@@ -1,0 +1,89 @@
+generated: '2026-08-26'
+method: derived
+source: the four openapi/ documents + well-known/ probes
+standards:
+- id: wzdx
+  name: USDOT Work Zone Data Exchange (WZDx)
+  conforms: true
+  domain_standard: true
+  evidence: 'openapi/nexar-livefeed-openapi.yml declares the response media type application/vnd.wzdx on CityStreamAPI_FindRealtimeDetections,
+    and all four contracts carry the WZDx object model as first-class components: apiWZDxDetection, apiWZDxDetectionCollection,
+    apiWZDxDetectionProperties, apiWZDxFeedInfo, apiWZDxDataSource, apiWZDxCameraCoreDetails, apiWZDxDetectionFeatureType.
+    Nexar also maintains a fork of the WZDx specification repository at https://github.com/getnexar/wzdx.'
+  why_it_matters: 'WZDx is the domain standard for this market: a US state DOT or a mapping consumer that already
+    ingests WZDx feeds can take Nexar work-zone data with no bespoke connector. This is the exact distinction domain_standard_conformance
+    draws.'
+- id: geojson-rfc7946
+  name: GeoJSON
+  conforms: true
+  evidence: Response media type application/geo+json on CityStreamAPI_FindRealtimeDetections, backed by apiGeoJsonDetection
+    / apiGeoJsonDetectionCollection / apiGeoJsonGeometryPoint components declaring Feature and FeatureCollection
+    types.
+- id: h3
+  name: Uber H3 hierarchical hexagonal geospatial index
+  conforms: true
+  evidence: apiH3IndicesApiElement, H3IndexFormatApiElementFormat, H3CoverageApiElement, and a dedicated VcamService_GetH3Coverage
+    operation.
+- id: openstreetmap
+  name: OpenStreetMap road referencing
+  conforms: true
+  evidence: apiOsmRoadSegmentApiElement / apiOsmRoadTypeApiElement bind detections to OSM road segments and road
+    classes.
+- id: openapi-3
+  name: OpenAPI 3.0.1
+  conforms: true
+  evidence: 'All four published contracts declare openapi: 3.0.1 and parse.'
+- id: oauth2
+  name: OAuth 2.0
+  conforms: true
+  evidence: https://nexar.okta.com/oauth2/aus3qkg89t55hJZsT4x7/.well-known/oauth-authorization-server returned 200
+    with authorization_code, refresh_token, client_credentials and device_code grants.
+- id: oidc
+  name: OpenID Connect Discovery 1.0
+  conforms: true
+  evidence: https://nexar.okta.com/oauth2/aus3qkg89t55hJZsT4x7/.well-known/openid-configuration returned 200.
+- id: rfc7636-pkce
+  name: PKCE
+  conforms: true
+  evidence: 'code_challenge_methods_supported: ["S256"] on the Okta authorization server; the portal bundle implements
+    the S256 code-verifier exchange.'
+- id: rfc9116-security-txt
+  name: security.txt
+  conforms: true
+  evidence: https://www.getnexar.com/.well-known/security.txt returned 200 with Contact and Expires fields.
+- id: rfc9728-oauth-protected-resource
+  name: OAuth 2.0 Protected Resource Metadata
+  conforms: true
+  evidence: https://getnexar.com/.well-known/oauth-protected-resource returned 200 — Shopify-platform issued for
+    the commerce store, not the CityStream APIs.
+- id: grpc-protobuf
+  name: gRPC / Protocol Buffers
+  conforms: true
+  evidence: 'The contracts are grpc-gateway projections — runtimeError, protobufAny, google.rpc.Status shapes and
+    the `default` response are present. No .proto file is published: a code search of the getnexar GitHub org for
+    extension:proto returned 0 results, so no Protobuf artifact is claimed.'
+- id: rfc9457-problem-details
+  name: RFC 9457 Problem Details
+  conforms: false
+  evidence: No application/problem+json media type in any contract; vendor error envelopes are used instead.
+- id: asyncapi
+  name: AsyncAPI
+  conforms: false
+  evidence: No event, streaming or webhook surface was found. Live Feed is a polled POST endpoint. Nothing is fabricated
+    here.
+- id: json-api
+  name: JSON:API
+  conforms: false
+  evidence: Not used.
+- id: scim
+  name: SCIM 2.0
+  conforms: false
+  evidence: No identity-provisioning surface is published.
+- id: odata
+  name: OData
+  conforms: false
+  evidence: No $metadata surface.
+certifications_published: false
+certifications_note: No trust center and no named certification (SOC 2, ISO 27001, PCI DSS, HIPAA, FedRAMP) was
+  found. probe-security-programs.py returned trust=none; trust.getnexar.com and trust.nexar-ai.com do not resolve.
+  No Compliance pointer is emitted.

@@ -64,5 +64,10 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Nexar is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/nexar_stock/
+Nexar is a physical-AI infrastructure company that operates one of the largest real-world video driving datasets — over 1.2 billion miles of driving captured each year by more than 350,000 connected dashcams — and turns it into training data, collision-prediction models and real-time road intelligence for autonomous-vehicle, ADAS, mapping and smart-city programs. Its developer-facing surface is the CityStream™ family of REST APIs, published as four OpenAPI 3.0.1 contracts on the Nexar Developers Portal.
+
+- Website: https://www.nexar-ai.com/
+- Developers Portal: https://developer.getnexar.com/
+- API host: https://external.getnexar.com
+- GitHub: https://github.com/getnexar
+- Secondary-market listing this profile was seeded from: https://forgeglobal.com/nexar_stock/

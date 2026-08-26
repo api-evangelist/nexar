@@ -1,0 +1,226 @@
+generated: '2026-08-26'
+method: derived
+source: openapi/nexar-virtualcam-openapi.yml, openapi/nexar-livefeed-openapi.yml, openapi/nexar-workzones-openapi.yml,
+  openapi/nexar-roadinventory-openapi.yml
+format: vendor-json
+note: The CityStream contracts do not use RFC 9457 application/problem+json. Two distinct error envelopes are declared.
+  VirtualCam declares `nexarBadRequest` {status:int, error:string} for 400 and a gRPC-gateway `Status` {code:int32,
+  message:string, details[]}. Work Zones and Road Inventory declare the gRPC-gateway `runtimeError` {error:string,
+  code:int32, message:string, details[protobufAny]} on the `default` response. 403/429/500 responses are declared
+  with descriptions but no schema, so the body shape for those statuses is not machine-readable from the published
+  contract. No documented error-code registry was found on the developer portal (the portal renders client-side
+  and its documentation route is gated behind Okta group membership).
+envelopes:
+- name: nexarBadRequest
+  fields:
+    status: integer
+    error: string
+  example:
+    status: 400
+    error: Bad Request
+  sources:
+  - openapi/nexar-virtualcam-openapi.yml
+- name: Status
+  fields:
+    code: integer(int32)
+    message: string
+    details: array
+  note: grpc-gateway google.rpc.Status projection
+  sources:
+  - openapi/nexar-virtualcam-openapi.yml
+- name: runtimeError
+  fields:
+    error: string
+    code: integer(int32)
+    message: string
+    details: array<protobufAny>
+  note: grpc-gateway runtime error, bound to the `default` response
+  sources:
+  - openapi/nexar-workzones-openapi.yml
+  - openapi/nexar-roadinventory-openapi.yml
+problem_count: 30
+problems:
+- status: 400
+  title: Bad request.
+  schema: nexarBadRequest
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#VcamService_FindRawFrames
+- status: 403
+  title: Returned when the user does not have permission to access the resource.
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#VcamService_FindRawFrames
+- status: 429
+  title: API rate limit exceeded.
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#VcamService_FindRawFrames
+- status: 500
+  title: This is usually a temporary error due to high server load or a brief endpoint error.
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#VcamService_FindRawFrames
+- status: 400
+  title: Bad request.
+  schema: nexarBadRequest
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#VcamService_GetH3Coverage
+- status: 403
+  title: Access forbidden. Also returned when the requested area is not authorized.
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#VcamService_GetH3Coverage
+- status: 429
+  title: API rate limit exceeded.
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#VcamService_GetH3Coverage
+- status: 500
+  title: Internal server error
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#VcamService_GetH3Coverage
+- status: 400
+  title: Bad request.
+  schema: nexarBadRequest
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#RoadItemService_FindRawFrames
+- status: 403
+  title: Access forbiden. Also returned when the requested area is not authorized.
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#RoadItemService_FindRawFrames
+- status: 429
+  title: API rate limit exceeded.
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#RoadItemService_FindRawFrames
+- status: 500
+  title: Internal server error
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-virtualcam-openapi.yml#RoadItemService_FindRawFrames
+- status: 403
+  title: Returned when the user does not have permission to access the resource.
+  schema: null
+  media_types:
+  - application/json
+  - application/geo+json
+  - application/vnd.wzdx
+  source_operation: openapi/nexar-livefeed-openapi.yml#CityStreamAPI_FindRealtimeDetections
+- status: 500
+  title: This is usually a temporary error due to high server load or a brief endpoint error.
+  schema: null
+  media_types:
+  - application/json
+  - application/geo+json
+  - application/vnd.wzdx
+  source_operation: openapi/nexar-livefeed-openapi.yml#CityStreamAPI_FindRealtimeDetections
+- status: 200
+  title: A successful response.
+  schema: nexarFindDetectionsResponse
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-workzones-openapi.yml#NexarPlatformAPI_FindDetections
+- status: 403
+  title: There's a problem with your request Authorization (Insufficient permissions)
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-workzones-openapi.yml#NexarPlatformAPI_FindDetections
+- status: 500
+  title: Something is broken. This is usually a temporary error due to high server load or a brief endpoint error.
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-workzones-openapi.yml#NexarPlatformAPI_FindDetections
+- status: default
+  title: An unexpected error response.
+  schema: runtimeError
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-workzones-openapi.yml#NexarPlatformAPI_FindDetections
+- status: 200
+  title: A successful response.
+  schema: nexarGetDetectionResponse
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-workzones-openapi.yml#NexarPlatformAPI_GetDetection
+- status: 403
+  title: There's problem with your request Authorization (Insufficient permissions)
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-workzones-openapi.yml#NexarPlatformAPI_GetDetection
+- status: 500
+  title: Something is broken. This is usually a temporary error due to high server load or a brief endpoint error.
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-workzones-openapi.yml#NexarPlatformAPI_GetDetection
+- status: default
+  title: An unexpected error response.
+  schema: runtimeError
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-workzones-openapi.yml#NexarPlatformAPI_GetDetection
+- status: 200
+  title: A successful response.
+  schema: nexarFindDetectionsResponse
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-roadinventory-openapi.yml#NexarPlatformAPI_FindDetections
+- status: 403
+  title: There's a problem with your request Authorization (Insufficient permissions)
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-roadinventory-openapi.yml#NexarPlatformAPI_FindDetections
+- status: 500
+  title: Something is broken. This is usually a temporary error due to high server load or a brief endpoint error.
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-roadinventory-openapi.yml#NexarPlatformAPI_FindDetections
+- status: default
+  title: An unexpected error response.
+  schema: runtimeError
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-roadinventory-openapi.yml#NexarPlatformAPI_FindDetections
+- status: 200
+  title: A successful response.
+  schema: nexarGetDetectionResponse
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-roadinventory-openapi.yml#NexarPlatformAPI_GetDetection
+- status: 403
+  title: There's problem with your request Authorization (Insufficient permissions)
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-roadinventory-openapi.yml#NexarPlatformAPI_GetDetection
+- status: 500
+  title: Something is broken. This is usually a temporary error due to high server load or a brief endpoint error.
+  schema: null
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-roadinventory-openapi.yml#NexarPlatformAPI_GetDetection
+- status: default
+  title: An unexpected error response.
+  schema: runtimeError
+  media_types:
+  - application/json
+  source_operation: openapi/nexar-roadinventory-openapi.yml#NexarPlatformAPI_GetDetection

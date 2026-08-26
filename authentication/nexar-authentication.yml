@@ -1,0 +1,19 @@
+generated: '2026-08-26'
+method: derived
+source: openapi/nexar-livefeed-openapi.yml, openapi/nexar-roadinventory-openapi.yml, openapi/nexar-virtualcam-openapi.yml,
+  openapi/nexar-workzones-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: Bearer
+  type: apiKey
+  in: header
+  parameter: Authorization
+  sources:
+  - openapi/nexar-livefeed-openapi.yml
+  - openapi/nexar-roadinventory-openapi.yml
+  - openapi/nexar-virtualcam-openapi.yml
+  - openapi/nexar-workzones-openapi.yml

@@ -1,0 +1,113 @@
+generated: '2026-08-26'
+method: probed
+source: live GET of /.well-known/* on every apis.yml host and OpenAPI servers[] host
+hit_count: 5
+note: 'Five real documents were fetched and saved. www.getnexar.com serves an RFC 9116 security.txt. The apex getnexar.com
+  is the consumer dashcam store on Shopify and therefore serves Shopify-platform OIDC discovery and an RFC 9728
+  protected-resource document naming shopify.com/authentication/22387021 as the authorization server — these are
+  real, served documents on a Nexar host, but they are issued by the commerce platform, not authored by Nexar. The
+  two documents that describe Nexar''s OWN developer-portal identity live on Nexar''s Okta tenant, nexar.okta.com,
+  at the authorization-server id aus3qkg89t55hJZsT4x7 read verbatim out of the developer portal''s own JavaScript
+  bundle. developer.getnexar.com and account.getnexar.com are single-page apps that answer 200 with a 1201/642-byte
+  HTML shell for EVERY /.well-known/* path — recorded as misses, not documents. external.getnexar.com (the CityStream
+  API host) answers 403 "RBAC: access denied" on every path.'
+hosts:
+- host: https://www.getnexar.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: nexar-security.txt
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://getnexar.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: nexar-shopify-openid-configuration.json
+    note: Shopify-platform issued (issuer https://shopify.com/authentication/22387021), not Nexar-authored
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    note: byte-identical to the openid-configuration document above; not saved twice
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: nexar-shopify-oauth-protected-resource.json
+    note: RFC 9728; resource https://getnexar.com, authorization server shopify.com/authentication/22387021
+  - path: /.well-known/security.txt
+    status: 301
+  - path: /.well-known/api-catalog
+    status: 301
+  - path: /.well-known/agent-card.json
+    status: 301
+  - path: /.well-known/agent.json
+    status: 301
+- host: https://nexar.okta.com
+  documents:
+  - path: /oauth2/aus3qkg89t55hJZsT4x7/.well-known/openid-configuration
+    status: 200
+    file: nexar-okta-openid-configuration.json
+    note: Nexar's own Okta tenant; this is the authorization server the Developers Portal uses (PKCE, S256)
+  - path: /oauth2/aus3qkg89t55hJZsT4x7/.well-known/oauth-authorization-server
+    status: 200
+    file: nexar-okta-oauth-authorization-server.json
+- host: https://developer.getnexar.com
+  soft_404_control:
+    path: /.well-known/bogus-control
+    status: 200
+    bytes: 1201
+    body: SPA shell
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    note: SPA shell, not a document — miss
+  - path: /.well-known/api-catalog
+    status: 200
+    note: SPA shell, not a document — miss
+  - path: /.well-known/agent-card.json
+    status: 200
+    note: SPA shell, not a document — miss
+  - path: /.well-known/agent.json
+    status: 200
+    note: SPA shell, not a document — miss
+- host: https://account.getnexar.com
+  soft_404_control:
+    path: /.well-known/bogus-control
+    status: 200
+    bytes: 642
+    body: SPA shell
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    note: SPA shell, not a document — miss
+- host: https://external.getnexar.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    note: 'RBAC: access denied'
+  - path: /.well-known/oauth-protected-resource
+    status: 403
+    note: 'RBAC: access denied'
+  - path: /.well-known/agent-card.json
+    status: 403
+    note: 'RBAC: access denied'
+- host: https://www.nexar-ai.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404

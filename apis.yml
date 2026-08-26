@@ -1,23 +1,187 @@
 aid: nexar
 name: Nexar
-description: 'Nexar is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Nexar is a physical-AI infrastructure company that operates one of the largest real-world
+  video driving datasets — over 1.2 billion miles of driving captured each year by more than 350,000 connected
+  dashcams — and turns it into training data, collision-prediction models and real-time road intelligence
+  for autonomous-vehicle, ADAS, mapping and smart-city programs. Its developer-facing surface is the CityStream™
+  family of REST APIs, published as four OpenAPI 3.0.1 contracts on the Nexar Developers Portal: VirtualCam
+  (anonymized road frames), Live Feed (real-time detections), Work Zones (curated construction-zone detections,
+  served as WZDx and GeoJSON) and Road Inventory (curated traffic-sign and road-asset detections). All
+  four run on a single gRPC-gateway backed host and are authorized with a bearer access token minted through
+  Nexar''s Okta authorization server. Nexar also publishes the open-source BADAS collision-prediction
+  model on PyPI and the `nap` platform CLI through its own Homebrew tap.'
+image: https://cdn.prod.website-files.com/6714bce7188a12cb895149f5/68f0ac403e8da1fec926cec2_social%20sharing.png
 url: https://raw.githubusercontent.com/api-evangelist/nexar/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-26'
 modified: '2026-08-26'
 tags:
 - Company
-apis: []
+- Mapping
+- Geospatial
+- Transportation
+- Computer Vision
+- Autonomous Vehicles
+- Smart Cities
+- Imagery
+- Road Data
+- Machine Learning
+apis:
+- aid: nexar:virtualcam
+  name: CityStream VirtualCam API
+  description: Returns a fresh collection of anonymized road frames captured by the Nexar camera network,
+    selectable by date, location, minimum quality, road type, time of day or vehicle heading, plus an
+    H3 coverage endpoint for checking imagery availability across an area.
+  humanURL: https://developer.getnexar.com/documentation
+  baseURL: https://external.getnexar.com
+  tags:
+  - Mapping
+  - Geospatial
+  - Transportation
+  - Computer Vision
+  - Imagery
+  - Road Data
+  properties:
+  - type: OpenAPI
+    url: openapi/nexar-virtualcam-openapi.yml
+  - type: Overlay
+    url: overlays/nexar-virtualcam-overlay.yaml
+  version: '4.0'
+- aid: nexar:livefeed
+  name: CityStream Live Feed API
+  description: Returns real-time detections produced by the Nexar camera network. The endpoint is generic
+    across detection types (construction zones, road conditions, road surface, traffic signs) and can
+    be served as JSON, GeoJSON (application/geo+json) or a WZDx feed (application/vnd.wzdx).
+  humanURL: https://developer.getnexar.com/documentation
+  baseURL: https://external.getnexar.com
+  tags:
+  - Mapping
+  - Geospatial
+  - Transportation
+  - Computer Vision
+  - Imagery
+  - Road Data
+  properties:
+  - type: OpenAPI
+    url: openapi/nexar-livefeed-openapi.yml
+  - type: Overlay
+    url: overlays/nexar-livefeed-overlay.yaml
+  version: '4.0'
+- aid: nexar:workzones
+  name: CityStream Work Zones API
+  description: Returns a curated collection of work zones that Nexar AI detects from road imagery containing
+    work-zone elements such as grabber cones, diamond signs, barriers and message boards, with a companion
+    endpoint for the full detail of a single work zone.
+  humanURL: https://developer.getnexar.com/documentation
+  baseURL: https://external.getnexar.com
+  tags:
+  - Mapping
+  - Geospatial
+  - Transportation
+  - Computer Vision
+  - Imagery
+  - Road Data
+  properties:
+  - type: OpenAPI
+    url: openapi/nexar-workzones-openapi.yml
+  - type: Overlay
+    url: overlays/nexar-workzones-overlay.yaml
+  version: '3.0'
+- aid: nexar:roadinventory
+  name: CityStream Road Inventory API
+  description: Returns a curated inventory of road signs and road assets captured by the Nexar camera
+    network, with a companion endpoint for the full detail of a single detection.
+  humanURL: https://developer.getnexar.com/documentation
+  baseURL: https://external.getnexar.com
+  tags:
+  - Mapping
+  - Geospatial
+  - Transportation
+  - Computer Vision
+  - Imagery
+  - Road Data
+  properties:
+  - type: OpenAPI
+    url: openapi/nexar-roadinventory-openapi.yml
+  - type: Overlay
+    url: overlays/nexar-roadinventory-overlay.yaml
+  version: '3.0'
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/nexar-agentic-access.yml
+- type: VulnerabilityDisclosure
+  url: security/nexar-vulnerability-disclosure.yml
 - type: Website
-  url: https://forgeglobal.com/nexar_stock/
+  url: https://www.nexar-ai.com/
+- type: DeveloperPortal
+  url: https://developer.getnexar.com/
+- type: Documentation
+  url: https://developer.getnexar.com/documentation
+- type: APIReference
+  url: https://developer.getnexar.com/documentation
+- type: SignUp
+  url: https://developer.getnexar.com/signup
+- type: Login
+  url: https://developer.getnexar.com/login
+- type: Support
+  url: https://help.getnexar.com/
+- type: Blog
+  url: https://www.nexar-ai.com/blog
+- type: GitHubOrganization
+  url: https://github.com/getnexar
+- type: TermsOfService
+  url: https://www.nexar-ai.com/legal/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.nexar-ai.com/legal/privacy-policy
+- type: Security
+  url: https://www.getnexar.com/.well-known/security.txt
+- type: SecurityTxt
+  url: well-known/nexar-security.txt
+- type: WellKnown
+  url: well-known/nexar-well-known.yml
+- type: LLMsTxt
+  url: llms/nexar-llms.txt
+- type: MCPServer
+  url: mcp/nexar-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/nexar-tool-crosswalk.yml
+- type: Authentication
+  url: authentication/nexar-authentication.yml
+- type: OAuthScopes
+  url: scopes/nexar-scopes.yml
+- type: Conventions
+  url: conventions/nexar-conventions.yml
+- type: ErrorCatalog
+  url: errors/nexar-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/nexar-lifecycle.yml
+- type: Deprecation
+  url: lifecycle/nexar-lifecycle.yml
+- type: Conformance
+  url: conformance/nexar-conformance.yml
+- type: DataModel
+  url: data-model/nexar-data-model.yml
+- type: Packages
+  url: packages/nexar-packages.yml
+- type: CLI
+  url: cli/nexar-cli.yml
+- type: Plans
+  url: plans/nexar-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/nexar-rate-limits.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/nexar-domain-security.yml
+x-enrichment:
+  date: '2026-08-26'
+  status: enriched
+  artifacts_added: 36
+  pass: local-v1

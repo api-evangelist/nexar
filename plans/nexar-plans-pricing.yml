@@ -1,0 +1,20 @@
+generated: '2026-08-26'
+method: searched
+source: https://www.nexar-ai.com/ (sitemap + site navigation), https://www.nexar-ai.com/pricing
+plan_count: 0
+plans: []
+model: enterprise-contact-sales
+note: Nexar publishes no plans, tiers, prices, quotas or overage terms for the CityStream APIs. https://www.nexar-ai.com/pricing
+  returns 404 and no pricing URL appears anywhere in the nexar-ai.com sitemap (52 pages), the llms.txt, or the developer-portal
+  application bundle. Access is sold through a demo request — https://www.nexar-ai.com/demo-form (200) and https://www.nexar-ai.com/contact-us
+  (200) — and is then granted as Okta group membership, which is what unlocks both the documentation route and the
+  token scopes in the Developers Portal. This is an honest zero, not an unchecked field. Note that the separate
+  consumer dashcam store at getnexar.com does publish hardware prices; that is retail commerce, not API pricing,
+  and is deliberately not recorded as a plan.
+evidence:
+- url: https://www.nexar-ai.com/pricing
+  status: 404
+- url: https://www.nexar-ai.com/demo-form
+  status: 200
+- url: https://developer.getnexar.com/signup
+  status: 200

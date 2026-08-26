@@ -1,0 +1,4167 @@
+generated: '2026-08-26'
+method: derived
+source: openapi/nexar-virtualcam-openapi.yml, openapi/nexar-livefeed-openapi.yml, openapi/nexar-workzones-openapi.yml,
+  openapi/nexar-roadinventory-openapi.yml
+note: 'Derived mechanically from the $ref graph of the four published CityStream OpenAPI documents. The core is
+  a DETECTION: a geolocated observation (traffic sign, construction zone, road condition, road surface, road blockage)
+  carried with its evidence frame, its H3 index, its OSM road segment and its lifecycle status (NEW / EXISTING /
+  REMOVED). VirtualCam is the raw-frame projection of the same core; Work Zones and Road Inventory are curated projections;
+  Live Feed is the real-time projection and additionally serializes the same detections as GeoJSON features and
+  as a WZDx feed. No id-prefix scheme is published.'
+core_entities:
+- Detection
+- EvidenceFrame
+- GeoLocation
+- GeoBoundingBox
+- H3Index
+- OsmRoadSegment
+- RawFrame
+- WZDxDetection
+- GeoJsonDetection
+entity_count: 265
+relationship_count: 349
+entities:
+- entity: apiDaylightStateApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: string
+  title: Daylight conditions
+  field_count: 0
+  fields: []
+- entity: apiFindRawFramesApiFilters
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Request Filters
+  field_count: 7
+  fields:
+  - directions
+  - frames_context
+  - min_frame_quality
+  - frames_per_h3
+  - road_types
+  - start_time
+  - end_time
+- entity: apiFindRawFramesApiRequestParams
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: VirtualCam Request
+  field_count: 4
+  fields:
+  - bounding_box
+  - h3_location
+  - filters
+  - sort_by
+- entity: nexarBadRequest
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Bad Request
+  field_count: 2
+  fields:
+  - status
+  - error
+- entity: apiFindRawFramesApiResult
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: VirtualCam Response
+  field_count: 2
+  fields:
+  - frames
+  - frames_fetched
+- entity: apiH3IndicesApiRequest
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Area of interest as H3 cells
+  field_count: 1
+  fields:
+  - h3_ids
+- entity: apiHeadingApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: string
+  title: HeadingApiElement
+  field_count: 0
+  fields: []
+- entity: apiRawFrameApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Frame metadata
+  field_count: 12
+  fields:
+  - frame_id
+  - frame_url
+  - thumbnail_url
+  - captured_at
+  - timezone_offset
+  - h3_index_res12
+  - gps_info
+  - direction
+  - camera_heading
+  - frame_quality
+  - frame_context
+  - osm_info
+- entity: apiSortByApiRequest
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: string
+  title: Optional sorting modes of the returned frame
+  field_count: 0
+  fields: []
+- entity: nexarFindRawFramesApiResponse
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: VirtualCam Response
+  field_count: 1
+  fields:
+  - frames
+- entity: road_itemapiGeoBoundingBoxApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Area of interest
+  field_count: 2
+  fields:
+  - north_east
+  - south_west
+- entity: road_itemapiGeoLocationApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: GPS Point
+  field_count: 2
+  fields:
+  - longitude
+  - latitude
+- entity: road_itemapiOsmRoadSegmentApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Osm Info
+  field_count: 3
+  fields:
+  - osm_node_id_from
+  - osm_node_id_to
+  - road_type
+- entity: road_itemapiOsmRoadTypeApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: string
+  title: Open Street Map road types
+  field_count: 0
+  fields: []
+- entity: FindRawFramesApiRequestParams
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: VirtualCam Request
+  field_count: 4
+  fields:
+  - bounding_box
+  - h3_location
+  - filters
+  - sort_by
+- entity: FindRawFramesApiResponse
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields:
+  - frames
+  - frames_fetched
+- entity: GeoBoundingBoxApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Area of interest
+  field_count: 2
+  fields:
+  - north_east
+  - south_west
+- entity: GeoLocationApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Geo Coordinates
+  field_count: 2
+  fields:
+  - longitude
+  - latitude
+- entity: H3IndicesApiRequest
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Area of interest as H3 cells
+  field_count: 1
+  fields:
+  - h3_ids
+- entity: FindRawFramesApiFilters
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Request Filters
+  field_count: 7
+  fields:
+  - directions
+  - frames_context
+  - min_frame_quality
+  - frames_per_h3
+  - road_types
+  - start_time
+  - end_time
+- entity: HeadingApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: string
+  title: HeadingApiElement
+  field_count: 0
+  fields: []
+- entity: DaylightStateApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: string
+  title: Daylight conditions
+  field_count: 0
+  fields: []
+- entity: OsmRoadTypeApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: string
+  title: Open Street Map road types
+  field_count: 0
+  fields: []
+- entity: SortByApiRequest
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: string
+  title: Optional sorting modes of the returned frame
+  field_count: 0
+  fields: []
+- entity: RawFrameApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Frame metadata
+  field_count: 12
+  fields:
+  - frame_id
+  - frame_url
+  - thumbnail_url
+  - captured_at
+  - timezone_offset
+  - h3_index_res12
+  - gps_info
+  - direction
+  - camera_heading
+  - frame_quality
+  - frame_context
+  - osm_info
+- entity: Status
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: null
+  field_count: 3
+  fields:
+  - code
+  - message
+  - details
+- entity: OsmRoadSegmentApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: Osm Info
+  field_count: 3
+  fields:
+  - osm_node_id_from
+  - osm_node_id_to
+  - road_type
+- entity: GetH3CoverageRequestParams
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: H3 Coverage Request
+  field_count: 2
+  fields:
+  - h3_coverage_bounding_box
+  - h3_indices
+- entity: GetH3CoverageResponse
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: H3 Coverage Response
+  field_count: 1
+  fields:
+  - coverage
+- entity: H3CoverageApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: H3 Coverage Information
+  field_count: 2
+  fields:
+  - h3_id
+  - frame_count
+- entity: H3CoverageBoundingBoxApiElement
+  spec: openapi/nexar-virtualcam-openapi.yml
+  type: object
+  title: H3 Coverage Area
+  field_count: 2
+  fields:
+  - bounding_box
+  - h3_resolution
+- entity: DetectionStatusApiElementStatus
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: Detection Status
+  field_count: 0
+  fields: []
+- entity: H3IndexFormatApiElementFormat
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: H3 Index Format
+  field_count: 0
+  fields: []
+- entity: apiConstructionZoneApiElementSubType
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: Construction Zone Detection Sub Type
+  field_count: 0
+  fields: []
+- entity: apiConstructionZoneDetectionApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Construction Zone Detection
+  field_count: 5
+  fields:
+  - confidence
+  - bounding_box
+  - location
+  - sub_type
+  - lane_impact
+- entity: apiDetectionEvidenceFrameApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Camera Evidence Frame
+  field_count: 3
+  fields:
+  - image_id
+  - image_url
+  - image_timestamp_millis
+- entity: apiDetectionFilterApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Detection Request Filters
+  field_count: 5
+  fields:
+  - detections_with_evidence
+  - detection_types
+  - osm_road_types
+  - detection_status
+  - detections_with_lane_impact
+- entity: apiDetectionRequestParams
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Real-time Detection Request Parameters
+  field_count: 5
+  fields:
+  - bounding_box
+  - filter
+  - detections_from_millis
+  - max_detections_per_h3
+  - h3_index_format
+- entity: apiDetectionResponsePayload
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Response For Realtime Detection Requests
+  field_count: 3
+  fields:
+  - detection_payload
+  - geo_json_payload
+  - wzdx_payload
+- entity: apiDetectionTypeApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Detection Type
+  field_count: 4
+  fields:
+  - traffic_sign
+  - construction_zone_element
+  - road_condition_element
+  - road_surface_element
+- entity: apiGeoBoundingBoxApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Geo Bounding Box
+  field_count: 2
+  fields:
+  - north_east
+  - south_west
+- entity: apiGeoJsonDetection
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: GeoJson Detection
+  field_count: 4
+  fields:
+  - id
+  - type
+  - properties
+  - geometry
+- entity: apiGeoJsonDetectionCollection
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Detections GeoJson Collection
+  field_count: 2
+  fields:
+  - type
+  - features
+- entity: apiGeoJsonDetectionCollectionFeatureCollectionType
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiGeoJsonDetectionFeatureType
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiGeoJsonGeometryPoint
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: GeoJson Point
+  field_count: 2
+  fields:
+  - type
+  - coordinates
+- entity: apiGeoJsonGeometryPointGeometryType
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiGeoLocationApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Geo Coordinates
+  field_count: 3
+  fields:
+  - longitude
+  - latitude
+  - course
+- entity: apiGeoLocationApiElementRequest
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Geo Coordinates
+  field_count: 2
+  fields:
+  - longitude
+  - latitude
+- entity: apiH3IndicesApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: H3 Indices
+  field_count: 32
+  fields:
+  - res_0
+  - res_1
+  - res_2
+  - res_3
+  - res_4
+  - res_5
+  - res_6
+  - res_7
+  - res_8
+  - res_9
+  - res_10
+  - res_11
+  - res_12
+  - res_13
+  - res_14
+  - res_15
+  - res_0_hex
+  - res_1_hex
+  - res_2_hex
+  - res_3_hex
+  - res_4_hex
+  - res_5_hex
+  - res_6_hex
+  - res_7_hex
+  - res_8_hex
+- entity: apiHexsegDetectionApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Detection
+  field_count: 14
+  fields:
+  - detection_count
+  - negative_detection_count
+  - first_detection_millis
+  - latest_detection_millis
+  - traffic_signs
+  - construction_zone_elements
+  - road_condition_elements
+  - road_surface_elements
+  - camera_gps
+  - frame
+  - osm_segment
+  - h3_indices
+  - status
+  - processed_at_millis
+- entity: apiHexsegDetectionPayload
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Realtime Detections
+  field_count: 1
+  fields:
+  - detections
+- entity: apiOsmRoadSegmentApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: OSM Road Segment
+  field_count: 5
+  fields:
+  - source_id
+  - dest_id
+  - source_location
+  - dest_location
+  - type
+- entity: apiOsmRoadTypeApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: Open Street Map Road Types
+  field_count: 0
+  fields: []
+- entity: apiPixelBoundingBoxApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Pixel Bounding Box
+  field_count: 4
+  fields:
+  - x1
+  - y1
+  - x2
+  - y2
+- entity: apiRoadConditionApiElementSubType
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: Road Condition Detection Sub Type (Beta Release)
+  field_count: 0
+  fields: []
+- entity: apiRoadConditionDetectionApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Road Condition Detection
+  field_count: 4
+  fields:
+  - confidence
+  - bounding_box
+  - location
+  - sub_type
+- entity: apiRoadSurfaceApiElementSubType
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: Road Surface Detection Sub Type (Beta Release)
+  field_count: 0
+  fields: []
+- entity: apiRoadSurfaceDetectionApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Road Surface Detection
+  field_count: 4
+  fields:
+  - confidence
+  - bounding_box
+  - location
+  - sub_type
+- entity: apiTrafficSignApiElementSubType
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: Traffic Sign Detection Sub Type
+  field_count: 0
+  fields: []
+- entity: apiTrafficSignDetectionApiElement
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: Traffic Sign Detection
+  field_count: 4
+  fields:
+  - confidence
+  - bounding_box
+  - location
+  - sub_type
+- entity: apiWZDxCameraCoreDetails
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: WZDx Camera Core Details
+  field_count: 6
+  fields:
+  - data_source_id
+  - device_type
+  - road_names
+  - device_status
+  - has_automatic_location
+  - update_date
+- entity: apiWZDxDataSource
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: WZDx Data Source
+  field_count: 2
+  fields:
+  - data_source_id
+  - organization_name
+- entity: apiWZDxDetection
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: WZDx Detection
+  field_count: 4
+  fields:
+  - id
+  - type
+  - properties
+  - geometry
+- entity: apiWZDxDetectionCollection
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: WZDx Road Work Detections
+  field_count: 3
+  fields:
+  - feed_info
+  - type
+  - features
+- entity: apiWZDxDetectionCollectionFeatureCollectionType
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiWZDxDetectionFeatureType
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiWZDxDetectionProperties
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: WZDx Smart Work Zone Camera Device
+  field_count: 4
+  fields:
+  - core_details
+  - image_url
+  - image_timestamp
+  - detection_properties
+- entity: apiWZDxFeedInfo
+  spec: openapi/nexar-livefeed-openapi.yml
+  type: object
+  title: WZDx Feed Info
+  field_count: 7
+  fields:
+  - update_date
+  - publisher
+  - contact_name
+  - contact_email
+  - update_frequency
+  - version
+  - data_sources
+- entity: FindDetectionsRequestParamsSortDirection
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: Sort order
+  field_count: 0
+  fields: []
+- entity: GPSSignalGPSProducer
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: GPS signal source (Camera or external mount)
+  field_count: 0
+  fields: []
+- entity: H3IndexFormatApiElementFormat
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: H3 index format
+  field_count: 0
+  fields: []
+- entity: ParkingSpotFilterIsAllowed
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiConstructionZoneApiElementSubType
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: Road Blockage Detections
+  field_count: 0
+  fields: []
+- entity: apiConstructionZoneDetectionApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Construction Zone Detection
+  field_count: 4
+  fields:
+  - confidence
+  - bounding_box
+  - location
+  - sub_type
+- entity: apiDetectionEvidenceFrameApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Camera Evidence Frame
+  field_count: 2
+  fields:
+  - image_id
+  - image_url
+- entity: apiDetectionFilterApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Detection request filters
+  field_count: 4
+  fields:
+  - detections_with_evidence
+  - detection_types
+  - osm_road_types
+  - detection_status
+- entity: apiDetectionRequestParams
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Realtime Detection request parameters
+  field_count: 5
+  fields:
+  - bounding_box
+  - filter
+  - detections_from_millis
+  - max_detections_per_h3
+  - h3_index_format
+- entity: apiDetectionResponsePayload
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Response for realtime detection requests
+  field_count: 3
+  fields:
+  - detection_payload
+  - geo_json_payload
+  - wzdx_payload
+- entity: apiDetectionStatusApiElementStatus
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiDetectionTypeApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: null
+  title: Detection Type
+  field_count: 0
+  fields: []
+- entity: apiGeoBoundingBoxApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Geo Bounding Box
+  field_count: 2
+  fields:
+  - north_east
+  - south_west
+- entity: apiGeoJsonDetection
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: GeoJson Detection
+  field_count: 4
+  fields:
+  - id
+  - type
+  - properties
+  - geometry
+- entity: apiGeoJsonDetectionCollection
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Detections GeoJson Collection
+  field_count: 2
+  fields:
+  - type
+  - features
+- entity: apiGeoJsonDetectionCollectionFeatureCollectionType
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiGeoJsonDetectionFeatureType
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiGeoJsonGeometryPoint
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: GeoJson Point
+  field_count: 2
+  fields:
+  - type
+  - coordinates
+- entity: apiGeoJsonGeometryPointGeometryType
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiGeoLocationApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Geo Coordinates
+  field_count: 3
+  fields:
+  - longitude
+  - latitude
+  - course
+- entity: apiH3IndicesApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: H3 Indices
+  field_count: 32
+  fields:
+  - res_0
+  - res_1
+  - res_2
+  - res_3
+  - res_4
+  - res_5
+  - res_6
+  - res_7
+  - res_8
+  - res_9
+  - res_10
+  - res_11
+  - res_12
+  - res_13
+  - res_14
+  - res_15
+  - res_0_hex
+  - res_1_hex
+  - res_2_hex
+  - res_3_hex
+  - res_4_hex
+  - res_5_hex
+  - res_6_hex
+  - res_7_hex
+  - res_8_hex
+- entity: apiHexsegDetectionApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Detection
+  field_count: 12
+  fields:
+  - detection_count
+  - negative_detection_count
+  - first_detection_millis
+  - latest_detection_millis
+  - road_blockages
+  - traffic_signs
+  - construction_zone_elements
+  - camera_gps
+  - frame
+  - osm_segment
+  - h3_indices
+  - status
+- entity: apiHexsegDetectionPayload
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Realtime Detections
+  field_count: 1
+  fields:
+  - detections
+- entity: apiOsmRoadSegmentApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: OSM road segment
+  field_count: 5
+  fields:
+  - source_id
+  - dest_id
+  - source_location
+  - dest_location
+  - type
+- entity: apiOsmRoadTypeApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: Open Street Map road types
+  field_count: 0
+  fields: []
+- entity: apiPixelBoundingBoxApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Pixel Bounding Box
+  field_count: 4
+  fields:
+  - x1
+  - y1
+  - x2
+  - y2
+- entity: apiRoadBlockageApiElementSubType
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: Road Blockage Detection Sub Type
+  field_count: 0
+  fields: []
+- entity: apiRoadBlockageDetectionApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Road Blockage Detection
+  field_count: 4
+  fields:
+  - confidence
+  - bounding_box
+  - location
+  - sub_type
+- entity: apiTrafficSignApiElementSubType
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: Traffic Sign Detection sub type
+  field_count: 0
+  fields: []
+- entity: apiTrafficSignDetectionApiElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Traffic Sign Detection
+  field_count: 4
+  fields:
+  - confidence
+  - bounding_box
+  - location
+  - sub_type
+- entity: apiWZDxCameraCoreDetails
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: WZDx Camera Core Details
+  field_count: 6
+  fields:
+  - data_source_id
+  - device_type
+  - road_names
+  - device_status
+  - has_automatic_location
+  - update_date
+- entity: apiWZDxDataSource
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: WZDx Data Source
+  field_count: 2
+  fields:
+  - data_source_id
+  - organization_name
+- entity: apiWZDxDetection
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: WZDx Detection
+  field_count: 4
+  fields:
+  - id
+  - type
+  - properties
+  - geometry
+- entity: apiWZDxDetectionCollection
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: WZDx Road work detections
+  field_count: 3
+  fields:
+  - feed_info
+  - type
+  - features
+- entity: apiWZDxDetectionCollectionFeatureCollectionType
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiWZDxDetectionFeatureType
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiWZDxDetectionProperties
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: WZDx smart work zone camera device
+  field_count: 4
+  fields:
+  - core_details
+  - image_url
+  - image_timestamp
+  - detection_properties
+- entity: apiWZDxFeedInfo
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: WZDx Feed Info
+  field_count: 7
+  fields:
+  - update_date
+  - publisher
+  - contact_name
+  - contact_email
+  - update_frequency
+  - version
+  - data_sources
+- entity: mobinexarConstructionZoneDetection
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Aggregated construction zone detections segmented by geographical shape
+  field_count: 2
+  fields:
+  - primary_segments
+  - detection_segments
+- entity: mobinexarConstructionZoneSegment
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields:
+  - line
+  - lane_impact
+- entity: mobinexarOperator
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: Allowed TimestampParams filter operators
+  field_count: 0
+  fields: []
+- entity: mobinexarTimeRange
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Work Zones filter by their detection time
+  field_count: 2
+  fields:
+  - start
+  - end
+- entity: nexarBBox
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Location of detected element on the image, where (X1,Y1),(X2,Y2) describes the SW,NE corners accordingly
+  field_count: 5
+  fields:
+  - x1
+  - y1
+  - x2
+  - y2
+  - tag
+- entity: nexarBoundingGPSBox
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Geo bounding box
+  field_count: 2
+  fields:
+  - south_west_point
+  - north_east_point
+- entity: nexarChangeDetectionStatus
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: Describing the status of the work zone lane impact (e.g. new / removed detections)
+  field_count: 0
+  fields: []
+- entity: nexarConstructionZoneDetectionElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields:
+  - element
+  - evidence_frames
+- entity: nexarConstructionZoneDetectionSegment
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Construction elements that ConstructionZoneSegmentconstitute a construction zone grouped to a primary road
+    segment
+  field_count: 3
+  fields:
+  - segment
+  - sub_item_id
+  - detection_element
+- entity: nexarConstructionZoneElements
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Filter predicate by work zone element type
+  field_count: 3
+  fields:
+  - elements
+  - operator
+  - not
+- entity: nexarConstructionZoneFilter
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Filter by work zone elements type / impact on road
+  field_count: 3
+  fields:
+  - construction_zone_elements
+  - construction_zone_impact
+  - operator
+- entity: nexarConstructionZoneImpact
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Filter predicate by impact on road
+  field_count: 2
+  fields:
+  - lane_impact
+  - not
+- entity: nexarConstructionZoneImpactLaneImpact
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: nexarConstructionZoneRoadSegment
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Describes the impact on a lane from a given construction zone
+  field_count: 2
+  fields:
+  - segment
+  - status
+- entity: nexarDetectionLocation
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Detection location and metadata
+  field_count: 5
+  fields:
+  - location
+  - course
+  - bbox
+  - confidence
+  - h3_indices
+- entity: nexarDisplayImage
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: URL and metadata for the head frame best representing the road item
+  field_count: 6
+  fields:
+  - image_url
+  - timestamp_millis
+  - width
+  - height
+  - imageRef
+  - frame_id
+- entity: nexarFindDetectionsRequestParams
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Work Zones Request Parameters
+  field_count: 9
+  fields:
+  - detection_filter
+  - bounding_box
+  - h3_indices
+  - heading
+  - time_range
+  - time_sort_direction
+  - limit
+  - start
+  - time_of_day_range
+- entity: nexarFindDetectionsResponse
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: find detections response
+  field_count: 1
+  fields:
+  - results
+- entity: nexarFindDetectionsResponsePayload
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: response messages
+  field_count: 1
+  fields:
+  - results
+- entity: nexarFindRawFramesRequestParams
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 3
+  fields:
+  - road_item_filters
+  - filters
+  - limit
+- entity: nexarFrameFilters
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 6
+  fields:
+  - bounding_box
+  - h3_indices
+  - osm_ids
+  - heading
+  - start_timestamp
+  - end_timestamp
+- entity: nexarGPSPoint
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: A basic GPS point
+  field_count: 3
+  fields:
+  - latitude
+  - longtitude
+  - altitude
+- entity: nexarGPSSignal
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: GPS measurement
+  field_count: 11
+  fields:
+  - timestamp
+  - longitude
+  - latitude
+  - horizontal_accuracy
+  - vertical_accuracy
+  - altitude
+  - speed
+  - course
+  - producer
+  - gps_timestamp
+  - producer_timestamp
+- entity: nexarGeoLine
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Geo line
+  field_count: 4
+  fields:
+  - point_from
+  - point_to
+  - course
+  - osm_info
+- entity: nexarGeoPoint
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: GPS point enriched with Open Street Map node identifier
+  field_count: 3
+  fields:
+  - point
+  - course
+  - osm_info
+- entity: nexarGetDetectionRequestParams
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Work Zone Request Parameter
+  field_count: 1
+  fields:
+  - item_id
+- entity: nexarGetDetectionResponse
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Detailed Work Zone Response
+  field_count: 2
+  fields:
+  - road_item_detection
+  - display_images
+- entity: nexarH3IndicesRequest
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: List of Uber H3 hexagon identifiers
+  field_count: 1
+  fields:
+  - h3_indices
+- entity: nexarHeading
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: heading
+  field_count: 0
+  fields: []
+- entity: nexarHumanReadableTimeRange
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: 'Allows querying by specific times of the day: "HH:mm:ss"'
+  field_count: 2
+  fields:
+  - start
+  - end
+- entity: nexarImageQuality
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 1
+  fields:
+  - internal_car_average
+- entity: nexarLogicalOperator
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: Conjunction operator
+  field_count: 0
+  fields: []
+- entity: nexarObjectId
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Wrapper for Nexar unique identifier
+  field_count: 1
+  fields:
+  - id
+- entity: nexarOsmInfo
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Open Street Map way identifier and metadata
+  field_count: 3
+  fields:
+  - osm_node_id_from
+  - osm_node_id_to
+  - road_type
+- entity: nexarOsmRequest
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Open Street Map node identifier request
+  field_count: 1
+  fields:
+  - node_id
+- entity: nexarParkingSpotDetection
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 6
+  fields:
+  - line
+  - span
+  - geojson_line_string
+  - evidence_frames
+  - detection_precision
+  - is_allowed
+- entity: nexarParkingSpotFilter
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields:
+  - detection_precision
+  - is_allowed
+- entity: nexarPointH3Indices
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Uber H3 index list
+  field_count: 16
+  fields:
+  - h3_index_res0
+  - h3_index_res1
+  - h3_index_res2
+  - h3_index_res3
+  - h3_index_res4
+  - h3_index_res5
+  - h3_index_res6
+  - h3_index_res7
+  - h3_index_res8
+  - h3_index_res9
+  - h3_index_res10
+  - h3_index_res11
+  - h3_index_res12
+  - h3_index_res13
+  - h3_index_res14
+  - h3_index_res15
+- entity: nexarRawFrameResponse
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 12
+  fields:
+  - frame_id
+  - image_ref
+  - image_url
+  - thumbnail_url
+  - captured_on_ms
+  - captured_timezone_offset
+  - h3_indices
+  - gps_point
+  - heading
+  - course_of_camera
+  - image_quality
+  - osm_info
+- entity: nexarRawFramesResponse
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields:
+  - context
+  - payload
+- entity: nexarRawFramesResult
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Road items result
+  field_count: 1
+  fields:
+  - raw_frames
+- entity: nexarResponseContext
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 0
+  fields: []
+- entity: nexarRoadBlockageConstructionElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: Construction element types
+  field_count: 0
+  fields: []
+- entity: nexarRoadItemDetection
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Work Zone detection
+  field_count: 5
+  fields:
+  - item_id
+  - construction_zone
+  - timezone_offset
+  - created_at_millis
+  - expired_at_millis
+- entity: nexarRoadItemDetectionFilter
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Detection filters
+  field_count: 2
+  fields:
+  - construction_zone_filter
+  - status
+- entity: nexarRoadItemDetectionResultSet
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 4
+  fields:
+  - road_item_detections
+  - total_row_count
+  - fetch_count
+  - result_window_time_range
+- entity: nexarRoadItemEvidenceFrame
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 8
+  fields:
+  - frame_id
+  - image_ref
+  - raw_gps_signal_of_camera
+  - location_of_camera
+  - course_of_camera
+  - detection_locations
+  - h3_indices
+  - osm_info
+- entity: nexarRoadItemFilters
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Input filters to fetch road item detections
+  field_count: 7
+  fields:
+  - bounding_box
+  - h3_indices
+  - osm_ids
+  - heading
+  - created_timestamp
+  - expired_timestamp
+  - time_range
+- entity: nexarRoadSignDetection
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Aggregated road sign detections
+  field_count: 3
+  fields:
+  - location
+  - detection_element
+  - status
+- entity: nexarRoadSignDetectionElement
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Road sign detection
+  field_count: 5
+  fields:
+  - road_sign_type
+  - impact
+  - evidence_frames
+  - negative_image_ref
+  - earliest_evidence_millis
+- entity: nexarRoadSignElements
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Filter predicate by road sign type
+  field_count: 2
+  fields:
+  - road_sign_types
+  - not
+- entity: nexarRoadSignImpact
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Filter predicate by road sign status (unsupported)
+  field_count: 1
+  fields:
+  - damaged
+- entity: nexarRoadSignType
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: nexarRoadSignTypeFilter
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Road sign filter predicate
+  field_count: 4
+  fields:
+  - road_sign_elements
+  - road_sign_impact
+  - operator
+  - not
+- entity: nexarRoadType
+  spec: openapi/nexar-workzones-openapi.yml
+  type: string
+  title: Open Street Map road types
+  field_count: 0
+  fields: []
+- entity: nexarTimeOfDay
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Time of day
+  field_count: 3
+  fields:
+  - hours
+  - minutes
+  - seconds
+- entity: nexarTimeOfDayRange
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Filter predicate by time of day
+  field_count: 3
+  fields:
+  - from
+  - to
+  - time_zone_name
+- entity: nexarTimestampParams
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: Filter predicate by timestamp in milliseconds (UTC)
+  field_count: 2
+  fields:
+  - operator
+  - timestamp_millis
+- entity: protobufAny
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields:
+  - type_url
+  - value
+- entity: runtimeError
+  spec: openapi/nexar-workzones-openapi.yml
+  type: object
+  title: null
+  field_count: 4
+  fields:
+  - error
+  - code
+  - message
+  - details
+- entity: FindDetectionsRequestParamsSortDirection
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: Sort order
+  field_count: 0
+  fields: []
+- entity: GPSSignalGPSProducer
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: GPS signal source (Camera or external mount)
+  field_count: 0
+  fields: []
+- entity: H3IndexFormatApiElementFormat
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: H3 index format
+  field_count: 0
+  fields: []
+- entity: ParkingSpotFilterIsAllowed
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiConstructionZoneApiElementSubType
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: Road Blockage Detections
+  field_count: 0
+  fields: []
+- entity: apiConstructionZoneDetectionApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Construction Zone Detection
+  field_count: 4
+  fields:
+  - confidence
+  - bounding_box
+  - location
+  - sub_type
+- entity: apiDetectionEvidenceFrameApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Camera Evidence Frame
+  field_count: 2
+  fields:
+  - image_id
+  - image_url
+- entity: apiDetectionFilterApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Detection request filters
+  field_count: 4
+  fields:
+  - detections_with_evidence
+  - detection_types
+  - osm_road_types
+  - detection_status
+- entity: apiDetectionRequestParams
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Realtime Detection request parameters
+  field_count: 5
+  fields:
+  - bounding_box
+  - filter
+  - detections_from_millis
+  - max_detections_per_h3
+  - h3_index_format
+- entity: apiDetectionResponsePayload
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Response for realtime detection requests
+  field_count: 3
+  fields:
+  - detection_payload
+  - geo_json_payload
+  - wzdx_payload
+- entity: apiDetectionStatusApiElementStatus
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiDetectionTypeApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: null
+  title: Detection Type
+  field_count: 0
+  fields: []
+- entity: apiGeoBoundingBoxApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Geo Bounding Box
+  field_count: 2
+  fields:
+  - north_east
+  - south_west
+- entity: apiGeoJsonDetection
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: GeoJson Detection
+  field_count: 4
+  fields:
+  - id
+  - type
+  - properties
+  - geometry
+- entity: apiGeoJsonDetectionCollection
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Detections GeoJson Collection
+  field_count: 2
+  fields:
+  - type
+  - features
+- entity: apiGeoJsonDetectionCollectionFeatureCollectionType
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiGeoJsonDetectionFeatureType
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiGeoJsonGeometryPoint
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: GeoJson Point
+  field_count: 2
+  fields:
+  - type
+  - coordinates
+- entity: apiGeoJsonGeometryPointGeometryType
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiGeoLocationApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Geo Coordinates
+  field_count: 3
+  fields:
+  - longitude
+  - latitude
+  - course
+- entity: apiH3IndicesApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: H3 Indices
+  field_count: 32
+  fields:
+  - res_0
+  - res_1
+  - res_2
+  - res_3
+  - res_4
+  - res_5
+  - res_6
+  - res_7
+  - res_8
+  - res_9
+  - res_10
+  - res_11
+  - res_12
+  - res_13
+  - res_14
+  - res_15
+  - res_0_hex
+  - res_1_hex
+  - res_2_hex
+  - res_3_hex
+  - res_4_hex
+  - res_5_hex
+  - res_6_hex
+  - res_7_hex
+  - res_8_hex
+- entity: apiHexsegDetectionApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Detection
+  field_count: 12
+  fields:
+  - detection_count
+  - negative_detection_count
+  - first_detection_millis
+  - latest_detection_millis
+  - road_blockages
+  - traffic_signs
+  - construction_zone_elements
+  - camera_gps
+  - frame
+  - osm_segment
+  - h3_indices
+  - status
+- entity: apiHexsegDetectionPayload
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Realtime Detections
+  field_count: 1
+  fields:
+  - detections
+- entity: apiOsmRoadSegmentApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: OSM road segment
+  field_count: 5
+  fields:
+  - source_id
+  - dest_id
+  - source_location
+  - dest_location
+  - type
+- entity: apiOsmRoadTypeApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: Open Street Map road types
+  field_count: 0
+  fields: []
+- entity: apiPixelBoundingBoxApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Pixel Bounding Box
+  field_count: 4
+  fields:
+  - x1
+  - y1
+  - x2
+  - y2
+- entity: apiRoadBlockageApiElementSubType
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: Road Blockage Detection Sub Type
+  field_count: 0
+  fields: []
+- entity: apiRoadBlockageDetectionApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Road Blockage Detection
+  field_count: 4
+  fields:
+  - confidence
+  - bounding_box
+  - location
+  - sub_type
+- entity: apiTrafficSignApiElementSubType
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: Traffic Sign Detection sub type
+  field_count: 0
+  fields: []
+- entity: apiTrafficSignDetectionApiElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Traffic Sign Detection
+  field_count: 4
+  fields:
+  - confidence
+  - bounding_box
+  - location
+  - sub_type
+- entity: apiWZDxCameraCoreDetails
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: WZDx Camera Core Details
+  field_count: 6
+  fields:
+  - data_source_id
+  - device_type
+  - road_names
+  - device_status
+  - has_automatic_location
+  - update_date
+- entity: apiWZDxDataSource
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: WZDx Data Source
+  field_count: 2
+  fields:
+  - data_source_id
+  - organization_name
+- entity: apiWZDxDetection
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: WZDx Detection
+  field_count: 4
+  fields:
+  - id
+  - type
+  - properties
+  - geometry
+- entity: apiWZDxDetectionCollection
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: WZDx Road work detections
+  field_count: 3
+  fields:
+  - feed_info
+  - type
+  - features
+- entity: apiWZDxDetectionCollectionFeatureCollectionType
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiWZDxDetectionFeatureType
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: apiWZDxDetectionProperties
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: WZDx smart work zone camera device
+  field_count: 4
+  fields:
+  - core_details
+  - image_url
+  - image_timestamp
+  - detection_properties
+- entity: apiWZDxFeedInfo
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: WZDx Feed Info
+  field_count: 7
+  fields:
+  - update_date
+  - publisher
+  - contact_name
+  - contact_email
+  - update_frequency
+  - version
+  - data_sources
+- entity: mobinexarConstructionZoneDetection
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Aggregated construction zone detections segmented by geographical shape
+  field_count: 2
+  fields:
+  - primary_segments
+  - detection_segments
+- entity: mobinexarConstructionZoneSegment
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields:
+  - line
+  - lane_impact
+- entity: mobinexarOperator
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: Allowed TimestampParams filter operators
+  field_count: 0
+  fields: []
+- entity: mobinexarTimeRange
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Filter predicate by UTC format timestamp
+  field_count: 4
+  fields:
+  - start
+  - end
+  - start_datetime
+  - end_datetime
+- entity: nexarBBox
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Location of detected element on the image, where (X1,Y1),(X2,Y2) describes the SW,NE corners accordingly
+  field_count: 5
+  fields:
+  - x1
+  - y1
+  - x2
+  - y2
+  - tag
+- entity: nexarBoundingGPSBox
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Geo based polygon area
+  field_count: 2
+  fields:
+  - south_west_point
+  - north_east_point
+- entity: nexarChangeDetectionStatus
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: Describing the status of the construction zone lane impact (e.g. new / removed detections)
+  field_count: 0
+  fields: []
+- entity: nexarConstructionZoneDetectionElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields:
+  - element
+  - evidence_frames
+- entity: nexarConstructionZoneDetectionSegment
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Construction elements that ConstructionZoneSegmentconstitute a construction zone grouped to a primary road
+    segment
+  field_count: 3
+  fields:
+  - segment
+  - sub_item_id
+  - detection_element
+- entity: nexarConstructionZoneElements
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Filter predicate by construction element type
+  field_count: 3
+  fields:
+  - elements
+  - operator
+  - not
+- entity: nexarConstructionZoneFilter
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Filter predicate by construction elements type / impact on road
+  field_count: 4
+  fields:
+  - construction_zone_elements
+  - construction_zone_impact
+  - operator
+  - not
+- entity: nexarConstructionZoneImpact
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Filter predicate by impact on road
+  field_count: 2
+  fields:
+  - lane_impact
+  - not
+- entity: nexarConstructionZoneImpactLaneImpact
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: nexarConstructionZoneRoadSegment
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Describes the impact on a lane from a given construction zone
+  field_count: 2
+  fields:
+  - segment
+  - status
+- entity: nexarDetectionLocation
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Detection location and metadata
+  field_count: 5
+  fields:
+  - location
+  - course
+  - bbox
+  - confidence
+  - h3_indices
+- entity: nexarDisplayImage
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: URL and metadata for the head frame best representing the road item
+  field_count: 6
+  fields:
+  - image_url
+  - timestamp_millis
+  - width
+  - height
+  - imageRef
+  - frame_id
+- entity: nexarFindDetectionsRequestParams
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Road Signs Request Parameters
+  field_count: 9
+  fields:
+  - detection_filter
+  - bounding_box
+  - h3_indices
+  - heading
+  - time_range
+  - time_sort_direction
+  - limit
+  - start
+  - time_of_day_range
+- entity: nexarFindDetectionsResponse
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: find detections response
+  field_count: 2
+  fields:
+  - context
+  - payload
+- entity: nexarFindDetectionsResponsePayload
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: response messages
+  field_count: 1
+  fields:
+  - results
+- entity: nexarFindRawFramesRequestParams
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 3
+  fields:
+  - road_item_filters
+  - filters
+  - limit
+- entity: nexarFrameFilters
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 6
+  fields:
+  - bounding_box
+  - h3_indices
+  - osm_ids
+  - heading
+  - start_timestamp
+  - end_timestamp
+- entity: nexarGPSPoint
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: A basic GPS point
+  field_count: 3
+  fields:
+  - latitude
+  - longtitude
+  - altitude
+- entity: nexarGPSSignal
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: GPS measurement
+  field_count: 11
+  fields:
+  - timestamp
+  - longitude
+  - latitude
+  - horizontal_accuracy
+  - vertical_accuracy
+  - altitude
+  - speed
+  - course
+  - producer
+  - gps_timestamp
+  - producer_timestamp
+- entity: nexarGeoLine
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Geo line
+  field_count: 4
+  fields:
+  - point_from
+  - point_to
+  - course
+  - osm_info
+- entity: nexarGeoPoint
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: GPS point enriched with Open Street Map node identifier
+  field_count: 3
+  fields:
+  - point
+  - course
+  - osm_info
+- entity: nexarGetDetectionRequestParams
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 1
+  fields:
+  - item_id
+- entity: nexarGetDetectionResponse
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Detailed Road Sign Response
+  field_count: 2
+  fields:
+  - road_item_detection
+  - display_images
+- entity: nexarH3IndicesRequest
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: List of Uber H3 hexagon identifiers
+  field_count: 1
+  fields:
+  - h3_indices
+- entity: nexarHeading
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: heading
+  field_count: 0
+  fields: []
+- entity: nexarHumanReadableTimeRange
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: 'Allows querying by specific times of the day: "HH:mm:ss"'
+  field_count: 2
+  fields:
+  - start
+  - end
+- entity: nexarImageQuality
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 1
+  fields:
+  - internal_car_average
+- entity: nexarLogicalOperator
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: Conjunction operator
+  field_count: 0
+  fields: []
+- entity: nexarObjectId
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Wrapper for Nexar unique identifier
+  field_count: 1
+  fields:
+  - id
+- entity: nexarOsmInfo
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Open Street Map way identifier and metadata
+  field_count: 3
+  fields:
+  - osm_node_id_from
+  - osm_node_id_to
+  - road_type
+- entity: nexarOsmRequest
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Open Street Map node identifier request
+  field_count: 1
+  fields:
+  - node_id
+- entity: nexarParkingSpotDetection
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 6
+  fields:
+  - line
+  - span
+  - geojson_line_string
+  - evidence_frames
+  - detection_precision
+  - is_allowed
+- entity: nexarParkingSpotFilter
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields:
+  - detection_precision
+  - is_allowed
+- entity: nexarPointH3Indices
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Uber H3 index list
+  field_count: 16
+  fields:
+  - h3_index_res0
+  - h3_index_res1
+  - h3_index_res2
+  - h3_index_res3
+  - h3_index_res4
+  - h3_index_res5
+  - h3_index_res6
+  - h3_index_res7
+  - h3_index_res8
+  - h3_index_res9
+  - h3_index_res10
+  - h3_index_res11
+  - h3_index_res12
+  - h3_index_res13
+  - h3_index_res14
+  - h3_index_res15
+- entity: nexarRawFrameResponse
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 12
+  fields:
+  - frame_id
+  - image_ref
+  - image_url
+  - thumbnail_url
+  - captured_on_ms
+  - captured_timezone_offset
+  - h3_indices
+  - gps_point
+  - heading
+  - course_of_camera
+  - image_quality
+  - osm_info
+- entity: nexarRawFramesResponse
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields:
+  - context
+  - payload
+- entity: nexarRawFramesResult
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Road items result
+  field_count: 1
+  fields:
+  - raw_frames
+- entity: nexarResponseContext
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 0
+  fields: []
+- entity: nexarRoadBlockageConstructionElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: Construction element types
+  field_count: 0
+  fields: []
+- entity: nexarRoadItemDetection
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Road Sign Detection
+  field_count: 5
+  fields:
+  - item_id
+  - road_sign
+  - timezone_offset
+  - created_at_millis
+  - expired_at_millis
+- entity: nexarRoadItemDetectionFilter
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Road Sign Filters
+  field_count: 2
+  fields:
+  - road_sign_filter
+  - status
+- entity: nexarRoadItemDetectionResultSet
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 4
+  fields:
+  - road_item_detections
+  - total_row_count
+  - fetch_count
+  - result_window_time_range
+- entity: nexarRoadItemEvidenceFrame
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 8
+  fields:
+  - frame_id
+  - image_ref
+  - raw_gps_signal_of_camera
+  - location_of_camera
+  - course_of_camera
+  - detection_locations
+  - h3_indices
+  - osm_info
+- entity: nexarRoadItemFilters
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Input filters to fetch road item detections
+  field_count: 7
+  fields:
+  - bounding_box
+  - h3_indices
+  - osm_ids
+  - heading
+  - created_timestamp
+  - expired_timestamp
+  - time_range
+- entity: nexarRoadSignDetection
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Aggregated road sign detections
+  field_count: 3
+  fields:
+  - location
+  - detection_element
+  - status
+- entity: nexarRoadSignDetectionElement
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Road sign detection
+  field_count: 5
+  fields:
+  - road_sign_type
+  - impact
+  - evidence_frames
+  - negative_image_ref
+  - earliest_evidence_millis
+- entity: nexarRoadSignElements
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Filter predicate by road sign type
+  field_count: 2
+  fields:
+  - road_sign_types
+  - not
+- entity: nexarRoadSignImpact
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Filter predicate by road sign status (unsupported)
+  field_count: 1
+  fields:
+  - damaged
+- entity: nexarRoadSignType
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: null
+  field_count: 0
+  fields: []
+- entity: nexarRoadSignTypeFilter
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Road sign filter predicate
+  field_count: 4
+  fields:
+  - road_sign_elements
+  - road_sign_impact
+  - operator
+  - not
+- entity: nexarRoadType
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: string
+  title: Open Street Map road types
+  field_count: 0
+  fields: []
+- entity: nexarTimeOfDay
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Time of day
+  field_count: 3
+  fields:
+  - hours
+  - minutes
+  - seconds
+- entity: nexarTimeOfDayRange
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Filter predicate by time of day
+  field_count: 3
+  fields:
+  - from
+  - to
+  - time_zone_name
+- entity: nexarTimestampParams
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: Filter predicate by timestamp in milliseconds (UTC)
+  field_count: 2
+  fields:
+  - operator
+  - timestamp_millis
+- entity: protobufAny
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields:
+  - type_url
+  - value
+- entity: runtimeError
+  spec: openapi/nexar-roadinventory-openapi.yml
+  type: object
+  title: null
+  field_count: 4
+  fields:
+  - error
+  - code
+  - message
+  - details
+relationships:
+- from: apiFindRawFramesApiFilters
+  to: apiDaylightStateApiElement
+  cardinality: has_many
+  via: frames_context
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiFindRawFramesApiFilters
+  to: apiHeadingApiElement
+  cardinality: has_many
+  via: directions
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiFindRawFramesApiFilters
+  to: road_itemapiOsmRoadTypeApiElement
+  cardinality: has_many
+  via: road_types
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiFindRawFramesApiRequestParams
+  to: apiFindRawFramesApiFilters
+  cardinality: has_one
+  via: filters
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiFindRawFramesApiRequestParams
+  to: apiH3IndicesApiRequest
+  cardinality: has_one
+  via: h3_location
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiFindRawFramesApiRequestParams
+  to: apiSortByApiRequest
+  cardinality: has_one
+  via: sort_by
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiFindRawFramesApiRequestParams
+  to: road_itemapiGeoBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiFindRawFramesApiResult
+  to: apiRawFrameApiElement
+  cardinality: has_many
+  via: frames
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiRawFrameApiElement
+  to: apiDaylightStateApiElement
+  cardinality: has_one
+  via: frame_context
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiRawFrameApiElement
+  to: apiHeadingApiElement
+  cardinality: has_one
+  via: direction
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiRawFrameApiElement
+  to: road_itemapiGeoLocationApiElement
+  cardinality: has_one
+  via: gps_info
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiRawFrameApiElement
+  to: road_itemapiOsmRoadSegmentApiElement
+  cardinality: has_one
+  via: osm_info
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: nexarFindRawFramesApiResponse
+  to: apiFindRawFramesApiResult
+  cardinality: has_one
+  via: frames
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: road_itemapiGeoBoundingBoxApiElement
+  to: road_itemapiGeoLocationApiElement
+  cardinality: has_one
+  via: north_east
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: road_itemapiOsmRoadSegmentApiElement
+  to: road_itemapiOsmRoadTypeApiElement
+  cardinality: has_one
+  via: road_type
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: FindRawFramesApiRequestParams
+  to: FindRawFramesApiFilters
+  cardinality: has_one
+  via: filters
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: FindRawFramesApiRequestParams
+  to: GeoBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: FindRawFramesApiRequestParams
+  to: H3IndicesApiRequest
+  cardinality: has_one
+  via: h3_location
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: FindRawFramesApiRequestParams
+  to: SortByApiRequest
+  cardinality: has_one
+  via: sort_by
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: FindRawFramesApiResponse
+  to: RawFrameApiElement
+  cardinality: has_many
+  via: frames
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: GeoBoundingBoxApiElement
+  to: GeoLocationApiElement
+  cardinality: has_one
+  via: north_east
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: FindRawFramesApiFilters
+  to: DaylightStateApiElement
+  cardinality: has_many
+  via: frames_context
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: FindRawFramesApiFilters
+  to: HeadingApiElement
+  cardinality: has_many
+  via: directions
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: FindRawFramesApiFilters
+  to: OsmRoadTypeApiElement
+  cardinality: has_many
+  via: road_types
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: RawFrameApiElement
+  to: DaylightStateApiElement
+  cardinality: has_one
+  via: frame_context
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: RawFrameApiElement
+  to: GeoLocationApiElement
+  cardinality: has_one
+  via: gps_info
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: RawFrameApiElement
+  to: HeadingApiElement
+  cardinality: has_one
+  via: direction
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: RawFrameApiElement
+  to: OsmRoadSegmentApiElement
+  cardinality: has_one
+  via: osm_info
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: OsmRoadSegmentApiElement
+  to: OsmRoadTypeApiElement
+  cardinality: has_one
+  via: road_type
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: GetH3CoverageRequestParams
+  to: H3CoverageBoundingBoxApiElement
+  cardinality: has_one
+  via: h3_coverage_bounding_box
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: GetH3CoverageRequestParams
+  to: H3IndicesApiRequest
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: GetH3CoverageResponse
+  to: H3CoverageApiElement
+  cardinality: has_many
+  via: coverage
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: H3CoverageBoundingBoxApiElement
+  to: GeoBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-virtualcam-openapi.yml
+- from: apiConstructionZoneDetectionApiElement
+  to: apiConstructionZoneApiElementSubType
+  cardinality: has_one
+  via: sub_type
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiConstructionZoneDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiConstructionZoneDetectionApiElement
+  to: apiPixelBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionFilterApiElement
+  to: DetectionStatusApiElementStatus
+  cardinality: has_many
+  via: detection_status
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionFilterApiElement
+  to: apiDetectionTypeApiElement
+  cardinality: has_many
+  via: detection_types
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionFilterApiElement
+  to: apiOsmRoadTypeApiElement
+  cardinality: has_many
+  via: osm_road_types
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionRequestParams
+  to: H3IndexFormatApiElementFormat
+  cardinality: has_one
+  via: h3_index_format
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionRequestParams
+  to: apiDetectionFilterApiElement
+  cardinality: has_one
+  via: filter
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionRequestParams
+  to: apiGeoBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionResponsePayload
+  to: apiGeoJsonDetectionCollection
+  cardinality: has_one
+  via: geo_json_payload
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionResponsePayload
+  to: apiHexsegDetectionPayload
+  cardinality: has_one
+  via: detection_payload
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionResponsePayload
+  to: apiWZDxDetectionCollection
+  cardinality: has_one
+  via: wzdx_payload
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionTypeApiElement
+  to: apiConstructionZoneApiElementSubType
+  cardinality: has_one
+  via: construction_zone_element
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionTypeApiElement
+  to: apiRoadConditionApiElementSubType
+  cardinality: has_one
+  via: road_condition_element
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionTypeApiElement
+  to: apiRoadSurfaceApiElementSubType
+  cardinality: has_one
+  via: road_surface_element
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiDetectionTypeApiElement
+  to: apiTrafficSignApiElementSubType
+  cardinality: has_one
+  via: traffic_sign
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiGeoBoundingBoxApiElement
+  to: apiGeoLocationApiElementRequest
+  cardinality: has_one
+  via: north_east
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiGeoJsonDetection
+  to: apiGeoJsonDetectionFeatureType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiGeoJsonDetection
+  to: apiGeoJsonGeometryPoint
+  cardinality: has_one
+  via: geometry
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiGeoJsonDetection
+  to: apiHexsegDetectionApiElement
+  cardinality: has_one
+  via: properties
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiGeoJsonDetectionCollection
+  to: apiGeoJsonDetection
+  cardinality: has_many
+  via: features
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiGeoJsonDetectionCollection
+  to: apiGeoJsonDetectionCollectionFeatureCollectionType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiGeoJsonGeometryPoint
+  to: apiGeoJsonGeometryPointGeometryType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: DetectionStatusApiElementStatus
+  cardinality: has_one
+  via: status
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiConstructionZoneDetectionApiElement
+  cardinality: has_many
+  via: construction_zone_elements
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiDetectionEvidenceFrameApiElement
+  cardinality: has_one
+  via: frame
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: camera_gps
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiH3IndicesApiElement
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiOsmRoadSegmentApiElement
+  cardinality: has_one
+  via: osm_segment
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiRoadConditionDetectionApiElement
+  cardinality: has_many
+  via: road_condition_elements
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiRoadSurfaceDetectionApiElement
+  cardinality: has_many
+  via: road_surface_elements
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiTrafficSignDetectionApiElement
+  cardinality: has_many
+  via: traffic_signs
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiHexsegDetectionPayload
+  to: apiHexsegDetectionApiElement
+  cardinality: has_many
+  via: detections
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiOsmRoadSegmentApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: source_location
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiOsmRoadSegmentApiElement
+  to: apiOsmRoadTypeApiElement
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiRoadConditionDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiRoadConditionDetectionApiElement
+  to: apiPixelBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiRoadConditionDetectionApiElement
+  to: apiRoadConditionApiElementSubType
+  cardinality: has_one
+  via: sub_type
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiRoadSurfaceDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiRoadSurfaceDetectionApiElement
+  to: apiPixelBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiRoadSurfaceDetectionApiElement
+  to: apiRoadSurfaceApiElementSubType
+  cardinality: has_one
+  via: sub_type
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiTrafficSignDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiTrafficSignDetectionApiElement
+  to: apiPixelBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiTrafficSignDetectionApiElement
+  to: apiTrafficSignApiElementSubType
+  cardinality: has_one
+  via: sub_type
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiWZDxDetection
+  to: apiGeoJsonGeometryPoint
+  cardinality: has_one
+  via: geometry
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiWZDxDetection
+  to: apiWZDxDetectionFeatureType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiWZDxDetection
+  to: apiWZDxDetectionProperties
+  cardinality: has_one
+  via: properties
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiWZDxDetectionCollection
+  to: apiWZDxDetection
+  cardinality: has_many
+  via: features
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiWZDxDetectionCollection
+  to: apiWZDxDetectionCollectionFeatureCollectionType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiWZDxDetectionCollection
+  to: apiWZDxFeedInfo
+  cardinality: has_one
+  via: feed_info
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiWZDxDetectionProperties
+  to: apiHexsegDetectionApiElement
+  cardinality: has_one
+  via: detection_properties
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiWZDxDetectionProperties
+  to: apiWZDxCameraCoreDetails
+  cardinality: has_one
+  via: core_details
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiWZDxFeedInfo
+  to: apiWZDxDataSource
+  cardinality: has_many
+  via: data_sources
+  spec: openapi/nexar-livefeed-openapi.yml
+- from: apiConstructionZoneDetectionApiElement
+  to: apiConstructionZoneApiElementSubType
+  cardinality: has_one
+  via: sub_type
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiConstructionZoneDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiConstructionZoneDetectionApiElement
+  to: apiPixelBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiDetectionFilterApiElement
+  to: apiDetectionStatusApiElementStatus
+  cardinality: has_many
+  via: detection_status
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiDetectionFilterApiElement
+  to: apiDetectionTypeApiElement
+  cardinality: has_many
+  via: detection_types
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiDetectionFilterApiElement
+  to: apiOsmRoadTypeApiElement
+  cardinality: has_many
+  via: osm_road_types
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiDetectionRequestParams
+  to: H3IndexFormatApiElementFormat
+  cardinality: has_one
+  via: h3_index_format
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiDetectionRequestParams
+  to: apiDetectionFilterApiElement
+  cardinality: has_one
+  via: filter
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiDetectionRequestParams
+  to: apiGeoBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiDetectionResponsePayload
+  to: apiGeoJsonDetectionCollection
+  cardinality: has_one
+  via: geo_json_payload
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiDetectionResponsePayload
+  to: apiHexsegDetectionPayload
+  cardinality: has_one
+  via: detection_payload
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiDetectionResponsePayload
+  to: apiWZDxDetectionCollection
+  cardinality: has_one
+  via: wzdx_payload
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiGeoBoundingBoxApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: north_east
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiGeoJsonDetection
+  to: apiGeoJsonDetectionFeatureType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiGeoJsonDetection
+  to: apiGeoJsonGeometryPoint
+  cardinality: has_one
+  via: geometry
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiGeoJsonDetection
+  to: apiHexsegDetectionApiElement
+  cardinality: has_one
+  via: properties
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiGeoJsonDetectionCollection
+  to: apiGeoJsonDetection
+  cardinality: has_many
+  via: features
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiGeoJsonDetectionCollection
+  to: apiGeoJsonDetectionCollectionFeatureCollectionType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiGeoJsonGeometryPoint
+  to: apiGeoJsonGeometryPointGeometryType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiConstructionZoneDetectionApiElement
+  cardinality: has_many
+  via: construction_zone_elements
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiDetectionEvidenceFrameApiElement
+  cardinality: has_one
+  via: frame
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiDetectionStatusApiElementStatus
+  cardinality: has_one
+  via: status
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: camera_gps
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiH3IndicesApiElement
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiOsmRoadSegmentApiElement
+  cardinality: has_one
+  via: osm_segment
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiRoadBlockageDetectionApiElement
+  cardinality: has_many
+  via: road_blockages
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiTrafficSignDetectionApiElement
+  cardinality: has_many
+  via: traffic_signs
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiHexsegDetectionPayload
+  to: apiHexsegDetectionApiElement
+  cardinality: has_many
+  via: detections
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiOsmRoadSegmentApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: source_location
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiOsmRoadSegmentApiElement
+  to: apiOsmRoadTypeApiElement
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiRoadBlockageDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiRoadBlockageDetectionApiElement
+  to: apiPixelBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiRoadBlockageDetectionApiElement
+  to: apiRoadBlockageApiElementSubType
+  cardinality: has_one
+  via: sub_type
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiTrafficSignDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiTrafficSignDetectionApiElement
+  to: apiPixelBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiTrafficSignDetectionApiElement
+  to: apiTrafficSignApiElementSubType
+  cardinality: has_one
+  via: sub_type
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiWZDxDetection
+  to: apiGeoJsonGeometryPoint
+  cardinality: has_one
+  via: geometry
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiWZDxDetection
+  to: apiWZDxDetectionFeatureType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiWZDxDetection
+  to: apiWZDxDetectionProperties
+  cardinality: has_one
+  via: properties
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiWZDxDetectionCollection
+  to: apiWZDxDetection
+  cardinality: has_many
+  via: features
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiWZDxDetectionCollection
+  to: apiWZDxDetectionCollectionFeatureCollectionType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiWZDxDetectionCollection
+  to: apiWZDxFeedInfo
+  cardinality: has_one
+  via: feed_info
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiWZDxDetectionProperties
+  to: apiHexsegDetectionApiElement
+  cardinality: has_one
+  via: detection_properties
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiWZDxDetectionProperties
+  to: apiWZDxCameraCoreDetails
+  cardinality: has_one
+  via: core_details
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiWZDxFeedInfo
+  to: apiWZDxDataSource
+  cardinality: has_many
+  via: data_sources
+  spec: openapi/nexar-workzones-openapi.yml
+- from: mobinexarConstructionZoneDetection
+  to: nexarConstructionZoneDetectionSegment
+  cardinality: has_many
+  via: detection_segments
+  spec: openapi/nexar-workzones-openapi.yml
+- from: mobinexarConstructionZoneDetection
+  to: nexarConstructionZoneRoadSegment
+  cardinality: has_many
+  via: primary_segments
+  spec: openapi/nexar-workzones-openapi.yml
+- from: mobinexarConstructionZoneSegment
+  to: nexarConstructionZoneImpactLaneImpact
+  cardinality: has_one
+  via: lane_impact
+  spec: openapi/nexar-workzones-openapi.yml
+- from: mobinexarConstructionZoneSegment
+  to: nexarGeoLine
+  cardinality: has_one
+  via: line
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarBoundingGPSBox
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: south_west_point
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneDetectionElement
+  to: nexarRoadBlockageConstructionElement
+  cardinality: has_one
+  via: element
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneDetectionElement
+  to: nexarRoadItemEvidenceFrame
+  cardinality: has_many
+  via: evidence_frames
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneDetectionSegment
+  to: mobinexarConstructionZoneSegment
+  cardinality: has_one
+  via: segment
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneDetectionSegment
+  to: nexarConstructionZoneDetectionElement
+  cardinality: has_one
+  via: detection_element
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneDetectionSegment
+  to: nexarObjectId
+  cardinality: has_one
+  via: sub_item_id
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneElements
+  to: nexarLogicalOperator
+  cardinality: has_one
+  via: operator
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneElements
+  to: nexarRoadBlockageConstructionElement
+  cardinality: has_many
+  via: elements
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneFilter
+  to: nexarConstructionZoneElements
+  cardinality: has_one
+  via: construction_zone_elements
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneFilter
+  to: nexarConstructionZoneImpact
+  cardinality: has_one
+  via: construction_zone_impact
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneFilter
+  to: nexarLogicalOperator
+  cardinality: has_one
+  via: operator
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneImpact
+  to: nexarConstructionZoneImpactLaneImpact
+  cardinality: has_many
+  via: lane_impact
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneRoadSegment
+  to: mobinexarConstructionZoneSegment
+  cardinality: has_one
+  via: segment
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarConstructionZoneRoadSegment
+  to: nexarChangeDetectionStatus
+  cardinality: has_one
+  via: status
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarDetectionLocation
+  to: nexarBBox
+  cardinality: has_one
+  via: bbox
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarDetectionLocation
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarDetectionLocation
+  to: nexarPointH3Indices
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: FindDetectionsRequestParamsSortDirection
+  cardinality: has_one
+  via: time_sort_direction
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: mobinexarTimeRange
+  cardinality: has_one
+  via: time_range
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: nexarBoundingGPSBox
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: nexarH3IndicesRequest
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: nexarHeading
+  cardinality: has_one
+  via: heading
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: nexarRoadItemDetectionFilter
+  cardinality: has_one
+  via: detection_filter
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: nexarTimeOfDayRange
+  cardinality: has_one
+  via: time_of_day_range
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFindDetectionsResponse
+  to: nexarRoadItemDetectionResultSet
+  cardinality: has_one
+  via: results
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFindDetectionsResponsePayload
+  to: nexarRoadItemDetectionResultSet
+  cardinality: has_one
+  via: results
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFindRawFramesRequestParams
+  to: nexarFrameFilters
+  cardinality: has_one
+  via: filters
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFindRawFramesRequestParams
+  to: nexarRoadItemFilters
+  cardinality: has_one
+  via: road_item_filters
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFrameFilters
+  to: nexarBoundingGPSBox
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFrameFilters
+  to: nexarH3IndicesRequest
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFrameFilters
+  to: nexarHeading
+  cardinality: has_one
+  via: heading
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarFrameFilters
+  to: nexarOsmRequest
+  cardinality: has_one
+  via: osm_ids
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarGPSSignal
+  to: GPSSignalGPSProducer
+  cardinality: has_one
+  via: producer
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarGeoLine
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: point_from
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarGeoLine
+  to: nexarOsmInfo
+  cardinality: has_one
+  via: osm_info
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarGeoPoint
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: point
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarGeoPoint
+  to: nexarOsmInfo
+  cardinality: has_one
+  via: osm_info
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarGetDetectionRequestParams
+  to: nexarObjectId
+  cardinality: has_one
+  via: item_id
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarGetDetectionResponse
+  to: nexarDisplayImage
+  cardinality: has_many
+  via: display_images
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarGetDetectionResponse
+  to: nexarRoadItemDetection
+  cardinality: has_one
+  via: road_item_detection
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarOsmInfo
+  to: nexarRoadType
+  cardinality: has_one
+  via: road_type
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarParkingSpotDetection
+  to: nexarGeoLine
+  cardinality: has_one
+  via: line
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarParkingSpotDetection
+  to: nexarRoadItemEvidenceFrame
+  cardinality: has_many
+  via: evidence_frames
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarParkingSpotFilter
+  to: ParkingSpotFilterIsAllowed
+  cardinality: has_one
+  via: is_allowed
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRawFrameResponse
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: gps_point
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRawFrameResponse
+  to: nexarHeading
+  cardinality: has_one
+  via: heading
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRawFrameResponse
+  to: nexarImageQuality
+  cardinality: has_one
+  via: image_quality
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRawFrameResponse
+  to: nexarOsmInfo
+  cardinality: has_one
+  via: osm_info
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRawFrameResponse
+  to: nexarPointH3Indices
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRawFramesResponse
+  to: nexarRawFramesResult
+  cardinality: has_one
+  via: payload
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRawFramesResponse
+  to: nexarResponseContext
+  cardinality: has_one
+  via: context
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRawFramesResult
+  to: nexarRawFrameResponse
+  cardinality: has_many
+  via: raw_frames
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemDetection
+  to: mobinexarConstructionZoneDetection
+  cardinality: has_one
+  via: construction_zone
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemDetection
+  to: nexarObjectId
+  cardinality: has_one
+  via: item_id
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemDetectionFilter
+  to: nexarChangeDetectionStatus
+  cardinality: has_many
+  via: status
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemDetectionFilter
+  to: nexarConstructionZoneFilter
+  cardinality: has_one
+  via: construction_zone_filter
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemDetectionResultSet
+  to: mobinexarTimeRange
+  cardinality: has_one
+  via: result_window_time_range
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemDetectionResultSet
+  to: nexarRoadItemDetection
+  cardinality: has_many
+  via: road_item_detections
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemEvidenceFrame
+  to: nexarDetectionLocation
+  cardinality: has_many
+  via: detection_locations
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemEvidenceFrame
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: location_of_camera
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemEvidenceFrame
+  to: nexarGPSSignal
+  cardinality: has_one
+  via: raw_gps_signal_of_camera
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemEvidenceFrame
+  to: nexarOsmInfo
+  cardinality: has_one
+  via: osm_info
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemEvidenceFrame
+  to: nexarPointH3Indices
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarBoundingGPSBox
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarH3IndicesRequest
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarHeading
+  cardinality: has_one
+  via: heading
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarHumanReadableTimeRange
+  cardinality: has_one
+  via: time_range
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarOsmRequest
+  cardinality: has_one
+  via: osm_ids
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarTimestampParams
+  cardinality: has_one
+  via: created_timestamp
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadSignDetection
+  to: nexarChangeDetectionStatus
+  cardinality: has_one
+  via: status
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadSignDetection
+  to: nexarGeoPoint
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadSignDetection
+  to: nexarRoadSignDetectionElement
+  cardinality: has_one
+  via: detection_element
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadSignDetectionElement
+  to: nexarRoadItemEvidenceFrame
+  cardinality: has_many
+  via: evidence_frames
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadSignDetectionElement
+  to: nexarRoadSignImpact
+  cardinality: has_one
+  via: impact
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadSignDetectionElement
+  to: nexarRoadSignType
+  cardinality: has_one
+  via: road_sign_type
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadSignElements
+  to: nexarRoadSignType
+  cardinality: has_many
+  via: road_sign_types
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadSignTypeFilter
+  to: nexarLogicalOperator
+  cardinality: has_one
+  via: operator
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadSignTypeFilter
+  to: nexarRoadSignElements
+  cardinality: has_one
+  via: road_sign_elements
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarRoadSignTypeFilter
+  to: nexarRoadSignImpact
+  cardinality: has_one
+  via: road_sign_impact
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarTimeOfDayRange
+  to: nexarTimeOfDay
+  cardinality: has_one
+  via: from
+  spec: openapi/nexar-workzones-openapi.yml
+- from: nexarTimestampParams
+  to: mobinexarOperator
+  cardinality: has_one
+  via: operator
+  spec: openapi/nexar-workzones-openapi.yml
+- from: runtimeError
+  to: protobufAny
+  cardinality: has_many
+  via: details
+  spec: openapi/nexar-workzones-openapi.yml
+- from: apiConstructionZoneDetectionApiElement
+  to: apiConstructionZoneApiElementSubType
+  cardinality: has_one
+  via: sub_type
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiConstructionZoneDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiConstructionZoneDetectionApiElement
+  to: apiPixelBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiDetectionFilterApiElement
+  to: apiDetectionStatusApiElementStatus
+  cardinality: has_many
+  via: detection_status
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiDetectionFilterApiElement
+  to: apiDetectionTypeApiElement
+  cardinality: has_many
+  via: detection_types
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiDetectionFilterApiElement
+  to: apiOsmRoadTypeApiElement
+  cardinality: has_many
+  via: osm_road_types
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiDetectionRequestParams
+  to: H3IndexFormatApiElementFormat
+  cardinality: has_one
+  via: h3_index_format
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiDetectionRequestParams
+  to: apiDetectionFilterApiElement
+  cardinality: has_one
+  via: filter
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiDetectionRequestParams
+  to: apiGeoBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiDetectionResponsePayload
+  to: apiGeoJsonDetectionCollection
+  cardinality: has_one
+  via: geo_json_payload
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiDetectionResponsePayload
+  to: apiHexsegDetectionPayload
+  cardinality: has_one
+  via: detection_payload
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiDetectionResponsePayload
+  to: apiWZDxDetectionCollection
+  cardinality: has_one
+  via: wzdx_payload
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiGeoBoundingBoxApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: north_east
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiGeoJsonDetection
+  to: apiGeoJsonDetectionFeatureType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiGeoJsonDetection
+  to: apiGeoJsonGeometryPoint
+  cardinality: has_one
+  via: geometry
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiGeoJsonDetection
+  to: apiHexsegDetectionApiElement
+  cardinality: has_one
+  via: properties
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiGeoJsonDetectionCollection
+  to: apiGeoJsonDetection
+  cardinality: has_many
+  via: features
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiGeoJsonDetectionCollection
+  to: apiGeoJsonDetectionCollectionFeatureCollectionType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiGeoJsonGeometryPoint
+  to: apiGeoJsonGeometryPointGeometryType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiConstructionZoneDetectionApiElement
+  cardinality: has_many
+  via: construction_zone_elements
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiDetectionEvidenceFrameApiElement
+  cardinality: has_one
+  via: frame
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiDetectionStatusApiElementStatus
+  cardinality: has_one
+  via: status
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: camera_gps
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiH3IndicesApiElement
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiOsmRoadSegmentApiElement
+  cardinality: has_one
+  via: osm_segment
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiRoadBlockageDetectionApiElement
+  cardinality: has_many
+  via: road_blockages
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiHexsegDetectionApiElement
+  to: apiTrafficSignDetectionApiElement
+  cardinality: has_many
+  via: traffic_signs
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiHexsegDetectionPayload
+  to: apiHexsegDetectionApiElement
+  cardinality: has_many
+  via: detections
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiOsmRoadSegmentApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: source_location
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiOsmRoadSegmentApiElement
+  to: apiOsmRoadTypeApiElement
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiRoadBlockageDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiRoadBlockageDetectionApiElement
+  to: apiPixelBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiRoadBlockageDetectionApiElement
+  to: apiRoadBlockageApiElementSubType
+  cardinality: has_one
+  via: sub_type
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiTrafficSignDetectionApiElement
+  to: apiGeoLocationApiElement
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiTrafficSignDetectionApiElement
+  to: apiPixelBoundingBoxApiElement
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiTrafficSignDetectionApiElement
+  to: apiTrafficSignApiElementSubType
+  cardinality: has_one
+  via: sub_type
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiWZDxDetection
+  to: apiGeoJsonGeometryPoint
+  cardinality: has_one
+  via: geometry
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiWZDxDetection
+  to: apiWZDxDetectionFeatureType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiWZDxDetection
+  to: apiWZDxDetectionProperties
+  cardinality: has_one
+  via: properties
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiWZDxDetectionCollection
+  to: apiWZDxDetection
+  cardinality: has_many
+  via: features
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiWZDxDetectionCollection
+  to: apiWZDxDetectionCollectionFeatureCollectionType
+  cardinality: has_one
+  via: type
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiWZDxDetectionCollection
+  to: apiWZDxFeedInfo
+  cardinality: has_one
+  via: feed_info
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiWZDxDetectionProperties
+  to: apiHexsegDetectionApiElement
+  cardinality: has_one
+  via: detection_properties
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiWZDxDetectionProperties
+  to: apiWZDxCameraCoreDetails
+  cardinality: has_one
+  via: core_details
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: apiWZDxFeedInfo
+  to: apiWZDxDataSource
+  cardinality: has_many
+  via: data_sources
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: mobinexarConstructionZoneDetection
+  to: nexarConstructionZoneDetectionSegment
+  cardinality: has_many
+  via: detection_segments
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: mobinexarConstructionZoneDetection
+  to: nexarConstructionZoneRoadSegment
+  cardinality: has_many
+  via: primary_segments
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: mobinexarConstructionZoneSegment
+  to: nexarConstructionZoneImpactLaneImpact
+  cardinality: has_one
+  via: lane_impact
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: mobinexarConstructionZoneSegment
+  to: nexarGeoLine
+  cardinality: has_one
+  via: line
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarBoundingGPSBox
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: south_west_point
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneDetectionElement
+  to: nexarRoadBlockageConstructionElement
+  cardinality: has_one
+  via: element
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneDetectionElement
+  to: nexarRoadItemEvidenceFrame
+  cardinality: has_many
+  via: evidence_frames
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneDetectionSegment
+  to: mobinexarConstructionZoneSegment
+  cardinality: has_one
+  via: segment
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneDetectionSegment
+  to: nexarConstructionZoneDetectionElement
+  cardinality: has_one
+  via: detection_element
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneDetectionSegment
+  to: nexarObjectId
+  cardinality: has_one
+  via: sub_item_id
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneElements
+  to: nexarLogicalOperator
+  cardinality: has_one
+  via: operator
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneElements
+  to: nexarRoadBlockageConstructionElement
+  cardinality: has_many
+  via: elements
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneFilter
+  to: nexarConstructionZoneElements
+  cardinality: has_one
+  via: construction_zone_elements
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneFilter
+  to: nexarConstructionZoneImpact
+  cardinality: has_one
+  via: construction_zone_impact
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneFilter
+  to: nexarLogicalOperator
+  cardinality: has_one
+  via: operator
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneImpact
+  to: nexarConstructionZoneImpactLaneImpact
+  cardinality: has_many
+  via: lane_impact
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneRoadSegment
+  to: mobinexarConstructionZoneSegment
+  cardinality: has_one
+  via: segment
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarConstructionZoneRoadSegment
+  to: nexarChangeDetectionStatus
+  cardinality: has_one
+  via: status
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarDetectionLocation
+  to: nexarBBox
+  cardinality: has_one
+  via: bbox
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarDetectionLocation
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarDetectionLocation
+  to: nexarPointH3Indices
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: FindDetectionsRequestParamsSortDirection
+  cardinality: has_one
+  via: time_sort_direction
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: mobinexarTimeRange
+  cardinality: has_one
+  via: time_range
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: nexarBoundingGPSBox
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: nexarH3IndicesRequest
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: nexarHeading
+  cardinality: has_one
+  via: heading
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: nexarRoadItemDetectionFilter
+  cardinality: has_one
+  via: detection_filter
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindDetectionsRequestParams
+  to: nexarTimeOfDayRange
+  cardinality: has_one
+  via: time_of_day_range
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindDetectionsResponse
+  to: nexarFindDetectionsResponsePayload
+  cardinality: has_one
+  via: payload
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindDetectionsResponse
+  to: nexarResponseContext
+  cardinality: has_one
+  via: context
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindDetectionsResponsePayload
+  to: nexarRoadItemDetectionResultSet
+  cardinality: has_one
+  via: results
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindRawFramesRequestParams
+  to: nexarFrameFilters
+  cardinality: has_one
+  via: filters
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFindRawFramesRequestParams
+  to: nexarRoadItemFilters
+  cardinality: has_one
+  via: road_item_filters
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFrameFilters
+  to: nexarBoundingGPSBox
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFrameFilters
+  to: nexarH3IndicesRequest
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFrameFilters
+  to: nexarHeading
+  cardinality: has_one
+  via: heading
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarFrameFilters
+  to: nexarOsmRequest
+  cardinality: has_one
+  via: osm_ids
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarGPSSignal
+  to: GPSSignalGPSProducer
+  cardinality: has_one
+  via: producer
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarGeoLine
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: point_from
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarGeoLine
+  to: nexarOsmInfo
+  cardinality: has_one
+  via: osm_info
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarGeoPoint
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: point
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarGeoPoint
+  to: nexarOsmInfo
+  cardinality: has_one
+  via: osm_info
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarGetDetectionRequestParams
+  to: nexarObjectId
+  cardinality: has_one
+  via: item_id
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarGetDetectionResponse
+  to: nexarDisplayImage
+  cardinality: has_many
+  via: display_images
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarGetDetectionResponse
+  to: nexarRoadItemDetection
+  cardinality: has_one
+  via: road_item_detection
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarOsmInfo
+  to: nexarRoadType
+  cardinality: has_one
+  via: road_type
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarParkingSpotDetection
+  to: nexarGeoLine
+  cardinality: has_one
+  via: line
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarParkingSpotDetection
+  to: nexarRoadItemEvidenceFrame
+  cardinality: has_many
+  via: evidence_frames
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarParkingSpotFilter
+  to: ParkingSpotFilterIsAllowed
+  cardinality: has_one
+  via: is_allowed
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRawFrameResponse
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: gps_point
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRawFrameResponse
+  to: nexarHeading
+  cardinality: has_one
+  via: heading
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRawFrameResponse
+  to: nexarImageQuality
+  cardinality: has_one
+  via: image_quality
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRawFrameResponse
+  to: nexarOsmInfo
+  cardinality: has_one
+  via: osm_info
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRawFrameResponse
+  to: nexarPointH3Indices
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRawFramesResponse
+  to: nexarRawFramesResult
+  cardinality: has_one
+  via: payload
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRawFramesResponse
+  to: nexarResponseContext
+  cardinality: has_one
+  via: context
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRawFramesResult
+  to: nexarRawFrameResponse
+  cardinality: has_many
+  via: raw_frames
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemDetection
+  to: nexarObjectId
+  cardinality: has_one
+  via: item_id
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemDetection
+  to: nexarRoadSignDetection
+  cardinality: has_one
+  via: road_sign
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemDetectionFilter
+  to: nexarChangeDetectionStatus
+  cardinality: has_many
+  via: status
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemDetectionFilter
+  to: nexarRoadSignTypeFilter
+  cardinality: has_one
+  via: road_sign_filter
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemDetectionResultSet
+  to: mobinexarTimeRange
+  cardinality: has_one
+  via: result_window_time_range
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemDetectionResultSet
+  to: nexarRoadItemDetection
+  cardinality: has_many
+  via: road_item_detections
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemEvidenceFrame
+  to: nexarDetectionLocation
+  cardinality: has_many
+  via: detection_locations
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemEvidenceFrame
+  to: nexarGPSPoint
+  cardinality: has_one
+  via: location_of_camera
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemEvidenceFrame
+  to: nexarGPSSignal
+  cardinality: has_one
+  via: raw_gps_signal_of_camera
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemEvidenceFrame
+  to: nexarOsmInfo
+  cardinality: has_one
+  via: osm_info
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemEvidenceFrame
+  to: nexarPointH3Indices
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarBoundingGPSBox
+  cardinality: has_one
+  via: bounding_box
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarH3IndicesRequest
+  cardinality: has_one
+  via: h3_indices
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarHeading
+  cardinality: has_one
+  via: heading
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarHumanReadableTimeRange
+  cardinality: has_one
+  via: time_range
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarOsmRequest
+  cardinality: has_one
+  via: osm_ids
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadItemFilters
+  to: nexarTimestampParams
+  cardinality: has_one
+  via: created_timestamp
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadSignDetection
+  to: nexarChangeDetectionStatus
+  cardinality: has_one
+  via: status
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadSignDetection
+  to: nexarGeoPoint
+  cardinality: has_one
+  via: location
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadSignDetection
+  to: nexarRoadSignDetectionElement
+  cardinality: has_one
+  via: detection_element
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadSignDetectionElement
+  to: nexarRoadItemEvidenceFrame
+  cardinality: has_many
+  via: evidence_frames
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadSignDetectionElement
+  to: nexarRoadSignImpact
+  cardinality: has_one
+  via: impact
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadSignDetectionElement
+  to: nexarRoadSignType
+  cardinality: has_one
+  via: road_sign_type
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadSignElements
+  to: nexarRoadSignType
+  cardinality: has_many
+  via: road_sign_types
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadSignTypeFilter
+  to: nexarLogicalOperator
+  cardinality: has_one
+  via: operator
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadSignTypeFilter
+  to: nexarRoadSignElements
+  cardinality: has_one
+  via: road_sign_elements
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarRoadSignTypeFilter
+  to: nexarRoadSignImpact
+  cardinality: has_one
+  via: road_sign_impact
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarTimeOfDayRange
+  to: nexarTimeOfDay
+  cardinality: has_one
+  via: from
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: nexarTimestampParams
+  to: mobinexarOperator
+  cardinality: has_one
+  via: operator
+  spec: openapi/nexar-roadinventory-openapi.yml
+- from: runtimeError
+  to: protobufAny
+  cardinality: has_many
+  via: details
+  spec: openapi/nexar-roadinventory-openapi.yml

@@ -1,0 +1,28 @@
+generated: '2026-08-26'
+method: generated
+source: openapi/nexar-virtualcam-openapi.yml, openapi/nexar-livefeed-openapi.yml, openapi/nexar-workzones-openapi.yml,
+  openapi/nexar-roadinventory-openapi.yml
+note: Generated from the four published CityStream contracts. Every operationId referenced in these skills was grepped
+  out of the spec it is attributed to. No provider-published AGENTS.md or skill file was found on nexar-ai.com,
+  getnexar.com or the Developers Portal.
+skills:
+- file: nexar-fetch-road-imagery.md
+  name: Fetch road imagery for an area (Nexar CityStream VirtualCam)
+  api: openapi/nexar-virtualcam-openapi.yml
+  operations:
+  - VcamService_GetH3Coverage
+  - VcamService_FindRawFrames
+  - RoadItemService_FindRawFrames
+- file: nexar-monitor-work-zones.md
+  name: Monitor work zones and consume them as WZDx
+  api: openapi/nexar-workzones-openapi.yml
+  operations:
+  - NexarPlatformAPI_FindDetections
+  - NexarPlatformAPI_GetDetection
+  - CityStreamAPI_FindRealtimeDetections
+- file: nexar-road-sign-inventory.md
+  name: Build a road-sign inventory from Nexar Road Inventory
+  api: openapi/nexar-roadinventory-openapi.yml
+  operations:
+  - NexarPlatformAPI_FindDetections
+  - NexarPlatformAPI_GetDetection

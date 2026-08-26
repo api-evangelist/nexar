@@ -1,0 +1,17 @@
+# Nexar (nexar-ai.com)
+
+> Nexar operates one of the largest real-world video driving datasets - 1.2B+
+> miles of real driving captured each year by 350,000+ connected dashcams - and
+> builds the data, models, and real-time intelligence used to train and validate
+> autonomous-vehicle, ADAS, and smart-city systems.
+
+## Products & platforms
+- BADAS 2.0 - collision-prediction model (99.4% precision, 91% recall): https://www.nexar-ai.com/badas-2
+- Nexar APEX - real-world validation benchmark for AV stacks: https://www.nexar-ai.com/drivers-license-for-av
+- Nexar Atlas - real-world driving data, AI-ready at scale: https://www.nexar-ai.com/nexar-atlas
+- The City AV Index - U.S. city AV-readiness index: https://www.nexar-ai.com/the-av-city-index
+
+## Company
+- Glossary of AV-data and physical-AI terms: https://www.nexar-ai.com/glossary
+- Partners include NVIDIA, Waymo, Lyft, TomTom, Motional, Mapbox.
+- Contact: https://www.nexar-ai.com/contact-us

@@ -1,0 +1,105 @@
+generated: '2026-08-26'
+method: derived
+source: the four openapi/ documents + https://developer.getnexar.com (portal bundle)
+authentication:
+  style: bearer-token
+  header: 'Authorization: Bearer {token}'
+  issuer: https://nexar.okta.com/oauth2/aus3qkg89t55hJZsT4x7
+  see: authentication/nexar-authentication.yml
+transport:
+  protocol: HTTPS
+  style: RPC-over-REST
+  note: Every operation is an HTTP POST with a JSON request body, including the read/search operations. The contracts
+    are grpc-gateway projections of protobuf services — the runtimeError/protobufAny/Status schemas and the `default`
+    response are the tell — so path segments are versioned service routes (/api/<service>/v<n>/<resource>) rather
+    than resource URLs.
+idempotency:
+  supported: false
+  note: 'No idempotency key, header or parameter appears anywhere in the four contracts, and none is documented.
+    This is largely moot: all seven published operations are reads, so there is no duplicate-write hazard to protect
+    against. No Idempotency pointer is emitted.'
+pagination:
+  style: limit + sort
+  params:
+  - limit
+  - sort_by
+  - sort_direction
+  note: Requests carry a `limit` and a sort specification. No cursor or page token is declared in the published
+    contracts, so deep pagination beyond `limit` is not expressible from the spec alone.
+filtering:
+  style: structured request body
+  dimensions:
+  - geo bounding box
+  - H3 index list
+  - OSM road segment / road type
+  - date-time range
+  - detection type and sub-type
+  - detection status (NEW/EXISTING/REMOVED)
+  - minimum quality
+  - time of day / daylight state
+  - vehicle heading
+  note: The filter object is the substance of the API; it is passed in the POST body, not the query string.
+content_negotiation:
+  supported: true
+  media_types:
+  - application/json
+  - application/geo+json
+  - application/vnd.wzdx
+  note: The Live Feed operation declares three response media types for the same operation. application/geo+json
+    returns an RFC 7946 FeatureCollection; application/vnd.wzdx returns a USDOT Work Zone Data Exchange feed. This
+    is real content negotiation over one operation, not three endpoints.
+geospatial:
+  indexing: H3 (Uber hierarchical hexagonal index)
+  road_reference: OpenStreetMap road segments
+  geometry: GeoJSON Point / FeatureCollection
+versioning:
+  scheme: uri-path
+  pattern: /api/{service}/v{n}/...
+  current:
+    virtualcam frames: v5
+    virtualcam coverage: v4
+    livefeed: v4
+    workzones: v3
+    roadinventory: v3
+  note: Version is per-service, not global; VirtualCam runs frames v5 alongside coverage v4.
+error_envelope:
+  shapes:
+  - nexarBadRequest
+  - Status
+  - runtimeError
+  rfc9457: false
+  see: errors/nexar-problem-types.yml
+rate_limit_signaling:
+  status_on_exhaustion: 429
+  declared_in: openapi/nexar-virtualcam-openapi.yml (three operations declare a 429 "API rate limit exceeded")
+  headers: null
+  note: No RateLimit-*/X-RateLimit-*/Retry-After header is declared in any contract and no limit is published. See
+    rate-limits/nexar-rate-limits.yml.
+  see: rate-limits/nexar-rate-limits.yml
+request_tracing:
+  header: null
+  note: No request-id or correlation header is declared in the published contracts.
+metadata:
+  supported: false
+field_expansion:
+  supported: false
+dry_run_mode:
+  state: na
+  note: Read-only API — nothing to rehearse.
+reversibility:
+  state: na
+  grade: na
+  note: 'All seven published operations across the four CityStream contracts are reads: VcamService_FindRawFrames,
+    RoadItemService_FindRawFrames, VcamService_GetH3Coverage, CityStreamAPI_FindRealtimeDetections and the two NexarPlatformAPI_FindDetections
+    / NexarPlatformAPI_GetDetection pairs. They are POSTs only because the filter object is too large for a query
+    string — none of them creates, mutates or deletes provider-side state. There is therefore no write surface to
+    reverse, and no cancel/refund/void/undo/restore operation exists or should exist. Reversibility, dry-run and
+    idempotency are all correctly `na` for this provider rather than zero.'
+  write_surfaces: []
+cross_links:
+  errors: errors/nexar-problem-types.yml
+  lifecycle: lifecycle/nexar-lifecycle.yml
+  authentication: authentication/nexar-authentication.yml
+  scopes: scopes/nexar-scopes.yml
+  rate_limits: rate-limits/nexar-rate-limits.yml
+  data_model: data-model/nexar-data-model.yml

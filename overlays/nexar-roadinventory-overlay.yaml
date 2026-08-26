@@ -1,0 +1,24 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Nexar roadinventory
+  version: 1.0.0
+extends: openapi/nexar-roadinventory-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: nexar
+    x-apievangelist-harvested: '2026-08-26'
+    x-apievangelist-source: https://developer.getnexar.com/specs/roadinventory.yaml
+    x-apievangelist-auth: Bearer access token minted by https://nexar.okta.com/oauth2/aus3qkg89t55hJZsT4x7
+    x-apievangelist-artifacts:
+      authentication: authentication/nexar-authentication.yml
+      scopes: scopes/nexar-scopes.yml
+      conventions: conventions/nexar-conventions.yml
+      errors: errors/nexar-problem-types.yml
+      lifecycle: lifecycle/nexar-lifecycle.yml
+      conformance: conformance/nexar-conformance.yml
+      data_model: data-model/nexar-data-model.yml
+- target: $.servers
+  update:
+  - url: https://external.getnexar.com
+    description: 'CityStream production host (returns 403 "RBAC: access denied" without a bearer token)'

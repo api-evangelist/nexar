@@ -1,0 +1,49 @@
+generated: '2026-08-26'
+method: derived
+source: mcp/nexar-mcp.yml + the four openapi/ documents
+note: 'The MCP surface and the OpenAPI surface at Nexar are two DIFFERENT products and do not overlap at all. The
+  MCP endpoint is the Shopify storefront for the consumer dashcam shop; the OpenAPI contracts are the CityStream
+  road-data APIs on external.getnexar.com. Recording this divergence is the point of the crosswalk: an agent that
+  discovers Nexar through MCP can buy a dashcam and read store policy, and cannot reach a single one of the seven
+  published CityStream operations.'
+surfaces:
+  openapi:
+  - openapi/nexar-virtualcam-openapi.yml
+  - openapi/nexar-livefeed-openapi.yml
+  - openapi/nexar-workzones-openapi.yml
+  - openapi/nexar-roadinventory-openapi.yml
+  openapi_host: 'https://external.getnexar.com (gated — 403 RBAC: access denied without a bearer token)'
+  graphql: null
+  mcp: https://getnexar.com/api/mcp (anonymous tools/list returned 200)
+crosswalk: []
+mcp_only:
+- tool: search_shop_policies_and_faqs
+  reason: Shopify storefront retrieval over shop policy/FAQ/product content; there is no public Nexar REST operation
+    behind it.
+rest_only:
+- capability: Road imagery
+  operations:
+  - VcamService_FindRawFrames
+  - RoadItemService_FindRawFrames
+  - VcamService_GetH3Coverage
+  spec: openapi/nexar-virtualcam-openapi.yml
+- capability: Real-time detections
+  operations:
+  - CityStreamAPI_FindRealtimeDetections
+  spec: openapi/nexar-livefeed-openapi.yml
+- capability: Work zones
+  operations:
+  - NexarPlatformAPI_FindDetections
+  - NexarPlatformAPI_GetDetection
+  spec: openapi/nexar-workzones-openapi.yml
+- capability: Road inventory
+  operations:
+  - NexarPlatformAPI_FindDetections
+  - NexarPlatformAPI_GetDetection
+  spec: openapi/nexar-roadinventory-openapi.yml
+coverage:
+  tools_named: 1
+  tools_bound: 0
+  mcp_only: 1
+  rest_operations_total: 7
+  rest_operations_with_a_tool: 0

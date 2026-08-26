@@ -1,0 +1,38 @@
+generated: '2026-08-26'
+method: searched
+source: https://developer.getnexar.com/specs/virtualcamera.yaml (info.description) + the four openapi/ documents
+versioning:
+  scheme: uri-path
+  pattern: /api/{service}/v{n}/
+  current:
+    CityStream VirtualCam API: 4.0 (frames v5, coverage v4)
+    CityStream Live Feed API: 4.0 (livefeed v4)
+    CityStream Work Zones API: 3.0 (workzones v3)
+    CityStream Road Inventory API: 3.0 (roadinventory v3)
+  docs: https://developer.getnexar.com/documentation
+deprecation:
+  policy_url: null
+  sunset_header: null
+  announced_in_spec: true
+  announcements:
+  - api: CityStream VirtualCam API
+    statement: VirtualCam API Frames V4 and Coverage V3 endpoints will be deprecated on March 31, 2025.
+    sunset_date: '2025-03-31'
+    source: openapi/nexar-virtualcam-openapi.yml#/info/description
+    note: The stated sunset date has already passed; the current published contract carries frames v5 and coverage
+      v4.
+  note: Nexar announces deprecations and their dates inside the OpenAPI info.description of the affected API rather
+    than on a standalone deprecation-policy page. That is a real, dated, machine-fetchable deprecation notice attached
+    to the contract itself, but there is no published policy stating a general notice period, and no Deprecation/Sunset
+    response header (RFC 8594) is declared in any of the four contracts.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+status_page: null
+status_page_note: No status page was found. status.getnexar.com and status.nexar-ai.com do not resolve, and no status
+  link appears in the developer portal bundle, the llms.txt or the site sitemap. No StatusPage pointer is emitted.
+change_log: null
+change_log_note: No dated changelog was found. Release news is carried as prose inside the OpenAPI info.description
+  (the VirtualCam document announces a new Frames endpoint version and the documentation of the Coverage endpoint).
+  No ChangeLog pointer is emitted.

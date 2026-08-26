@@ -1,0 +1,24 @@
+generated: '2026-08-26'
+method: searched
+source: openapi/nexar-virtualcam-openapi.yml + https://developer.getnexar.com (portal bundle)
+limit_count: 0
+limits: []
+status_on_exhaustion: 429
+response_headers: []
+note: 'Nexar declares that rate limiting EXISTS but publishes no number. Three VirtualCam operations (VcamService_FindRawFrames,
+  VcamService_GetH3Coverage, RoadItemService_FindRawFrames) declare a 429 response with the description "API rate
+  limit exceeded". The Live Feed, Work Zones and Road Inventory contracts do not declare a 429 at all. No RateLimit-*,
+  X-RateLimit-* or Retry-After response header is declared in any of the four contracts, and no scope, window, quota
+  or burst value is documented on the developer portal, in the llms.txt, or on nexar-ai.com. An agent therefore
+  cannot tell how much budget it has, nor when to retry, until it is already being throttled. limit_count: 0 is
+  a measured zero, not an unchecked field.'
+evidence:
+- source: openapi/nexar-virtualcam-openapi.yml
+  operations:
+  - VcamService_FindRawFrames
+  - VcamService_GetH3Coverage
+  - RoadItemService_FindRawFrames
+  declares: 429 API rate limit exceeded
+- url: https://external.getnexar.com/api/virtualcam/v5/frames
+  status: 403
+  note: 'anonymous probe returns "RBAC: access denied" with no rate-limit headers'

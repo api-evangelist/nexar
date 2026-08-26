@@ -1,0 +1,75 @@
+generated: '2026-08-26'
+method: searched
+source: pypi.org, registry.npmjs.org, github.com/getnexar
+note: 'IMPORTANT NEGATIVE FINDING: Nexar publishes NO first-party client library for the CityStream APIs. There
+  is no Python, JavaScript, Go, Java or .NET SDK that wraps VirtualCam, Live Feed, Work Zones or Road Inventory
+  — consumers hand-roll HTTP against external.getnexar.com. Because no official API client exists, NO `SDKs` pointer
+  is emitted; emitting one on the strength of the two packages below would credit Nexar with an SDK it does not
+  ship. NAME COLLISION WARNING: npm `nexar-sdk` and `nexar-stream` are published by an unrelated company (nexar.com.co,
+  WhatsApp messaging) and are NOT Nexar Inc packages; they are recorded here as official:false so a later pass does
+  not re-adopt them.'
+packages:
+- language: python
+  registry: pypi
+  name: badas
+  url: https://pypi.org/project/badas/
+  install: pip install badas
+  official: true
+  version: 1.1.3
+  published: '2026-04-09'
+  source_code: https://github.com/getnexar/BADAS-Open
+  license: Apache-2.0
+  description: BADAS (Beyond ADAS) — collision-anticipation inference for dashcam video.
+  first_party_evidence: pyproject.toml in github.com/getnexar/BADAS-Open declares authors = [{name = "Nexar AI Research",
+    email = "research@nexar.com"}]; the PyPI release and the repo push are the same day (2026-04-09).
+  kind: model-library
+  wraps_api: false
+- language: go
+  registry: homebrew
+  name: nap
+  url: https://github.com/getnexar/homebrew-tap
+  install: brew install getnexar/tap/nap
+  official: true
+  version: 3.3.17
+  published: '2026-01-11'
+  distribution: https://storage.googleapis.com/nexar-cli-releases/v3.3.17/nap-{darwin,linux}-{amd64,arm64}
+  license: MIT
+  description: CLI for deploying apps to the Nexar AI Platform.
+  first_party_evidence: Formula/nap.rb in the getnexar GitHub org; homepage https://www.corp.nexars.ai.
+  kind: cli
+  wraps_api: false
+  note: Version read from the pinned URLs in the tap formula; `published` is the last commit date of the tap repo,
+    because a Homebrew tap has no registry metadata endpoint. Renamed from `nexar` to `nap` at v3.0.0.
+  see: cli/nexar-cli.yml
+- language: javascript
+  registry: npm
+  name: nexar-sdk
+  url: https://www.npmjs.com/package/nexar-sdk
+  official: false
+  version: 1.1.11
+  published: '2026-08-19'
+  note: NOT Nexar Inc. Published by nexar.com.co (WhatsApp messaging). Recorded only to prevent misattribution.
+- language: javascript
+  registry: npm
+  name: nexar-stream
+  url: https://www.npmjs.com/package/nexar-stream
+  official: false
+  version: 1.1.12
+  published: '2026-06-12'
+  note: NOT Nexar Inc. Published by nexar.com.co (WebRTC WHIP streaming). Recorded only to prevent misattribution.
+registries_checked:
+- registry: pypi
+  queries:
+  - nexar
+  - citystream
+  - badas-open
+  - nexar-badas
+  result: only `badas` exists and is first-party
+- registry: npm
+  queries:
+  - nexar
+  result: no first-party package; two same-name packages belong to another company
+- registry: github
+  queries:
+  - org:getnexar
+  result: 78 public repos; no client-SDK repo for CityStream

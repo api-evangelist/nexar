@@ -1,0 +1,72 @@
+generated: '2026-08-26'
+method: searched
+source: https://developer.getnexar.com/static/js/main.821ebbae.js (the Developers Portal application bundle)
+docs: https://developer.getnexar.com/access
+note: 'The four published OpenAPI documents declare only an apiKey scheme named `Bearer` in the Authorization header,
+  so derive-oauth-scopes.py found no oauth2 flows in the contract. The real authorization model is OAuth 2.0 Authorization
+  Code + PKCE against Nexar''s own Okta tenant: the portal mints a per-API access token and the scope strings it
+  requests are hard-coded in the portal bundle, one set per CityStream product. The Okta authorization-server metadata
+  (saved under well-known/) advertises only the standard OIDC scopes; these product scopes are custom and are granted
+  through Okta group membership, which is also what gates the documentation route for each API.'
+schemes:
+- name: Okta OAuth 2.0
+  type: oauth2
+  issuer: https://nexar.okta.com/oauth2/aus3qkg89t55hJZsT4x7
+  flows:
+  - flow: authorizationCode
+    pkce: S256
+    authorizationUrl: https://nexar.okta.com/oauth2/aus3qkg89t55hJZsT4x7/v1/authorize
+    tokenUrl: https://nexar.okta.com/oauth2/aus3qkg89t55hJZsT4x7/v1/token
+    revocationUrl: https://nexar.okta.com/oauth2/aus3qkg89t55hJZsT4x7/v1/revoke
+    introspectionUrl: https://nexar.okta.com/oauth2/aus3qkg89t55hJZsT4x7/v1/introspect
+  refresh: https://external.getnexar.com/dev-portal/refresh-token
+- name: Bearer
+  type: apiKey
+  in: header
+  parameter: Authorization
+  sources:
+  - openapi/nexar-virtualcam-openapi.yml
+  - openapi/nexar-livefeed-openapi.yml
+  - openapi/nexar-workzones-openapi.yml
+  - openapi/nexar-roadinventory-openapi.yml
+scopes:
+- scope: frame:get
+  description: Read road frames.
+  apis:
+  - CityStream VirtualCam API
+  flows:
+  - authorizationCode
+- scope: image:get
+  description: Read the image bytes behind a frame or a detection evidence frame.
+  apis:
+  - CityStream VirtualCam API
+  - CityStream Live Feed API
+  - CityStream Work Zones API
+  - CityStream Road Inventory API
+  flows:
+  - authorizationCode
+- scope: detection:find
+  description: Search a collection of detections.
+  apis:
+  - CityStream Live Feed API
+  - CityStream Work Zones API
+  - CityStream Road Inventory API
+  flows:
+  - authorizationCode
+- scope: detection:get
+  description: Read a single detection in full.
+  apis:
+  - CityStream Live Feed API
+  - CityStream Work Zones API
+  - CityStream Road Inventory API
+  flows:
+  - authorizationCode
+standard_oidc_scopes:
+- openid
+- profile
+- email
+- address
+- phone
+- offline_access
+- device_sso
+okta_groups_gate: true

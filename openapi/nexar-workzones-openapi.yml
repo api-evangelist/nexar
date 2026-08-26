@@ -1,0 +1,2496 @@
+openapi: 3.0.1
+info:
+  title: CityStream™ Work Zones API
+  description: "The CityStream™ Work Zones API provides a curated collection of work zones that the Nexar's AI detects from images with road work elements (e.g. grabber cones, diamond signs, barriers or message boards).
+    \n\n
+    Before you start developing with the CityStream™ Work Zones API, make sure you have a valid Access Token."
+  contact:
+    name: Nexar
+    url: https://getnexar.com/
+    email: api-support@getnexar.com
+  license:
+    name: "License: Proprietary"
+  version: "3.0"
+servers:
+  - url: https://external.getnexar.com
+paths:
+  /api/workzones/v3/detections:
+    post:
+      tags:
+        - "Get a collection of work zones"
+      summary: Get a set of curated work zone detections.
+      description: Get curated work zone detections by element and road type from a geographical area defined as bounding box or H3 IDs (Hexagonal Hierarchical Spatial Index).
+      operationId: NexarPlatformAPI_FindDetections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/nexarFindDetectionsRequestParams'
+        required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/nexarFindDetectionsResponse'
+        403:
+          description: There's a problem with your request Authorization (Insufficient
+            permissions)
+          content:
+            application/json:
+              schema:
+                type: object
+        500:
+          description: Something is broken. This is usually a temporary error due
+            to high server load or a brief endpoint error.
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/runtimeError'
+      security:
+        - Bearer: []
+      x-codegen-request-body-name: body
+  /api/workzones/v3/detections/single:
+    post:
+      tags:
+        - "Get a specific work zone"
+      summary: Get further information for a specific work zone.
+      description: Get a specific work zone based on a Nexar detection unique identifier.
+      operationId: NexarPlatformAPI_GetDetection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/nexarGetDetectionRequestParams'
+        required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/nexarGetDetectionResponse'
+        403:
+          description: There's problem with your request Authorization (Insufficient
+            permissions)
+          content:
+            application/json:
+              schema:
+                type: object
+        500:
+          description: Something is broken. This is usually a temporary error due
+            to high server load or a brief endpoint error.
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/runtimeError'
+      security:
+        - Bearer: []
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    FindDetectionsRequestParamsSortDirection:
+      title: Sort order
+      type: string
+      default: NONE
+      enum:
+        - NONE
+        - ASC
+        - DESC
+    GPSSignalGPSProducer:
+      title: GPS signal source (Camera or external mount)
+      type: string
+      default: DEVICE
+      enum:
+        - DEVICE
+        - CAMERA_MOUNT
+    H3IndexFormatApiElementFormat:
+      title: H3 index format
+      type: string
+      description: Whether h3 hexagon ids are given in decimal or hex format
+      default: UNSET
+      enum:
+        - UNSET
+        - LONG
+        - HEX
+    ParkingSpotFilterIsAllowed:
+      type: string
+      default: PARKING_ALLOWED_NOT_SET
+      enum:
+        - PARKING_ALLOWED_NOT_SET
+        - PARKING_ALLOWED_TRUE
+        - PARKING_ALLOWED_FALSE
+    apiConstructionZoneApiElementSubType:
+      title: Road Blockage Detections
+      type: string
+      description: Sub types of road blockage detections (or ANY to include the entire
+        type)
+      default: UNKNOWN
+      enum:
+        - UNKNOWN
+        - ARROW_OR_MESSAGE_BOARD
+        - BARRICADE
+        - BARRIER
+        - DIAMOND_SIGN
+        - DRUM
+        - GRABBER_CONE
+        - RECTANGULAR_SIGN
+        - TRAFFIC_CONE
+        - ANY
+    apiConstructionZoneDetectionApiElement:
+      title: Construction Zone Detection
+      required:
+        - sub_type
+      type: object
+      properties:
+        confidence:
+          title: Confidence
+          type: number
+          description: A score between 0 and 1 depicting the accuracy of this detection
+          format: float
+        bounding_box:
+          $ref: '#/components/schemas/apiPixelBoundingBoxApiElement'
+        location:
+          $ref: '#/components/schemas/apiGeoLocationApiElement'
+        sub_type:
+          $ref: '#/components/schemas/apiConstructionZoneApiElementSubType'
+    apiDetectionEvidenceFrameApiElement:
+      title: Camera Evidence Frame
+      required:
+        - image_id
+        - image_url
+      type: object
+      properties:
+        image_id:
+          title: Image Id
+          type: string
+          description: Unique Nexar Id for this evidence frame
+        image_url:
+          title: Image URL
+          type: string
+          description: Url for retrieving the evidence frame for this detection
+    apiDetectionFilterApiElement:
+      title: Detection request filters
+      type: object
+      properties:
+        detections_with_evidence:
+          title: Detections with evidence
+          type: boolean
+          description: If true then only detections containing visual evidence will
+            be included in the response
+        detection_types:
+          title: Detection types
+          type: array
+          description: Specific type of detections requested (like roadsigns or construction
+            zones)
+          items:
+            $ref: '#/components/schemas/apiDetectionTypeApiElement'
+        osm_road_types:
+          title: Open Street Map road type
+          type: array
+          description: The osm road types to include in the response (like MOTORWAY
+            or PRIMARY)
+          items:
+            $ref: '#/components/schemas/apiOsmRoadTypeApiElement'
+        detection_status:
+          title: Detection Status
+          type: array
+          description: Include detections only for certain statuses (like NEW or EXISTING)
+          items:
+            $ref: '#/components/schemas/apiDetectionStatusApiElementStatus'
+    apiDetectionRequestParams:
+      title: Realtime Detection request parameters
+      required:
+        - bounding_box
+      type: object
+      properties:
+        bounding_box:
+          $ref: '#/components/schemas/apiGeoBoundingBoxApiElement'
+        filter:
+          $ref: '#/components/schemas/apiDetectionFilterApiElement'
+        detections_from_millis:
+          title: Detections from millis
+          type: integer
+          description: Epoch time in the past from when detections should be returned
+          format: uint64
+        max_detections_per_h3:
+          title: Max detections per h3
+          type: integer
+          description: Maximum number of detections to return for each res 12 h3 hexagon
+            within the given bounding box
+          format: int64
+        h3_index_format:
+          $ref: '#/components/schemas/H3IndexFormatApiElementFormat'
+      example:
+        bounding_box:
+          north_east:
+            latitude: 40.80059708181876
+            longitude: -73.92470436457806
+          south_west:
+            latitude: 40.79059708181876
+            longitude: -74.02470436457806
+        filter:
+          detections_with_evidence: true
+          detection_types:
+            - traffic_sign: TURN_LEFT
+            - traffic_sign: STOP
+            - construction_zone: ANY
+          osm_road_types:
+            - FREEWAY
+            - MOTORWAY
+          detection_status:
+            - EXISTING
+        h3_index_format: HEX
+        detection_from_millis: 1663591145110
+        max_detections_per_h3: 100
+    apiDetectionResponsePayload:
+      title: Response for realtime detection requests
+      type: object
+      properties:
+        detection_payload:
+          $ref: '#/components/schemas/apiHexsegDetectionPayload'
+        geo_json_payload:
+          $ref: '#/components/schemas/apiGeoJsonDetectionCollection'
+        wzdx_payload:
+          $ref: '#/components/schemas/apiWZDxDetectionCollection'
+    apiDetectionStatusApiElementStatus:
+      type: string
+      default: UNKNOWN
+      enum:
+        - UNKNOWN
+        - NEW
+        - EXISTING
+        - REMOVED
+    apiDetectionTypeApiElement:
+      title: Detection Type
+      oneOf:
+        - type: object
+          properties:
+            traffic_sign:
+              $ref: '#/components/schemas/apiTrafficSignApiElementSubType'
+        - type: object
+          properties:
+            construction_zone_element:
+              $ref: '#/components/schemas/apiConstructionZoneApiElementSubType'
+        - type: object
+          properties:
+            road_blockage:
+              $ref: '#/components/schemas/apiRoadBlockageApiElementSubType'
+    apiGeoBoundingBoxApiElement:
+      title: Geo Bounding Box
+      required:
+        - north_east
+        - south_west
+      type: object
+      properties:
+        north_east:
+          $ref: '#/components/schemas/apiGeoLocationApiElement'
+        south_west:
+          $ref: '#/components/schemas/apiGeoLocationApiElement'
+    apiGeoJsonDetection:
+      title: GeoJson Detection
+      type: object
+      properties:
+        id:
+          title: Id
+          type: string
+          description: Unique id for this detection
+        type:
+          $ref: '#/components/schemas/apiGeoJsonDetectionFeatureType'
+        properties:
+          $ref: '#/components/schemas/apiHexsegDetectionApiElement'
+        geometry:
+          $ref: '#/components/schemas/apiGeoJsonGeometryPoint'
+    apiGeoJsonDetectionCollection:
+      title: Detections GeoJson Collection
+      required:
+        - features
+        - type
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/apiGeoJsonDetectionCollectionFeatureCollectionType'
+        features:
+          title: Nexar Detections represented as GeoJson Features
+          type: array
+          description: Nexar Detections represented as GeoJson Features
+          items:
+            $ref: '#/components/schemas/apiGeoJsonDetection'
+      example:
+        type: FeatureCollection
+        features:
+          - id: 323h983fh239aa8872s254
+            type: Feature
+            properties:
+              detection_count: 14
+              negative_detection_count: 2
+              first_detection_millis: 1663401980387
+              latest_detection_millis: 1663597804506
+              construction_zone_elements:
+                - confidence: 0.86949587
+                  bounding_box:
+                    x1: 664.625
+                    y1: 382.92188
+                    x2: 698.375
+                    y2: 438.07812
+                  location:
+                    longitude: 40.681501
+                    latitude: -73.9666176
+                  sub_type: CONE
+              camera_gps:
+                latitude: 40.7380653
+                longitude: -73.9800164
+                course: 6.91280832
+              frame:
+                image_id: 4sf05555053d8412db18f81
+                image_url: https://example.getnexar.com/c138656055/fod_4117-B25D.jpg
+              osm_segment:
+                source_id: string
+                dest_id: string
+                source_location:
+                  latitude: 40.7380653
+                  longitude: -73.9800164
+                dest_location:
+                  latitude: 40.7380653
+                  longitude: -73.9800164
+                type: MOTORWAY
+              h3_indices:
+                res_10: 622236723563233300
+                res_12: 631243922817955300
+              status: EXISTING
+            geometry:
+              type: Point
+              coordinates:
+                - -73.9800164
+                - 40.7380653
+    apiGeoJsonDetectionCollectionFeatureCollectionType:
+      type: string
+      default: UNSET
+      enum:
+        - UNSET
+        - FeatureCollection
+    apiGeoJsonDetectionFeatureType:
+      type: string
+      default: UNSET
+      enum:
+        - UNSET
+        - Feature
+    apiGeoJsonGeometryPoint:
+      title: GeoJson Point
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/apiGeoJsonGeometryPointGeometryType'
+        coordinates:
+          title: Coordinates
+          type: array
+          description: A length 2 array containing the points longitude and latitude
+          items:
+            type: number
+            format: double
+    apiGeoJsonGeometryPointGeometryType:
+      type: string
+      default: UNSET
+      enum:
+        - UNSET
+        - Point
+    apiGeoLocationApiElement:
+      title: Geo Coordinates
+      required:
+        - latitude
+        - longitude
+      type: object
+      properties:
+        longitude:
+          title: Longitude
+          type: number
+          description: GPS Point longitude in decimal degrees
+          format: double
+        latitude:
+          title: Latitude
+          type: number
+          description: GPS Point latitude in decimal degrees
+          format: double
+        course:
+          title: Course
+          type: number
+          description: GPS Heading in degrees
+          format: double
+    apiH3IndicesApiElement:
+      title: H3 Indices
+      type: object
+      properties:
+        res_0:
+          type: integer
+          format: uint64
+        res_1:
+          type: integer
+          format: uint64
+        res_2:
+          type: integer
+          format: uint64
+        res_3:
+          type: integer
+          format: uint64
+        res_4:
+          type: integer
+          format: uint64
+        res_5:
+          type: integer
+          format: uint64
+        res_6:
+          type: integer
+          format: uint64
+        res_7:
+          type: integer
+          format: uint64
+        res_8:
+          type: integer
+          format: uint64
+        res_9:
+          type: integer
+          format: uint64
+        res_10:
+          type: integer
+          format: uint64
+        res_11:
+          type: integer
+          format: uint64
+        res_12:
+          type: integer
+          format: uint64
+        res_13:
+          type: integer
+          format: uint64
+        res_14:
+          type: integer
+          format: uint64
+        res_15:
+          type: integer
+          format: uint64
+        res_0_hex:
+          type: string
+        res_1_hex:
+          type: string
+        res_2_hex:
+          type: string
+        res_3_hex:
+          type: string
+        res_4_hex:
+          type: string
+        res_5_hex:
+          type: string
+        res_6_hex:
+          type: string
+        res_7_hex:
+          type: string
+        res_8_hex:
+          type: string
+        res_9_hex:
+          type: string
+        res_10_hex:
+          type: string
+        res_11_hex:
+          type: string
+        res_12_hex:
+          type: string
+        res_13_hex:
+          type: string
+        res_14_hex:
+          type: string
+        res_15_hex:
+          type: string
+    apiHexsegDetectionApiElement:
+      title: Detection
+      required:
+        - detection_count
+        - first_detection_millis
+        - latest_detection_millis
+      type: object
+      properties:
+        detection_count:
+          title: Num confirmed detections
+          type: integer
+          description: The number of times this detection has been confirmed by different
+            cameras frames
+          format: int64
+        negative_detection_count:
+          title: Num Contradictory Detections
+          type: integer
+          description: The number of times this detection has been contradicted by
+            different cameras frames
+          format: int64
+        first_detection_millis:
+          title: First Detection Millis
+          type: integer
+          description: Timestamp when this detection was first recorded
+          format: uint64
+        latest_detection_millis:
+          title: Latest Detection Millis
+          type: integer
+          description: Timestamp when this detection was most recently recorded
+          format: uint64
+        road_blockages:
+          title: Road Blockage detection details
+          type: array
+          description: Nexar road blockage detection details
+          items:
+            $ref: '#/components/schemas/apiRoadBlockageDetectionApiElement'
+        traffic_signs:
+          title: Traffic Sign detection details
+          type: array
+          description: Nexar traffic sign detection details
+          items:
+            $ref: '#/components/schemas/apiTrafficSignDetectionApiElement'
+        construction_zone_elements:
+          title: Construction Zone Element detection details
+          type: array
+          description: Nexar construction zone element detection details
+          items:
+            $ref: '#/components/schemas/apiConstructionZoneDetectionApiElement'
+        camera_gps:
+          $ref: '#/components/schemas/apiGeoLocationApiElement'
+        frame:
+          $ref: '#/components/schemas/apiDetectionEvidenceFrameApiElement'
+        osm_segment:
+          $ref: '#/components/schemas/apiOsmRoadSegmentApiElement'
+        h3_indices:
+          $ref: '#/components/schemas/apiH3IndicesApiElement'
+        status:
+          $ref: '#/components/schemas/apiDetectionStatusApiElementStatus'
+    apiHexsegDetectionPayload:
+      title: Realtime Detections
+      required:
+        - detections
+      type: object
+      properties:
+        detections:
+          title: Detections
+          type: array
+          description: A list of detections
+          items:
+            $ref: '#/components/schemas/apiHexsegDetectionApiElement'
+      example:
+        detections:
+          - detection_count: 14
+            negative_detection_count: 2
+            first_detection_millis: 1663401980387
+            latest_detection_millis: 1663597804506
+            construction_zone_elements:
+              - confidence: 0.86949587
+                bounding_box:
+                  x1: 664.625
+                  y1: 382.92188
+                  x2: 698.375
+                  y2: 438.07812
+                location:
+                  longitude: 40.681501
+                  latitude: -73.9666176
+                sub_type: CONE
+            camera_gps:
+              latitude: 40.7380653
+              longitude: -73.9800164
+              course: 6.91280832
+            frame:
+              image_id: 4sf05555053d8412db18f81
+              image_url: https://example.getnexar.com/c138656055/fod_4117-B25D.jpg
+            osm_segment:
+              source_id: string
+              dest_id: string
+              source_location:
+                latitude: 40.7380653
+                longitude: -73.9800164
+              dest_location:
+                latitude: 40.7380653
+                longitude: -73.9800164
+              type: MOTORWAY
+            h3_indices:
+              res_10: 622236723563233300
+              res_12: 631243922817955300
+            status: EXISTING
+    apiOsmRoadSegmentApiElement:
+      title: OSM road segment
+      required:
+        - dest_id
+        - dest_location
+        - source_id
+        - source_location
+      type: object
+      properties:
+        source_id:
+          title: Source Id
+          type: integer
+          description: OSM node id at the start of this segment
+          format: uint64
+        dest_id:
+          title: Dest Id
+          type: integer
+          description: OSM node id at the end of this segment
+          format: uint64
+        source_location:
+          $ref: '#/components/schemas/apiGeoLocationApiElement'
+        dest_location:
+          $ref: '#/components/schemas/apiGeoLocationApiElement'
+        type:
+          $ref: '#/components/schemas/apiOsmRoadTypeApiElement'
+    apiOsmRoadTypeApiElement:
+      title: Open Street Map road types
+      type: string
+      default: UNKNOWN_ROAD_TYPE
+      enum:
+        - UNKNOWN_ROAD_TYPE
+        - MOTORWAY
+        - TRUNK
+        - PRIMARY
+        - SECONDARY
+        - TERTIARY
+        - UNCLASSIFIED
+        - RESIDENTIAL
+        - SERVICE
+        - MOTORWAY_LINK
+        - TRUNK_LINK
+        - PRIMARY_LINK
+        - SECONDARY_LINK
+        - TERTIARY_LINK
+        - LIVING_STREET
+        - PEDESTRIAN
+        - TRACK
+        - BUS_GUIDEWAY
+        - ESCAPE
+        - RACEWAY
+        - ROAD
+        - FOOTWAY
+        - BRIDLEWAY
+        - STEPS
+        - PATH
+        - CYCLEWAY
+        - CONSTRUCTION
+        - ABANDONED
+        - ACCESS
+        - PROPOSED
+        - REST_AREA
+    apiPixelBoundingBoxApiElement:
+      title: Pixel Bounding Box
+      required:
+        - x1
+        - x2
+        - y1
+        - y2
+      type: object
+      properties:
+        x1:
+          title: X1
+          type: number
+          description: starting x coordinate
+          format: float
+        y1:
+          title: Y1
+          type: number
+          description: starting y coordinate
+          format: float
+        x2:
+          title: X2
+          type: number
+          description: ending x coordinate
+          format: float
+        y2:
+          title: Y2
+          type: number
+          description: ending y coordinate
+          format: float
+    apiRoadBlockageApiElementSubType:
+      title: Road Blockage Detection Sub Type
+      type: string
+      description: Sub types of road blockage detections (or ANY to include the entire
+        type)
+      default: UNSET
+      enum:
+        - UNSET
+        - BLOCKING
+        - NON_BLOCKING
+        - ANY
+    apiRoadBlockageDetectionApiElement:
+      title: Road Blockage Detection
+      required:
+        - confidence
+        - sub_type
+      type: object
+      properties:
+        confidence:
+          title: Confidence
+          type: number
+          description: A score between 0 and 1 depicting the accuracy of this detection
+          format: float
+        bounding_box:
+          $ref: '#/components/schemas/apiPixelBoundingBoxApiElement'
+        location:
+          $ref: '#/components/schemas/apiGeoLocationApiElement'
+        sub_type:
+          $ref: '#/components/schemas/apiRoadBlockageApiElementSubType'
+    apiTrafficSignApiElementSubType:
+      title: Traffic Sign Detection sub type
+      type: string
+      description: Sub types of traffic sign detections (or ANY to include the entire
+        type)
+      default: UNKNOWN
+      enum:
+        - UNKNOWN
+        - STOP
+        - SPEED
+        - SCHOOL
+        - PEDESTRIAN
+        - NO_ENTER
+        - NO_RIGHT_TURN
+        - NO_LEFT_TURN
+        - NO_U_TURN
+        - PARKING_ZONE
+        - YIELD
+        - ISR_STOP_SIGN
+        - MUTCD__R1_1__STOP
+        - MUTCD__R1_2__YIELD
+        - MUTCD__R2_1__SPEED_LIMIT_25
+        - MUTCD__R2_1__SPEED_LIMIT_30
+        - MUTCD__R2_1__SPEED_LIMIT_35
+        - MUTCD__R2_1__SPEED_LIMIT_40
+        - MUTCD__R2_1__SPEED_LIMIT_45
+        - MUTCD__R3_18__NO_U_AND_LEFT_TURN
+        - MUTCD__R3_1__NO_RIGHT_TURN
+        - MUTCD__R3_2__NO_LEFT_TURN
+        - MUTCD__R3_4__NO_U_TURN
+        - MUTCD__R6_1__ONEWAY_LEFT
+        - MUTCD__R6_1__ONEWAY_RIGHT
+        - MUTCD__R8_3A__NO_PARKING
+        - MUTCD__S1_1__SCHOOL_ZONE
+        - MUTCD__W11_2__PEDESTRIAN_CROSSING
+        - MUTCD__W1_8_LEFT
+        - MUTCD__W1_8_RIGHT
+        - VIENNA__B1__GIVE_WAY
+        - VIENNA__C14__SPEED_LIMIT_30
+        - VIENNA__C1A__NO_ENTER
+        - VIENNA__D2__PASS_LEFT_OR_RIGHT
+        - VIENNA__D2__PASS_RIGHT
+        - VIENNA__E12A__PEDESTRIAN
+        - VIENNA__E3A__ONE_WAY
+        - ANY
+    apiTrafficSignDetectionApiElement:
+      title: Traffic Sign Detection
+      required:
+        - sub_type
+      type: object
+      properties:
+        confidence:
+          title: Confidence
+          type: number
+          description: A score between 0 and 1 depicting the accuracy of this detection
+          format: float
+        bounding_box:
+          $ref: '#/components/schemas/apiPixelBoundingBoxApiElement'
+        location:
+          $ref: '#/components/schemas/apiGeoLocationApiElement'
+        sub_type:
+          $ref: '#/components/schemas/apiTrafficSignApiElementSubType'
+    apiWZDxCameraCoreDetails:
+      title: WZDx Camera Core Details
+      type: object
+      properties:
+        data_source_id:
+          title: Data Source Id
+          type: string
+          description: data source to which this camera contributes
+        device_type:
+          title: Device Type
+          type: string
+          description: Camera
+        road_names:
+          title: Road Names
+          type: array
+          description: Road where this camera is currently located
+          items:
+            type: string
+        device_status:
+          title: Device Status
+          type: string
+          description: 'One of: ok, warning, error or unknown'
+        has_automatic_location:
+          title: Has Automatic Location
+          type: boolean
+          description: Whether the camera knows its own gps (for Nexar - true)
+        update_date:
+          title: Update Date
+          type: string
+          description: Timestamp of the last field device update
+    apiWZDxDataSource:
+      title: WZDx Data Source
+      type: object
+      properties:
+        data_source_id:
+          title: Data Source Id
+          type: string
+          description: Unique id for this data source
+        organization_name:
+          title: Organization Name
+          type: string
+          description: Organization that owns this data source
+    apiWZDxDetection:
+      title: WZDx Detection
+      type: object
+      properties:
+        id:
+          title: Id
+          type: string
+          description: Unique id for this detection
+        type:
+          $ref: '#/components/schemas/apiWZDxDetectionFeatureType'
+        properties:
+          $ref: '#/components/schemas/apiWZDxDetectionProperties'
+        geometry:
+          $ref: '#/components/schemas/apiGeoJsonGeometryPoint'
+    apiWZDxDetectionCollection:
+      title: WZDx Road work detections
+      required:
+        - features
+        - feed_info
+        - type
+      type: object
+      properties:
+        feed_info:
+          $ref: '#/components/schemas/apiWZDxFeedInfo'
+        type:
+          $ref: '#/components/schemas/apiWZDxDetectionCollectionFeatureCollectionType'
+        features:
+          title: Features
+          type: array
+          description: Nexar Detections represented as GeoJson Features
+          items:
+            $ref: '#/components/schemas/apiWZDxDetection'
+      example:
+        feed_info:
+          update_date: 2022-04-14T12:45:26Z
+          publisher: Nexar
+          contact_name: nexar
+          contact_email: api-support@nexar.com
+          update_frequency: 3
+          version: "4.0"
+          data_sources:
+            - data_source_id: nexar_data_source_1
+              organization_name: Nexar
+        type: FeatureCollection
+        features:
+          - id: 833hd27fg456s22334
+            type: Feature
+            properties:
+              core_details:
+                data_source_id: nexar_data_source_1
+                device_type: camera
+                road_names:
+                  - Hale Lane
+                device_status: ok
+                has_automatic_location: true
+                update_date: 2022-04-13T16:00:00Z
+              image_url: https://example.getnexar.com/c138656055/fod_4117-B25D.jpg
+              image_timestamp: 2022-04-13T16:00:00Z
+              detection_properties:
+                detection_count: 14
+                negative_detection_count: 2
+                first_detection_millis: 1663401980387
+                latest_detection_millis: 1663597804506
+                construction_zone_elements:
+                  - confidence: 0.86949587
+                    bounding_box:
+                      x1: 664.625
+                      y1: 382.92188
+                      x2: 698.375
+                      y2: 438.07812
+                    location:
+                      longitude: 40.681501
+                      latitude: -73.9666176
+                    sub_type: CONE
+                camera_gps:
+                  latitude: 40.7380653
+                  longitude: -73.9800164
+                  course: 6.91280832
+                frame:
+                  image_id: 4sf05555053d8412db18f81
+                  image_url: https://example.getnexar.com/c138656055/fod_4117-B25D.jpg
+                osm_segment:
+                  source_id: string
+                  dest_id: string
+                  source_location:
+                    latitude: 40.7380653
+                    longitude: -73.9800164
+                  dest_location:
+                    latitude: 40.7380653
+                    longitude: -73.9800164
+                  type: MOTORWAY
+                h3_indices:
+                  res_10: 622236723563233300
+                  res_12: 631243922817955300
+                status: EXISTING
+            geometry:
+              type: Point
+              coordinates:
+                - -73.9800164
+                - 40.7380653
+    apiWZDxDetectionCollectionFeatureCollectionType:
+      type: string
+      default: UNSET
+      enum:
+        - UNSET
+        - FeatureCollection
+    apiWZDxDetectionFeatureType:
+      type: string
+      default: UNSET
+      enum:
+        - UNSET
+        - Feature
+    apiWZDxDetectionProperties:
+      title: WZDx smart work zone camera device
+      type: object
+      properties:
+        core_details:
+          $ref: '#/components/schemas/apiWZDxCameraCoreDetails'
+        image_url:
+          title: Image URL
+          type: string
+          description: Url for retrieving the evidence frame for this detection
+        image_timestamp:
+          title: Image Timestamp
+          type: string
+          description: Timestamp when the evidence frame was taken
+        detection_properties:
+          $ref: '#/components/schemas/apiHexsegDetectionApiElement'
+    apiWZDxFeedInfo:
+      title: WZDx Feed Info
+      type: object
+      properties:
+        update_date:
+          title: Update Date
+          type: string
+          description: The last time the data in this feed was updated
+        publisher:
+          title: Publisher
+          type: string
+          description: The body responsible for publishing data to this feed
+        contact_name:
+          title: Contact Name
+          type: string
+          description: Contact person responsible for this feed
+        contact_email:
+          title: Contact email
+          type: string
+          description: Email to reach the person responsible for this feed
+        update_frequency:
+          title: Update Frequency
+          type: integer
+          description: How frequently the data in this feed is updated (in seconds)
+          format: int64
+        version:
+          title: Version
+          type: number
+          description: WZDx specification version
+          format: float
+        data_sources:
+          title: Data Sources
+          type: array
+          description: List of data sources contributing data to this feed
+          items:
+            $ref: '#/components/schemas/apiWZDxDataSource'
+    mobinexarConstructionZoneDetection:
+      title: Aggregated construction zone detections segmented by geographical shape
+      type: object
+      properties:
+        primary_segments:
+          title: Primary Segments
+          type: array
+          description: Primary segments are road areas which are blocked by construction
+            zone
+          items:
+            $ref: '#/components/schemas/nexarConstructionZoneRoadSegment'
+        detection_segments:
+          title: Detection Segments
+          type: array
+          description: Detection segments are where construction zone elements (such
+            as Barrels, Traffic cone, etc) were detected.
+          items:
+            $ref: '#/components/schemas/nexarConstructionZoneDetectionSegment'
+    mobinexarConstructionZoneSegment:
+      type: object
+      properties:
+        line:
+          $ref: '#/components/schemas/nexarGeoLine'
+        lane_impact:
+          $ref: '#/components/schemas/nexarConstructionZoneImpactLaneImpact'
+      description: Construction zones are segmented geographically. Each segment is
+        described by a geographical line.
+    mobinexarOperator:
+      title: Allowed TimestampParams filter operators
+      type: string
+      description: Operator
+      default: OPERATOR_UNKNOWN
+      enum:
+        - OPERATOR_UNKNOWN
+        - LESS_THAN
+        - GREATER_THAN
+        - EQUALS
+    mobinexarTimeRange:
+      title: Work Zones filter by their detection time
+      description: Selects detections within the aggregation time window which delimited by the end timestamp 
+      type: object
+      required:
+        - end
+      properties:
+        start:
+          title: Deprecated
+          type: string
+          format: uint64
+        end:
+          title: Time range end date (UTC)
+          type: string
+          format: uint64
+      example:
+        start: 1585468974791
+        end: 1588060974791
+    nexarBBox:
+      title: Location of detected element on the image, where (X1,Y1),(X2,Y2) describes
+        the SW,NE corners accordingly
+      type: object
+      properties:
+        x1:
+          type: number
+          format: double
+        y1:
+          type: number
+          format: double
+        x2:
+          type: number
+          format: double
+        y2:
+          type: number
+          format: double
+        tag:
+          type: string
+      example:
+        x1: 246
+        y1: 426
+        x2: 290
+        y2: 492
+        tag: grabber_cone
+    nexarBoundingGPSBox:
+      title: Geo bounding box
+      required:
+        - north_east_point
+        - south_west_point
+      type: object
+      properties:
+        south_west_point:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        north_east_point:
+          $ref: '#/components/schemas/nexarGPSPoint'
+    nexarChangeDetectionStatus:
+      title: Describing the status of the work zone lane impact (e.g. new
+        / removed detections)
+      type: string
+      default: DETECTION_STATUS_NONE
+      enum:
+        - DETECTION_STATUS_NONE
+        - NEW_DETECTION
+        - EXISTING_DETECTION
+        - REMOVED_DETECTION
+    nexarConstructionZoneDetectionElement:
+      type: object
+      properties:
+        element:
+          $ref: '#/components/schemas/nexarRoadBlockageConstructionElement'
+        evidence_frames:
+          title: Evidence Frames
+          type: array
+          description: List of evidence frames showing the construction element
+          items:
+            $ref: '#/components/schemas/nexarRoadItemEvidenceFrame'
+    nexarConstructionZoneDetectionSegment:
+      title: Construction elements that ConstructionZoneSegmentconstitute a construction
+        zone grouped to a primary road segment
+      type: object
+      properties:
+        segment:
+          $ref: '#/components/schemas/mobinexarConstructionZoneSegment'
+        sub_item_id:
+          $ref: '#/components/schemas/nexarObjectId'
+        detection_element:
+          $ref: '#/components/schemas/nexarConstructionZoneDetectionElement'
+    nexarConstructionZoneElements:
+      title: Filter predicate by work zone element type
+      type: object
+      properties:
+        elements:
+          title: Construction Elements
+          type: array
+          description: List of construction zone elements
+          items:
+            $ref: '#/components/schemas/nexarRoadBlockageConstructionElement'
+        operator:
+          $ref: '#/components/schemas/nexarLogicalOperator'
+        not:
+          title: Not
+          type: boolean
+          description: Negation operator (e.g. NOT TRAFFIC_CONE)
+    nexarConstructionZoneFilter:
+      title: Filter by work zone elements type / impact on road
+      type: object
+      properties:
+        construction_zone_elements:
+          $ref: '#/components/schemas/nexarConstructionZoneElements'
+        construction_zone_impact:
+          $ref: '#/components/schemas/nexarConstructionZoneImpact'
+        operator:
+          $ref: '#/components/schemas/nexarLogicalOperator'
+          not:
+          title: Not
+          type: boolean
+          description: Negation operator (e.g. NOT construction_zone_elements)
+    nexarConstructionZoneImpact:
+      title: Filter predicate by impact on road
+      type: object
+      properties:
+        lane_impact:
+          title: Lane Impact
+          type: array
+          description: Impact of construction elements on road (e.g. BLOCKED)
+          items:
+            $ref: '#/components/schemas/nexarConstructionZoneImpactLaneImpact'
+        not:
+          title: Not
+          type: boolean
+          description: Negation operator (e.g. NOT BLOCKED)
+    nexarConstructionZoneImpactLaneImpact:
+      type: string
+      default: NO_IMPACT
+      enum:
+        - NO_IMPACT
+        - BLOCKED
+        - NEW_BLOCKAGE
+        - EXISTING_BLOCKAGE
+        - REMOVED_BLOCKAGE
+    nexarConstructionZoneRoadSegment:
+      title: Describes the impact on a lane from a given construction zone
+      type: object
+      properties:
+        segment:
+          $ref: '#/components/schemas/mobinexarConstructionZoneSegment'
+        status:
+          $ref: '#/components/schemas/nexarChangeDetectionStatus'
+    nexarDetectionLocation:
+      title: Detection location and metadata
+      type: object
+      properties:
+        location:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        course:
+          title: Course
+          type: number
+          description: Aggregated course of the detection
+          format: double
+        bbox:
+          $ref: '#/components/schemas/nexarBBox'
+        confidence:
+          title: Confidence
+          type: number
+          description: Detection confidence
+          format: double
+        h3_indices:
+          $ref: '#/components/schemas/nexarPointH3Indices'
+    nexarDisplayImage:
+      title: URL and metadata for the head frame best representing the road item
+      type: object
+      properties:
+        image_url:
+          title: URL
+          type: string
+          description: URL to the source image file (valid for 24 hours)
+        timestamp_millis:
+          title: Timestamp
+          type: string
+          description: Timestamp in milliseconds for when the image was taken (UTC)
+          format: uint64
+        width:
+          title: Width
+          type: string
+          description: Image width in pixels
+          format: uint64
+        height:
+          title: Height
+          type: string
+          description: Image height in pixels
+          format: uint64
+        imageRef:
+          title: Ref
+          type: string
+          description: HTML a tag target href
+        frame_id:
+          title: Frame Id
+          type: string
+          description: Unique generated frame id
+      example:
+        image_url: https://d1fd2w0efmqqe1.cloudfront.net/fit-in/276x155/fod_6BB685FD-9646-48F8-90BB-1297ADCEB60E_anon.jpg?Expires=1568828292&Signature=DrBXr5sb0lhgL
+        timestamp_millis: 1568824692031
+        width: 276
+        height: 155
+    nexarFindDetectionsRequestParams:
+      title: Work Zones Request Parameters
+      required:
+        - detection_filter
+        - time_range
+      type: object
+      properties:
+        detection_filter:
+          $ref: '#/components/schemas/nexarRoadItemDetectionFilter'
+        bounding_box:
+          $ref: '#/components/schemas/nexarBoundingGPSBox'
+        h3_indices:
+          $ref: '#/components/schemas/nexarH3IndicesRequest'
+        heading:
+          $ref: '#/components/schemas/nexarHeading'
+        time_range:
+          $ref: '#/components/schemas/mobinexarTimeRange'
+        time_sort_direction:
+          $ref: '#/components/schemas/FindDetectionsRequestParamsSortDirection'
+        limit:
+          title: Limit
+          type: integer
+          description: Page limit for returned detection results
+          format: int64
+        start:
+          title: Start
+          type: integer
+          description: Start offset for paged detection results
+          format: int64
+        time_of_day_range:
+          $ref: '#/components/schemas/nexarTimeOfDayRange'
+      example: {
+        "detection_filter": {
+            "construction_zone_filter": {
+                "construction_zone_elements": {
+                    "elements": [
+                        "TRAFFIC_CONE",
+                        "TRAFFIC_CONE_BLACK",
+                        "ARROW_BOARD",
+                        "MESSAGE_BOARD"
+                    ]
+                },
+                "construction_zone_impact": {
+                    "lane_impact": [
+                        "BLOCKED",
+                        "NEW_BLOCKAGE",
+                        "EXISTING_BLOCKAGE",
+                        "REMOVED_BLOCKAGE"
+                    ]
+                }
+            },
+            "status": [
+                "EXISTING_DETECTION"
+            ]
+        },
+        "bounding_box": {
+            "south_west_point": {
+                "longtitude": -118.41187389888535,
+                "latitude": 33.68281897686988
+            },
+            "north_east_point": {
+                "longtitude": -117.89828178052616,
+                "latitude": 34.023717915748875
+            }
+        },
+        "time_range": {
+            "end": 1671624519242
+        },
+        "limit": 10
+      }
+    nexarFindDetectionsResponse:
+      title: find detections response
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/nexarRoadItemDetectionResultSet'
+    nexarFindDetectionsResponsePayload:
+      title: response messages
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/nexarRoadItemDetectionResultSet'
+    nexarFindRawFramesRequestParams:
+      type: object
+      properties:
+        road_item_filters:
+          $ref: '#/components/schemas/nexarRoadItemFilters'
+        filters:
+          $ref: '#/components/schemas/nexarFrameFilters'
+        limit:
+          title: Limit
+          type: integer
+          description: Maximum number of image metadata items to return per hexagon
+            in the response. If the limit is 0, default will be used.
+          format: int64
+    nexarFrameFilters:
+      required:
+        - bounding_box
+        - end_timestamp
+        - h3_indices
+        - heading
+        - osm_ids
+        - start_timestamp
+      type: object
+      properties:
+        bounding_box:
+          $ref: '#/components/schemas/nexarBoundingGPSBox'
+        h3_indices:
+          $ref: '#/components/schemas/nexarH3IndicesRequest'
+        osm_ids:
+          $ref: '#/components/schemas/nexarOsmRequest'
+        heading:
+          $ref: '#/components/schemas/nexarHeading'
+        start_timestamp:
+          title: Start Timestamp
+          type: string
+          description: All images having capture time greater than specified time
+            (Epoch milliseconds)
+          format: uint64
+        end_timestamp:
+          title: End Timestamp
+          type: string
+          description: All images having capture time less than specified time (Epoch
+            milliseconds)
+          format: uint64
+    nexarGPSPoint:
+      title: A basic GPS point
+      type: object
+      properties:
+        latitude:
+          title: Latitude
+          type: number
+          description: GPS Point latitude
+          format: double
+        longtitude:
+          title: Longiutde
+          type: number
+          description: GPS Point longitude
+          format: double
+        altitude:
+          title: Altitude
+          type: number
+          description: GPS Point altitude
+          format: double
+      example:
+        latitude: 40.7380653
+        longtitude: -73.9800164
+    nexarGPSSignal:
+      title: GPS measurement
+      type: object
+      properties:
+        timestamp:
+          title: Timestamp
+          type: string
+          description: Timestamp in milliseconds (UTC)
+          format: uint64
+        longitude:
+          title: Longitude
+          type: number
+          description: GPS Point longitude
+          format: double
+        latitude:
+          title: Latitude
+          type: number
+          description: GPS Point latitude
+          format: double
+        horizontal_accuracy:
+          title: Horizontal Accuracy
+          type: number
+          description: GPS horizontal accuracy in meters
+          format: double
+        vertical_accuracy:
+          title: Vertical Accuracy
+          type: number
+          description: GPS vertical accuracy in Meters
+          format: double
+        altitude:
+          title: Altitude
+          type: number
+          description: GPS detected altitude
+          format: double
+        speed:
+          title: Speed
+          type: number
+          description: GPS detected speed in meters per second
+          format: double
+        course:
+          title: Course
+          type: number
+          description: GPS heading direction
+          format: double
+        producer:
+          $ref: '#/components/schemas/GPSSignalGPSProducer'
+        gps_timestamp:
+          type: string
+          format: int64
+        producer_timestamp:
+          type: string
+          format: int64
+      example:
+        latitude: 40.7380653
+        longtitude: -73.9800164
+        timestamp: 1562979339998
+        horizontal_accuracy: 8.0012082736
+        course: 6.91280832
+        altitude: 725.5895027
+        speed: 11.34940719
+    nexarGeoLine:
+      title: Geo line
+      type: object
+      properties:
+        point_from:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        point_to:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        course:
+          title: Nexar car heading value
+          type: number
+          format: double
+        osm_info:
+          $ref: '#/components/schemas/nexarOsmInfo'
+    nexarGeoPoint:
+      title: GPS point enriched with Open Street Map node identifier
+      type: object
+      properties:
+        point:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        course:
+          title: Nexar car heading value
+          type: number
+          format: double
+        osm_info:
+          $ref: '#/components/schemas/nexarOsmInfo'
+    nexarGetDetectionRequestParams:
+      title: Work Zone Request Parameter
+      required:
+        - item_id
+      type: object
+      properties:
+        item_id:
+          $ref: '#/components/schemas/nexarObjectId'
+      example: {
+          "item_id":{ 
+              "id":"27058-c27b49be:1671623926000:CZ"
+          }
+      }
+    nexarGetDetectionResponse:
+      title: Detailed Work Zone Response
+      type: object
+      properties:
+        road_item_detection:
+          $ref: '#/components/schemas/nexarRoadItemDetection'
+        display_images:
+          title: Display Images
+          type: array
+          description: List of detection images for display
+          items:
+            $ref: '#/components/schemas/nexarDisplayImage'
+      example: {
+          "road_item_detection": {
+              "item_id": {
+                  "id": "27058-c27b49be:1671623926000:CZ"
+              },
+              "construction_zone": {
+                  "primary_segments": [
+                      {
+                          "segment": {
+                              "line": {
+                                  "point_from": {
+                                      "latitude": 33.948804565460755,
+                                      "longtitude": -118.39563079479073,
+                                      "altitude": 0.0
+                                  },
+                                  "point_to": {
+                                      "latitude": 33.948801292865454,
+                                      "longtitude": -118.39569353657892,
+                                      "altitude": 0.0
+                                  },
+                                  "course": 266.40210320277487,
+                                  "osm_info": {
+                                      "osm_node_id_from": 6074342723,
+                                      "osm_node_id_to": 248112255,
+                                      "road_type": "SECONDARY"
+                                  }
+                              },
+                              "lane_impact": "NO_IMPACT"
+                          },
+                          "status": "EXISTING_DETECTION"
+                      }
+                  ],
+                  "detection_segments": [
+                      {
+                          "segment": {
+                              "line": {
+                                  "point_from": {
+                                      "latitude": 33.948804565460755,
+                                      "longtitude": -118.39563079479073,
+                                      "altitude": 0.0
+                                  },
+                                  "point_to": {
+                                      "latitude": 33.94880033506202,
+                                      "longtitude": -118.39568270928218,
+                                      "altitude": 0.0
+                                  },
+                                  "course": 266.40211986949015,
+                                  "osm_info": {
+                                      "osm_node_id_from": 6074342723,
+                                      "osm_node_id_to": 248112255,
+                                      "road_type": "SECONDARY"
+                                  }
+                              },
+                              "lane_impact": "NO_IMPACT"
+                          },
+                          "sub_item_id": {
+                              "id": "0"
+                          },
+                          "detection_element": {
+                              "element": "TRAFFIC_CONE",
+                              "evidence_frames": [
+                                  {
+                                      "frame_id": "320d28a67d89b59c35d7abd0998f523d",
+                                      "image_ref": "ride/5b9c1928efc9fde7a6dd72f72b8de34a/fod_B05F3656-6BFC-4D23-B35B-904BE6D601CA.jpg",
+                                      "raw_gps_signal_of_camera": {
+                                          "timestamp": 1671796164999,
+                                          "longitude": -118.39569793961242,
+                                          "latitude": 33.94881135595405,
+                                          "horizontal_accuracy": 4.7394443518494995,
+                                          "speed": 13.213501113970823,
+                                          "course": 268.57687231205205,
+                                          "vertical_accuracy": 0.0,
+                                          "altitude": 0.0,
+                                          "producer": "DEVICE",
+                                          "gps_timestamp": 0,
+                                          "producer_timestamp": 0
+                                      },
+                                      "location_of_camera": {
+                                          "latitude": 33.94881135595405,
+                                          "longtitude": -118.39569793961242,
+                                          "altitude": 0.0
+                                      },
+                                      "course_of_camera": 268.57687231205205,
+                                      "detection_locations": [
+                                          {
+                                              "location": {
+                                                  "latitude": 33.94880472032093,
+                                                  "longtitude": -118.39582197462161,
+                                                  "altitude": 0.0
+                                              },
+                                              "course": 285.60424002430676,
+                                              "bbox": {
+                                                  "x1": 400.0,
+                                                  "y1": 445.0,
+                                                  "x2": 431.0,
+                                                  "y2": 496.0,
+                                                  "tag": "traffic_cone"
+                                              },
+                                              "confidence": 0.0
+                                          }
+                                      ],
+                                      "h3_indices": {
+                                          "h3_index_res10": "622229133718650879",
+                                          "h3_index_res11": "626732733346017279"
+                                      }
+                                  },
+                                  {
+                                      "frame_id": "ccee68c0d1e9d99aa88792a2bd8b3af2",
+                                      "image_ref": "ride/06228b85641f9ff2ef68620d0ff595a0/fod_F55E378F-35A3-4141-9D5D-009401A1641A.jpg",
+                                      "raw_gps_signal_of_camera": {
+                                          "timestamp": 1671623926000,
+                                          "longitude": -118.3955669955907,
+                                          "latitude": 33.94880028261839,
+                                          "horizontal_accuracy": 4.768188638057669,
+                                          "speed": 9.472063460413024,
+                                          "course": 266.7862243652344,
+                                          "vertical_accuracy": 0.0,
+                                          "altitude": 0.0,
+                                          "producer": "DEVICE",
+                                          "gps_timestamp": 0,
+                                          "producer_timestamp": 0
+                                      },
+                                      "location_of_camera": {
+                                          "latitude": 33.94880028261839,
+                                          "longtitude": -118.3955669955907,
+                                          "altitude": 0.0
+                                      },
+                                      "course_of_camera": 266.7862243652344,
+                                      "detection_locations": [
+                                          {
+                                              "location": {
+                                                  "latitude": 33.94877694608528,
+                                                  "longtitude": -118.39570283595292,
+                                                  "altitude": 0.0
+                                              },
+                                              "course": 285.71614810057207,
+                                              "bbox": {
+                                                  "x1": 338.0,
+                                                  "y1": 451.0,
+                                                  "x2": 357.0,
+                                                  "y2": 489.0,
+                                                  "tag": "traffic_cone"
+                                              },
+                                              "confidence": 0.0
+                                          }
+                                      ],
+                                      "h3_indices": {
+                                          "h3_index_res10": "622229133718487039",
+                                          "h3_index_res11": "626732733345849343"
+                                      }
+                                  }
+                              ]
+                          }
+                      }
+                  ]
+              },
+              "timezone_offset": -28800,
+              "created_at_millis": 1671623926000
+          },
+          "display_images": [
+              {
+                  "image_url": "https://images-cdn-api.getnexar.com/aod/full/ride/5b9c1928efc9fde7a6dd72f72b8de34a/fod_B05F3656-6BFC-4D23-B35B-904BE6D601CA.jpg",
+                  "timestamp_millis": 1673007192918,
+                  "width": 1280,
+                  "height": 720,
+                  "imageRef": "ride/5b9c1928efc9fde7a6dd72f72b8de34a/fod_B05F3656-6BFC-4D23-B35B-904BE6D601CA.jpg",
+                  "frame_id": "320d28a67d89b59c35d7abd0998f523d"
+              },
+              {
+                  "image_url": "https://images-cdn-api.getnexar.com/aod/thumbnail/ride/5b9c1928efc9fde7a6dd72f72b8de34a/fod_B05F3656-6BFC-4D23-B35B-904BE6D601CA.jpg",
+                  "timestamp_millis": 1673007192918,
+                  "width": 160,
+                  "height": 90,
+                  "imageRef": "ride/5b9c1928efc9fde7a6dd72f72b8de34a/fod_B05F3656-6BFC-4D23-B35B-904BE6D601CA.jpg",
+                  "frame_id": "320d28a67d89b59c35d7abd0998f523d"
+              }
+          ]
+      }
+    nexarH3IndicesRequest:
+      title: List of Uber H3 hexagon identifiers
+      type: object
+      properties:
+        h3_indices:
+          title: H3 Id
+          type: array
+          description: Uber H3 hexagon identifiers list
+          items:
+            type: string
+      example:
+        h3_indices:
+          - "622236750708604927"
+          - "622236723640434687"
+    nexarHeading:
+      title: heading
+      type: string
+      description: Nexar car heading direction
+      default: UNKNOWN_HEADING
+      enum:
+        - UNKNOWN_HEADING
+        - NORTH
+        - NORTH_WEST
+        - WEST
+        - SOUTH_WEST
+        - SOUTH
+        - SOUTH_EAST
+        - EAST
+        - NORTH_EAST
+    nexarHumanReadableTimeRange:
+      title: 'Allows querying by specific times of the day: "HH:mm:ss"'
+      type: object
+      properties:
+        start:
+          title: creation time
+          type: string
+        end:
+          title: removal/expiry time
+          type: string
+      example:
+        start: 10:00:00
+        end: 23:00:00
+    nexarImageQuality:
+      type: object
+      properties:
+        internal_car_average:
+          title: Internal Car Average
+          type: number
+          description: Pixels of the image inside the car divided by total pixels.
+          format: float
+    nexarLogicalOperator:
+      title: Conjunction operator
+      type: string
+      default: OR
+      enum:
+        - OR
+        - AND
+    nexarObjectId:
+      title: Wrapper for Nexar unique identifier
+      type: object
+      properties:
+        id:
+          type: string
+      example:
+        id: bed8dfe80331c3062c6893ac8c08146d
+    nexarOsmInfo:
+      title: Open Street Map way identifier and metadata
+      type: object
+      properties:
+        osm_node_id_from:
+          type: string
+          format: uint64
+        osm_node_id_to:
+          type: string
+          format: uint64
+        road_type:
+          $ref: '#/components/schemas/nexarRoadType'
+      example:
+        osm_node_id_from: "5717622395"
+        osm_node_id_to: "5717622398"
+        road_type: SECONDARY
+    nexarOsmRequest:
+      title: Open Street Map node identifier request
+      type: object
+      properties:
+        node_id:
+          type: array
+          items:
+            type: string
+            format: uint64
+      example:
+        node_id: 1439476776
+    nexarParkingSpotDetection:
+      type: object
+      properties:
+        line:
+          $ref: '#/components/schemas/nexarGeoLine'
+        span:
+          title: Span
+          type: number
+          description: Parking spot span
+          format: double
+        geojson_line_string:
+          title: GeoJSON LineString
+          type: string
+          description: Parking spot GeoJSON LineString representation
+        evidence_frames:
+          title: Evidence Frames
+          type: array
+          description: Evidence frames showing the parking spot
+          items:
+            $ref: '#/components/schemas/nexarRoadItemEvidenceFrame'
+        detection_precision:
+          title: Estimated detection precision
+          type: number
+          format: float
+        is_allowed:
+          title: Is parking allowed
+          type: boolean
+    nexarParkingSpotFilter:
+      type: object
+      properties:
+        detection_precision:
+          title: Detection Precision
+          type: number
+          description: Detection Precision criteria
+          format: float
+        is_allowed:
+          $ref: '#/components/schemas/ParkingSpotFilterIsAllowed'
+    nexarPointH3Indices:
+      title: Uber H3 index list
+      type: object
+      properties:
+        h3_index_res0:
+          title: Res0
+          type: string
+          description: H3 resolution 0 identifier
+        h3_index_res1:
+          title: Res1
+          type: string
+          description: H3 resolution 1 identifier
+        h3_index_res2:
+          title: Res2
+          type: string
+          description: H3 resolution 2 identifier
+        h3_index_res3:
+          title: Res3
+          type: string
+          description: H3 resolution 3 identifier
+        h3_index_res4:
+          title: Res4
+          type: string
+          description: H3 resolution 4 identifier
+        h3_index_res5:
+          title: Res5
+          type: string
+          description: H3 resolution 5 identifier
+        h3_index_res6:
+          title: Res6
+          type: string
+          description: H3 resolution6 identifier
+        h3_index_res7:
+          title: Res7
+          type: string
+          description: H3 resolution 7 identifier
+        h3_index_res8:
+          title: Res08
+          type: string
+          description: H3 resolution 8 identifier
+        h3_index_res9:
+          title: Res9
+          type: string
+          description: H3 resolution 9 identifier
+        h3_index_res10:
+          title: Res10
+          type: string
+          description: H3 resolution 10 identifier
+        h3_index_res11:
+          title: Res11
+          type: string
+          description: H3 resolution 11 identifier
+        h3_index_res12:
+          title: Res12
+          type: string
+          description: H3 resolution 12 identifier
+        h3_index_res13:
+          title: Res13
+          type: string
+          description: H3 resolution 13 identifier
+        h3_index_res14:
+          title: Res14
+          type: string
+          description: H3 resolution 14 identifier
+        h3_index_res15:
+          title: Res15
+          type: string
+          description: H3 resolution 15 identifier
+      example:
+        h3_index_res0: "577199624117288959"
+        h3_index_res1: "581698825698148351"
+        h3_index_res2: "586198577034821631"
+        h3_index_res3: "590702107942715391"
+        h3_index_res4: "595205690390216703"
+        h3_index_res5: "599709288943845375"
+        h3_index_res6: "604212888034344959"
+        h3_index_res7: "608716487544274943"
+        h3_index_res8: "613220087161159679"
+        h3_index_res9: "617723686786695167"
+        h3_index_res10: "622227286413836287"
+        h3_index_res11: "626730886041182207"
+        h3_index_res12: "631234485668551679"
+        h3_index_res13: "635738085295921855"
+        h3_index_res14: "640241684923292319"
+        h3_index_res15: "644745284550662814"
+    nexarRawFrameResponse:
+      type: object
+      properties:
+        frame_id:
+          title: Frame ID
+          type: string
+          description: Nexar image unique identifier id of the frame
+        image_ref:
+          title: Image Reference Path
+          type: string
+          description: Relative path to the frame's file
+        image_url:
+          title: Image Full Path
+          type: string
+          description: URL to the source image file (1280x720)
+        thumbnail_url:
+          title: Thumbnail image Full Path
+          type: string
+          description: URL to image file thumbnail (140x90)
+        captured_on_ms:
+          title: Captured On
+          type: string
+          description: Timestamp in milliseconds for when the image was taken (Epoch
+            milliseconds)
+          format: uint64
+        captured_timezone_offset:
+          title: Captured Timezone Offset
+          type: integer
+          description: Offset in seconds from GMT of the frame capture time
+          format: int32
+        h3_indices:
+          $ref: '#/components/schemas/nexarPointH3Indices'
+        gps_point:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        heading:
+          $ref: '#/components/schemas/nexarHeading'
+        course_of_camera:
+          title: Course
+          type: number
+          description: Course of the camera capturing the frame
+          format: double
+        image_quality:
+          $ref: '#/components/schemas/nexarImageQuality'
+        osm_info:
+          $ref: '#/components/schemas/nexarOsmInfo'
+    nexarRawFramesResponse:
+      type: object
+      properties:
+        context:
+          $ref: '#/components/schemas/nexarResponseContext'
+        payload:
+          $ref: '#/components/schemas/nexarRawFramesResult'
+    nexarRawFramesResult:
+      title: Road items result
+      type: object
+      properties:
+        raw_frames:
+          type: array
+          items:
+            $ref: '#/components/schemas/nexarRawFrameResponse'
+    nexarResponseContext:
+      type: object
+    nexarRoadBlockageConstructionElement:
+      title: Construction element types
+      type: string
+      default: UNKNOWN_CONSTRUCTION_ELEMENT
+      enum:
+        - UNKNOWN_CONSTRUCTION_ELEMENT
+        - BARRIER
+        - CONE
+        - POLE
+        - DIAMOND_SIGN
+        - RECTANGULAR_SIGN
+        - TRAFFIC_CONE
+        - GRABBER_CONE
+        - DRUM
+        - BARRICADE
+        - OTHER_CONSTRUCTION_AND_SAFETY_ELEMENT
+        - ARROW_OR_MESSAGE_BOARD
+        - NO_ARROW_OR_MESSAGE_BOARD
+        - ARROW_BOARD
+        - MESSAGE_BOARD
+        - TRAFFIC_CONE_BLACK
+        - VERTICAL_PANEL
+        - ROAD_WORKS_SIGN_VIENNA
+    nexarRoadItemDetection:
+      type: object
+      title: Work Zone detection
+      properties:
+        item_id:
+          $ref: '#/components/schemas/nexarObjectId'
+        construction_zone:
+          $ref: '#/components/schemas/mobinexarConstructionZoneDetection'
+        timezone_offset:
+          title: Timezone Offset
+          type: integer
+          description: Timezone offset in seconds from UTC
+          format: int32
+        created_at_millis:
+          title: Created at millis
+          type: string
+          description: UTC Timestamp in milliseconds of the earliest evidence
+          format: uint64
+        expired_at_millis:
+          title: expired at millis
+          type: string
+          description: UTC Timestamp in milliseconds of the detection expiration
+          format: uint64
+    nexarRoadItemDetectionFilter:
+      type: object
+      title: Detection filters
+      properties:
+        construction_zone_filter:
+          $ref: '#/components/schemas/nexarConstructionZoneFilter'
+        status:
+          title: Status
+          type: array
+          description: Change detection status filter
+          items:
+            $ref: '#/components/schemas/nexarChangeDetectionStatus'
+    nexarRoadItemDetectionResultSet:
+      type: object
+      properties:
+        road_item_detections:
+          title: Road Item Detections
+          type: array
+          description: Road item detection results
+          items:
+            $ref: '#/components/schemas/nexarRoadItemDetection'
+        total_row_count:
+          title: Total Row Count
+          type: integer
+          description: Count of total rows
+          format: int64
+        fetch_count:
+          title: Fetch Count
+          type: integer
+          description: Count of rows in result set (current page)
+          format: int64
+        result_window_time_range:
+          $ref: '#/components/schemas/mobinexarTimeRange'
+    nexarRoadItemEvidenceFrame:
+      type: object
+      properties:
+        frame_id:
+          title: Frame Id
+          type: string
+          description: Unique frame identifier
+        image_ref:
+          title: Image Ref
+          type: string
+          description: URL to the frame
+        raw_gps_signal_of_camera:
+          $ref: '#/components/schemas/nexarGPSSignal'
+        location_of_camera:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        course_of_camera:
+          title: Course Of Camera
+          type: number
+          description: Course of the camera capturing the frame
+          format: double
+        detection_locations:
+          title: Detection Locations
+          type: array
+          description: List of detection locations of a given type in this frame
+          items:
+            $ref: '#/components/schemas/nexarDetectionLocation'
+        h3_indices:
+          $ref: '#/components/schemas/nexarPointH3Indices'
+        osm_info:
+          $ref: '#/components/schemas/nexarOsmInfo'
+    nexarRoadItemFilters:
+      title: Input filters to fetch road item detections
+      required:
+        - bounding_box
+        - created_timestamp
+        - expired_timestamp
+        - h3_indices
+        - osm_ids
+      type: object
+      properties:
+        bounding_box:
+          $ref: '#/components/schemas/nexarBoundingGPSBox'
+        h3_indices:
+          $ref: '#/components/schemas/nexarH3IndicesRequest'
+        osm_ids:
+          $ref: '#/components/schemas/nexarOsmRequest'
+        heading:
+          $ref: '#/components/schemas/nexarHeading'
+        created_timestamp:
+          $ref: '#/components/schemas/nexarTimestampParams'
+        expired_timestamp:
+          $ref: '#/components/schemas/nexarTimestampParams'
+        time_range:
+          $ref: '#/components/schemas/nexarHumanReadableTimeRange'
+    nexarRoadSignDetection:
+      title: Aggregated road sign detections
+      type: object
+      properties:
+        location:
+          $ref: '#/components/schemas/nexarGeoPoint'
+        detection_element:
+          $ref: '#/components/schemas/nexarRoadSignDetectionElement'
+        status:
+          $ref: '#/components/schemas/nexarChangeDetectionStatus'
+    nexarRoadSignDetectionElement:
+      title: Road sign detection
+      type: object
+      properties:
+        road_sign_type:
+          $ref: '#/components/schemas/nexarRoadSignType'
+        impact:
+          $ref: '#/components/schemas/nexarRoadSignImpact'
+        evidence_frames:
+          title: Evidence Frames
+          type: array
+          description: List of evidence frames showing the road sign
+          items:
+            $ref: '#/components/schemas/nexarRoadItemEvidenceFrame'
+        negative_image_ref:
+          title: Negative Image Ref
+          type: string
+          description: URL to the frame giving the best view of the location without
+            the sign
+        earliest_evidence_millis:
+          title: Earliest Evidence Millis
+          type: string
+          description: Timestamp of earliest evidence frame for this detection
+          format: uint64
+    nexarRoadSignElements:
+      title: Filter predicate by road sign type
+      type: object
+      properties:
+        road_sign_types:
+          title: Road Sign Types
+          type: array
+          description: List of road sign types
+          items:
+            $ref: '#/components/schemas/nexarRoadSignType'
+        not:
+          title: Not
+          type: boolean
+          description: Negation operator (e.g. NOT STOP)
+      example:
+        road_sign_types:
+          - MUTCD_R2_1_SPEED_LIMIT_20
+    nexarRoadSignImpact:
+      title: Filter predicate by road sign status (unsupported)
+      type: object
+      properties:
+        damaged:
+          title: Damaged
+          type: boolean
+          description: Is damaged logical
+    nexarRoadSignType:
+      type: string
+      default: UNKNOWN
+      enum:
+        - UNKNOWN
+        - STOP
+        - NO_RIGHT_TURN
+        - NO_LEFT_TURN
+        - NO_U_TURN
+        - BUS_STOP
+        - SPEED_LIMIT_25
+        - SCHOOL
+        - DO_NOT_ENTER
+        - ISR_STOP_SIGN
+        - ISR_NO_LEFT_TURN
+        - ISR_NO_RIGHT_TURN
+        - ISR_NO_U_TURN
+        - ISR_GIVE_WAY
+        - ISR_BICYCLE_LANE
+        - ISR_SPEED_LIMIT_50
+        - ISR_SPEED_LIMIT_70
+        - ISR_SPEED_LIMIT_30
+        - ISR_PEDESTRIAN
+        - ISR_PARKING
+        - ISR_URBAN_AREA
+        - ISR_NO_ENTER
+        - ISR_HANDICAP
+        - ISR_ROAD_WORKS
+        - ONE_WAY
+        - ROAD_WORK
+        - STOP_AHEAD
+        - PEDESTRIAN_CROSSING
+        - EU_BICYCLE_LANE
+        - EU_GIVE_WAY
+        - EU_HANDICAP
+        - EU_ONE_WAY
+        - EU_PARKING
+        - EU_PARKING_PORHIBITED
+        - EU_PASS_LEFT
+        - EU_PASS_LEFT_OR_RIGHT
+        - EU_PASS_RIGHT
+        - EU_PEDESTRIAN
+        - EU_ROAD_WORKS
+        - EU_SPEED_LIMIT_30
+        - EU_SPEED_LIMIT_50
+        - EU_SPEED_LIMIT_70
+        - EU_STOP
+        - EU_URBAN_AREA
+        - US_BUS_STOP
+        - US_LEFT_ARROW_ONE_WAY
+        - US_PEDESTRIAN_CROSSING
+        - US_RIGHT_ARROW_ONE_WAY
+        - US_SCHOOL
+        - US_SPEED_LIMIT_25
+        - US_STOP
+        - NO_ENTER
+        - OHIO_EXIT
+        - MUTCD__R3_18__NO_U_AND_LEFT_TURN
+        - OHIO_ROUTE_33
+        - MUTCD__W20_7__FLAGGER_AHEAD
+        - MUTCD__R2_1__SPEED_LIMIT_20
+        - MUTCD__R2_1__SPEED_LIMIT_30
+        - MUTCD__R2_1__SPEED_LIMIT_35
+        - MUTCD__R2_1__SPEED_LIMIT_40
+        - MUTCD__R2_1__SPEED_LIMIT_45
+        - MUTCD__R2_1__SPEED_LIMIT_50
+        - MUTCD__R2_1__SPEED_LIMIT_55
+        - MUTCD__R2_1__SPEED_LIMIT_60
+        - MUTCD__R2_1__SPEED_LIMIT_65
+        - MUTCD__R2_1__SPEED_LIMIT_70
+        - MUTCD__R1_2__YIELD
+        - MUTCD__W1_8_LEFT
+        - MUTCD__W1_8_RIGHT
+        - VIENNA__B1__GIVE_WAY
+        - VIENNA__B2__STOP
+        - VIENNA__C14__SPEED_LIMIT_30
+        - VIENNA__C14__SPEED_LIMIT_50
+        - VIENNA__C14__SPEED_LIMIT_70
+        - VIENNA__C18__PARKING_PROHIBITED
+        - VIENNA__D2__PASS_LEFT
+        - VIENNA__D2__PASS_LEFT_OR_RIGHT
+        - VIENNA__D2__PASS_RIGHT
+        - VIENNA__D4__BICYCLE_LANE
+        - VIENNA__E12A__PEDESTRIAN
+        - VIENNA__E14__PARKING
+        - VIENNA__EA__ONE_WAY
+        - HANDICAP
+        - URBAN_AREA
+        - MUTCD__R1_1__STOP
+        - MUTCD__R2_1__SPEED_LIMIT_25
+        - MUTCD__R3_2__NO_LEFT_TURN
+        - MUTCD__R3_1__NO_RIGHT_TURN
+        - MUTCD__R3_4__NO_U_TURN
+        - MUTCD__R6_1__ONEWAY_LEFT
+        - MUTCD__R6_1__ONEWAY_RIGHT
+        - MUTCD__R7_8__HANDICAPPED
+        - MUTCD__R8_3A__NO_PARKING
+        - MUTCD__S1_1__SCHOOL_ZONE
+        - MUTCD__W11_2__PEDESTRIAN_CROSSING
+        - MUTCD__XX__NYC_BUS_STOP
+        - VIENNA__C1A__NO_ENTER
+        - VIENNA__C11A__NO_LEFT_TURN
+        - VIENNA__C11B__NO_RIGHT_TURN
+        - VIENNA__C12__NO_U_TURN
+        - VIENNA__E3A__ONE_WAY
+        - ISRAEL__B24__URBAN_AREA
+        - MUTCD__R5_1__DO_NOT_ENTER
+    nexarRoadSignTypeFilter:
+      title: Road sign filter predicate
+      type: object
+      properties:
+        road_sign_elements:
+          $ref: '#/components/schemas/nexarRoadSignElements'
+        road_sign_impact:
+          $ref: '#/components/schemas/nexarRoadSignImpact'
+        operator:
+          $ref: '#/components/schemas/nexarLogicalOperator'
+        not:
+          title: Not
+          type: boolean
+          description: Negation operator (e.g. NOT road_sign_element)
+    nexarRoadType:
+      title: Open Street Map road types
+      type: string
+      default: UNKNOWN_ROAD_TYPE
+      enum:
+        - UNKNOWN_ROAD_TYPE
+        - MOTORWAY
+        - TRUNK
+        - PRIMARY
+        - SECONDARY
+        - TERTIARY
+        - UNCLASSIFIED
+        - RESIDENTIAL
+        - SERVICE
+        - MOTORWAY_LINK
+        - TRUNK_LINK
+        - PRIMARY_LINK
+        - SECONDARY_LINK
+        - TERTIARY_LINK
+        - LIVING_STREET
+        - PEDESTRIAN
+        - TRACK
+        - BUS_GUIDEWAY
+        - ESCAPE
+        - RACEWAY
+        - ROAD
+        - FOOTWAY
+        - BRIDLEWAY
+        - STEPS
+        - PATH
+        - CYCLEWAY
+        - CONSTRUCTION
+        - ABANDONED
+        - ACCESS
+        - PROPOSED
+        - REST_AREA
+    nexarTimeOfDay:
+      title: Time of day
+      type: object
+      properties:
+        hours:
+          title: 0 to 23
+          type: integer
+          format: int32
+        minutes:
+          title: 0 to 59
+          type: integer
+          format: int32
+        seconds:
+          title: 0 to 59
+          type: integer
+          format: int32
+      example:
+        hours: 22
+        minutes: 10
+        seconds: 0
+    nexarTimeOfDayRange:
+      title: Filter predicate by time of day
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/nexarTimeOfDay'
+        to:
+          $ref: '#/components/schemas/nexarTimeOfDay'
+        time_zone_name:
+          title: IANA full time zone name e.g. America/Los_Angeles
+          type: string
+    nexarTimestampParams:
+      title: Filter predicate by timestamp in milliseconds (UTC)
+      type: object
+      properties:
+        operator:
+          $ref: '#/components/schemas/mobinexarOperator'
+        timestamp_millis:
+          title: Timestamp
+          type: string
+          description: Timestamp in milliseconds (UTC)
+          format: uint64
+      example:
+        operator: GREATER_THAN
+        timestamp_millis: 1566228682197
+    protobufAny:
+      type: object
+      properties:
+        type_url:
+          type: string
+          description: |-
+            A URL/resource name that uniquely identifies the type of the serialized
+            protocol buffer message. This string must contain at least
+            one "/" character. The last segment of the URL's path must represent
+            the fully qualified name of the type (as in
+            `path/google.protobuf.Duration`). The name should be in a canonical form
+            (e.g., leading "." is not accepted).
+
+            In practice, teams usually precompile into the binary all types that they
+            expect it to use in the context of Any. However, for URLs which use the
+            scheme `http`, `https`, or no scheme, one can optionally set up a type
+            server that maps type URLs to message definitions as follows:
+
+            * If no scheme is provided, `https` is assumed.
+            * An HTTP GET on the URL must yield a [google.protobuf.Type][]
+              value in binary format, or produce an error.
+            * Applications are allowed to cache lookup results based on the
+              URL, or have them precompiled into a binary to avoid any
+              lookup. Therefore, binary compatibility needs to be preserved
+              on changes to types. (Use versioned type names to manage
+              breaking changes.)
+
+            Note: this functionality is not currently available in the official
+            protobuf release, and it is not used for type URLs beginning with
+            type.googleapis.com.
+
+            Schemes other than `http`, `https` (or the empty scheme) might be
+            used with implementation specific semantics.
+        value:
+          pattern: ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$
+          type: string
+          description: Must be a valid serialized protocol buffer of the above specified
+            type.
+          format: byte
+      description: |-
+        `Any` contains an arbitrary serialized protocol buffer message along with a
+        URL that describes the type of the serialized message.
+
+        Protobuf library provides support to pack/unpack Any values in the form
+        of utility functions or additional generated methods of the Any type.
+
+        Example 1: Pack and unpack a message in C++.
+
+            Foo foo = ...;
+            Any any;
+            any.PackFrom(foo);
+            ...
+            if (any.UnpackTo(&foo)) {
+              ...
+            }
+
+        Example 2: Pack and unpack a message in Java.
+
+            Foo foo = ...;
+            Any any = Any.pack(foo);
+            ...
+            if (any.is(Foo.class)) {
+              foo = any.unpack(Foo.class);
+            }
+
+         Example 3: Pack and unpack a message in Python.
+
+            foo = Foo(...)
+            any = Any()
+            any.Pack(foo)
+            ...
+            if any.Is(Foo.DESCRIPTOR):
+              any.Unpack(foo)
+              ...
+
+         Example 4: Pack and unpack a message in Go
+
+             foo := &pb.Foo{...}
+             any, err := ptypes.MarshalAny(foo)
+             ...
+             foo := &pb.Foo{}
+             if err := ptypes.UnmarshalAny(any, foo); err != nil {
+               ...
+             }
+
+        The pack methods provided by protobuf library will by default use
+        'type.googleapis.com/full.type.name' as the type URL and the unpack
+        methods only use the fully qualified type name after the last '/'
+        in the type URL, for example "foo.bar.com/x/y.z" will yield type
+        name "y.z".
+
+
+        JSON
+        ====
+        The JSON representation of an `Any` value uses the regular
+        representation of the deserialized, embedded message, with an
+        additional field `@type` which contains the type URL. Example:
+
+            package google.profile;
+            message Person {
+              string first_name = 1;
+              string last_name = 2;
+            }
+
+            {
+              "@type": "type.googleapis.com/google.profile.Person",
+              "firstName": <string>,
+              "lastName": <string>
+            }
+
+        If the embedded message type is well-known and has a custom JSON
+        representation, that representation will be embedded adding a field
+        `value` which holds the custom JSON in addition to the `@type`
+        field. Example (for message [google.protobuf.Duration][]):
+
+            {
+              "@type": "type.googleapis.com/google.protobuf.Duration",
+              "value": "1.212s"
+            }
+    runtimeError:
+      type: object
+      properties:
+        error:
+          type: string
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+security:
+  - Bearer: []
