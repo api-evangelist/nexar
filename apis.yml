@@ -29,91 +29,86 @@ tags:
 - Road Data
 - Machine Learning
 apis:
-- aid: nexar:virtualcam
-  name: CityStream VirtualCam API
-  description: Returns a fresh collection of anonymized road frames captured by the Nexar camera network,
-    selectable by date, location, minimum quality, road type, time of day or vehicle heading, plus an
-    H3 coverage endpoint for checking imagery availability across an area.
+- aid: nexar:nexar-citystream-live-feed-api-v4-api
+  name: Nexar CityStream™ Live Feed API V4 API
+  description: >-
+    The CityStream™ Live Feed API V4 API from Nexar — 1 operation(s) for citystream™ live feed api v4.
   humanURL: https://developer.getnexar.com/documentation
   baseURL: https://external.getnexar.com
   tags:
-  - Mapping
-  - Geospatial
-  - Transportation
-  - Computer Vision
-  - Imagery
-  - Road Data
+  - CityStream™ Live Feed API V4
   properties:
   - type: OpenAPI
-    url: openapi/nexar-virtualcam-openapi.yml
-  - type: Overlay
-    url: overlays/nexar-virtualcam-overlay.yaml
-  version: '4.0'
-- aid: nexar:livefeed
-  name: CityStream Live Feed API
-  description: Returns real-time detections produced by the Nexar camera network. The endpoint is generic
-    across detection types (construction zones, road conditions, road surface, traffic signs) and can
-    be served as JSON, GeoJSON (application/geo+json) or a WZDx feed (application/vnd.wzdx).
+    url: openapi/nexar-citystream-live-feed-api-v4-api-openapi.yml
+- aid: nexar:nexar-get-a-collection-of-road-signs-api
+  name: Nexar Get a collection of road signs API
+  description: >-
+    The Get a collection of road signs API from Nexar — 1 operation(s) for get a collection of road signs.
   humanURL: https://developer.getnexar.com/documentation
   baseURL: https://external.getnexar.com
   tags:
-  - Mapping
-  - Geospatial
-  - Transportation
-  - Computer Vision
-  - Imagery
-  - Road Data
+  - Get a collection of road signs
   properties:
   - type: OpenAPI
-    url: openapi/nexar-livefeed-openapi.yml
-  - type: Overlay
-    url: overlays/nexar-livefeed-overlay.yaml
-  version: '4.0'
-- aid: nexar:workzones
-  name: CityStream Work Zones API
-  description: Returns a curated collection of work zones that Nexar AI detects from road imagery containing
-    work-zone elements such as grabber cones, diamond signs, barriers and message boards, with a companion
-    endpoint for the full detail of a single work zone.
+    url: openapi/nexar-get-a-collection-of-road-signs-api-openapi.yml
+- aid: nexar:nexar-get-a-collection-of-work-zones-api
+  name: Nexar Get a collection of work zones API
+  description: >-
+    The Get a collection of work zones API from Nexar — 1 operation(s) for get a collection of work zones.
   humanURL: https://developer.getnexar.com/documentation
   baseURL: https://external.getnexar.com
   tags:
-  - Mapping
-  - Geospatial
-  - Transportation
-  - Computer Vision
-  - Imagery
-  - Road Data
+  - Get a collection of work zones
   properties:
   - type: OpenAPI
-    url: openapi/nexar-workzones-openapi.yml
-  - type: Overlay
-    url: overlays/nexar-workzones-overlay.yaml
-  version: '3.0'
-- aid: nexar:roadinventory
-  name: CityStream Road Inventory API
-  description: Returns a curated inventory of road signs and road assets captured by the Nexar camera
-    network, with a companion endpoint for the full detail of a single detection.
+    url: openapi/nexar-get-a-collection-of-work-zones-api-openapi.yml
+- aid: nexar:nexar-get-a-specific-work-zone-api
+  name: Nexar Get a specific work zone API
+  description: >-
+    The Get a specific work zone API from Nexar — 1 operation(s) for get a specific work zone.
   humanURL: https://developer.getnexar.com/documentation
   baseURL: https://external.getnexar.com
   tags:
-  - Mapping
-  - Geospatial
-  - Transportation
-  - Computer Vision
-  - Imagery
-  - Road Data
+  - Get a specific work zone
   properties:
   - type: OpenAPI
-    url: openapi/nexar-roadinventory-openapi.yml
-  - type: Overlay
-    url: overlays/nexar-roadinventory-overlay.yaml
-  version: '3.0'
+    url: openapi/nexar-get-a-specific-work-zone-api-openapi.yml
+- aid: nexar:nexar-get-the-details-of-a-specific-road-sign-api
+  name: Nexar Get the details of a specific road sign API
+  description: >-
+    The Get the details of a specific road sign API from Nexar — 1 operation(s) for get the details of
+    a specific road sign.
+  humanURL: https://developer.getnexar.com/documentation
+  baseURL: https://external.getnexar.com
+  tags:
+  - Get the details of a specific road sign
+  properties:
+  - type: OpenAPI
+    url: openapi/nexar-get-the-details-of-a-specific-road-sign-api-openapi.yml
+- aid: nexar:nexar-virtualcam-api-api
+  name: Nexar VirtualCam API
+  description: The VirtualCam API API from Nexar — 3 operation(s) for virtualcam api.
+  humanURL: https://developer.getnexar.com/documentation
+  baseURL: https://external.getnexar.com
+  tags:
+  - VirtualCam API
+  properties:
+  - type: OpenAPI
+    url: openapi/nexar-virtualcam-api-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/nexar-virtualcam-overlay.yaml
+- type: Overlay
+  url: overlays/nexar-livefeed-overlay.yaml
+- type: Overlay
+  url: overlays/nexar-workzones-overlay.yaml
+- type: Overlay
+  url: overlays/nexar-roadinventory-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/nexar-agentic-access.yml
 - type: VulnerabilityDisclosure
