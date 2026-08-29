@@ -10,6 +10,18 @@ description: 'Nexar is a physical-AI infrastructure company that operates one of
   four run on a single gRPC-gateway backed host and are authorized with a bearer access token minted through
   Nexar''s Okta authorization server. Nexar also publishes the open-source BADAS collision-prediction
   model on PyPI and the `nap` platform CLI through its own Homebrew tap.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://cdn.prod.website-files.com/6714bce7188a12cb895149f5/68f0ac403e8da1fec926cec2_social%20sharing.png
 url: https://raw.githubusercontent.com/api-evangelist/nexar/refs/heads/main/apis.yml
 x-type: company
