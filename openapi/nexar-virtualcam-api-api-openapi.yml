@@ -1,0 +1,773 @@
+openapi: 3.2.0
+info:
+  title: CityStream™ VirtualCam VirtualCam API
+  description: "The CityStream™ VirtualCam API provides a fresh collection of anonymized frames captured by Nexar's network of cameras on the road. Frames can be selected using multiple attributes such as date, location, minimum quality, road type, time of the day or vehicle's heading. \n\n Before you start developing with the CityStream™ VirtualCam API, make sure you have a valid Access Token and set your request Authorization Header as: <code>Bearer {token}</code>. \n\n<b>NEW</b>: A new version of the VirtualCam API Frames Endpoint is now available! This update includes minor changes to the response attribute types. Additionally, the Coverage endpoint is now documented, making it easier to check imagery availability for a given area. \n\n  <b>IMPORTANT</b>: VirtualCam API Frames V4 and Coverage V3 endpoints will be deprecated on <b>March 31, 2025</b>. We encourage you to migrate to the latest versions at your earliest convenience."
+  contact:
+    name: Nexar
+    url: https://getnexar.com/
+    email: api-support@getnexar.com
+  license:
+    name: 'License: Proprietary'
+  version: '4.0'
+servers:
+- url: https://external.getnexar.com
+security:
+- Bearer: []
+tags:
+- name: VirtualCam API
+paths:
+  /api/virtualcam/v5/frames:
+    post:
+      tags:
+      - VirtualCam API
+      description: "Get anonymized frames for a given area defined by a bounding box or <a href=https://h3geo.org/>H3 IDs</a>. \n\n Additional options for filtering and sorting are provided to enhance the precision of the requests."
+      operationId: VcamService_FindRawFrames
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindRawFramesApiRequestParams'
+            example:
+              bounding_box:
+                south_west:
+                  longitude: -73.99708049121774
+                  latitude: 40.72176834293103
+                north_east:
+                  longitude: -73.98168795029027
+                  latitude: 40.73122344104337
+              filters:
+                frames_per_h3: 1
+                min_frame_quality: 0.7
+                road_types:
+                - MOTORWAY
+                - RESIDENTIAL
+                frames_context:
+                - DAYLIGHT
+                - NIGHTTIME
+                start_time: '1688169600000'
+                end_time: '1689206400000'
+                directions:
+                - NORTH
+                - NORTH_WEST
+              sort_by: QUALITY
+        required: true
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindRawFramesApiResponse'
+              example:
+                frames:
+                - frame_id: 56f8d643be2ff1e674598eccfae2b3e2
+                  frame_url: https://external-api.getnexar.com/aod/full/ride/cc07d59669bfa317a4136a7d93965b04/fod_709F23AE-6F53-49E8-A473-98FEB7DBE973.jpg
+                  thumbnail_url: https://external-api.getnexar.com/aod/thumbnail/ride/cc07d59669bfa317a4136a7d93965b04/fod_709F23AE-6F53-49E8-A473-98FEB7DBE973.jpg
+                  captured_at: '1689242521198'
+                  timezone_offset: -14400
+                  h3_index_res12: '631243922682792959'
+                  gps_info:
+                    longitude: -73.985751
+                    latitude: 40.733587
+                  direction: NORTH_WEST
+                  camera_heading: 298.8096008300781
+                  frame_quality: 0.9148776531219482
+                  frame_context: NIGHTTIME
+                  osm_info:
+                    osm_node_id_from: '8310246171'
+                    osm_node_id_to: '3985008876'
+                    road_type: RESIDENTIAL
+                frames_fetched: 1
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/nexarBadRequest'
+              example:
+                status: 400
+                error: Bad Request
+        '403':
+          description: Returned when the user does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                type: object
+        '429':
+          description: API rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                type: string
+                format: string
+              example: string
+        '500':
+          description: This is usually a temporary error due to high server load or a brief endpoint error.
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+      - Bearer: []
+      x-codegen-request-body-name: payload
+  /api/virtualcam/v4/coverage:
+    post:
+      tags:
+      - VirtualCam API
+      description: Get H3 coverage information for a given area defined by a bounding box or H3 IDs.
+      operationId: VcamService_GetH3Coverage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetH3CoverageRequestParams'
+            example:
+              h3_coverage_bounding_box:
+                bounding_box:
+                  south_west:
+                    longitude: -118.25408935546875
+                    latitude: 34.05493499798558
+                  north_east:
+                    longitude: -118.2513427734375
+                    latitude: 34.05721051351028
+                h3_resolution: 5
+        required: true
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetH3CoverageResponse'
+              example:
+                coverage:
+                - h3_id: '599711151885910015'
+                  frame_count: '2494'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/nexarBadRequest'
+              example:
+                status: 400
+                error: Bad Request
+        '403':
+          description: Access forbidden. Also returned when the requested area is not authorized.
+          content:
+            application/json:
+              schema:
+                type: string
+                format: string
+              example: string
+        '429':
+          description: API rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                type: string
+                format: string
+              example: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+              example: {}
+      security:
+      - Bearer: []
+      x-codegen-request-body-name: payload
+  /api/virtualcam/v4/frames:
+    post:
+      tags:
+      - VirtualCam API
+      description: "Get anonymized frames for a given area defined by a bounding box or <a href=https://h3geo.org/>H3 IDs</a> . \n\n Additional options for filtering and sorting are provided to enhance the precision of the requests."
+      operationId: RoadItemService_FindRawFrames
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/apiFindRawFramesApiRequestParams'
+        required: true
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiFindRawFramesApiResult'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/nexarBadRequest'
+        '403':
+          description: Access forbiden. Also returned when the requested area is not authorized.
+          content:
+            application/json:
+              schema:
+                type: string
+                format: string
+        '429':
+          description: API rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                type: string
+                format: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    apiRawFrameApiElement:
+      title: Frame metadata
+      type: object
+      properties:
+        frame_id:
+          title: Frame ID
+          type: string
+          description: unique identifier of the frame
+        frame_url:
+          title: Frame full Path
+          type: string
+          description: URL to request the frame file (1280x720)
+        thumbnail_url:
+          title: Thumbnail of the frame full path
+          type: string
+          description: URL to request the thumbnail file (140x90)
+        captured_at:
+          title: Frame captured timestamp
+          type: string
+          description: Timestamp when the frame was captured (Epoch milliseconds)
+          format: uint64
+        timezone_offset:
+          title: Timezone Offset
+          type: integer
+          description: Offset in seconds from UTC of the frame capture time
+          format: int32
+        h3_index_res12:
+          title: H3 cell
+          type: string
+          description: H3 cell of resolution 12 where the frame is located
+        gps_info:
+          $ref: '#/components/schemas/road_itemapiGeoLocationApiElement'
+        direction:
+          $ref: '#/components/schemas/apiHeadingApiElement'
+        camera_heading:
+          title: Camera Heading
+          type: number
+          description: Course of the camera when the frame was captured
+          format: double
+        frame_quality:
+          title: Frame Quality
+          type: number
+          description: Frame quality is defined as the number of pixels outside of the car divided by the total number of pixels.
+          format: double
+        frame_context:
+          $ref: '#/components/schemas/apiDaylightStateApiElement'
+        osm_info:
+          $ref: '#/components/schemas/road_itemapiOsmRoadSegmentApiElement'
+    apiFindRawFramesApiResult:
+      title: VirtualCam Response
+      type: object
+      properties:
+        frames:
+          type: array
+          items:
+            $ref: '#/components/schemas/apiRawFrameApiElement'
+        frames_fetched:
+          title: Frames Fetched
+          type: integer
+          description: Frames fetched count
+          format: int32
+      example:
+        frames:
+        - frame_id: 56f8d643be2ff1e674598eccfae2b3e2
+          frame_url: https://external-api.getnexar.com/aod/full/ride/cc07d59669bfa317a4136a7d93965b04/fod_709F23AE-6F53-49E8-A473-98FEB7DBE973.jpg
+          camera_heading: 298.8096008300781
+          captured_at: 1689242521198
+          timezone_offset: -14400
+          h3_index_res12: '631243922682792959'
+          gps_info:
+            longitude: -73.985751
+            latitude: 40.733587
+          thumbnail_url: https://external-api.getnexar.com/aod/thumbnail/ride/cc07d59669bfa317a4136a7d93965b04/fod_709F23AE-6F53-49E8-A473-98FEB7DBE973.jpg
+          direction: NORTH_WEST
+          frame_quality: 0.9148776531219482
+          frame_context: NIGHTTIME
+          osm_info:
+            osm_node_id_from: 8310246171
+            osm_node_id_to: 3985008876
+            road_type: RESIDENTIAL
+    RawFrameApiElement:
+      title: Frame metadata
+      type: object
+      properties:
+        frame_id:
+          title: Frame ID
+          type: string
+          description: unique identifier of the frame
+        frame_url:
+          title: Frame full Path
+          type: string
+          description: URL to request the frame file (1280x720)
+        thumbnail_url:
+          title: Thumbnail of the frame full path
+          type: string
+          description: URL to request the thumbnail file (140x90)
+        captured_at:
+          title: Frame captured timestamp
+          type: string
+          description: Timestamp when the frame was captured (Epoch milliseconds)
+          format: uint64
+        timezone_offset:
+          title: Timezone Offset
+          type: integer
+          description: Offset in seconds from UTC of the frame capture time
+          format: int32
+        h3_index_res12:
+          title: H3 cell
+          type: string
+          description: H3 cell of resolution 12 where the frame is located
+        gps_info:
+          $ref: '#/components/schemas/GeoLocationApiElement'
+        direction:
+          $ref: '#/components/schemas/HeadingApiElement'
+        camera_heading:
+          title: Camera Heading
+          type: number
+          description: Course of the camera when the frame was captured
+          format: double
+        frame_quality:
+          title: Frame Quality
+          type: number
+          description: Frame quality is defined as the number of pixels outside of the car divided by the total number of pixels.
+          format: double
+        frame_context:
+          $ref: '#/components/schemas/DaylightStateApiElement'
+        osm_info:
+          $ref: '#/components/schemas/OsmRoadSegmentApiElement'
+    H3CoverageBoundingBoxApiElement:
+      title: H3 Coverage Area
+      type: object
+      properties:
+        bounding_box:
+          $ref: '#/components/schemas/GeoBoundingBoxApiElement'
+        h3_resolution:
+          title: H3 Resolution
+          type: integer
+          description: The resolution levels of H3 cells used to obtain coverage information - supported values are 3, 5, 7, 8, 9, 10, 11, and 12.
+          format: int64
+    road_itemapiGeoBoundingBoxApiElement:
+      title: Area of interest
+      description: The geographical area of interest is defined as a rectangular area by its northeast and southwest points.
+      type: object
+      required:
+      - north_east
+      - south_west
+      properties:
+        north_east:
+          $ref: '#/components/schemas/road_itemapiGeoLocationApiElement'
+        south_west:
+          $ref: '#/components/schemas/road_itemapiGeoLocationApiElement'
+    OsmRoadTypeApiElement:
+      title: Open Street Map road types
+      type: string
+      enum:
+      - MOTORWAY
+      - TRUNK
+      - PRIMARY
+      - SECONDARY
+      - TERTIARY
+      - UNCLASSIFIED
+      - RESIDENTIAL
+      - SERVICE
+      - MOTORWAY_LINK
+      - TRUNK_LINK
+      - PRIMARY_LINK
+      - SECONDARY_LINK
+      - TERTIARY_LINK
+      - LIVING_STREET
+      - PEDESTRIAN
+      - TRACK
+      - BUS_GUIDEWAY
+      - ESCAPE
+      - RACEWAY
+      - ROAD
+      - FOOTWAY
+      - BRIDLEWAY
+      - STEPS
+      - PATH
+      - CYCLEWAY
+      - CONSTRUCTION
+      - ABANDONED
+      - ACCESS
+      - PROPOSED
+      - REST_AREA
+    SortByApiRequest:
+      title: Optional sorting modes of the returned frame
+      type: string
+      description: Sorting modes for the request 'sort_by' optional param
+      enum:
+      - TIMESTAMP
+      - QUALITY
+    apiHeadingApiElement:
+      title: HeadingApiElement
+      type: string
+      description: Camera direction
+      enum:
+      - NORTH
+      - NORTH_WEST
+      - WEST
+      - SOUTH_WEST
+      - SOUTH
+      - SOUTH_EAST
+      - EAST
+      - NORTH_EAST
+    road_itemapiOsmRoadTypeApiElement:
+      title: Open Street Map road types
+      type: string
+      enum:
+      - MOTORWAY
+      - TRUNK
+      - PRIMARY
+      - SECONDARY
+      - TERTIARY
+      - UNCLASSIFIED
+      - RESIDENTIAL
+      - SERVICE
+      - MOTORWAY_LINK
+      - TRUNK_LINK
+      - PRIMARY_LINK
+      - SECONDARY_LINK
+      - TERTIARY_LINK
+      - LIVING_STREET
+      - PEDESTRIAN
+      - TRACK
+      - BUS_GUIDEWAY
+      - ESCAPE
+      - RACEWAY
+      - ROAD
+      - FOOTWAY
+      - BRIDLEWAY
+      - STEPS
+      - PATH
+      - CYCLEWAY
+      - CONSTRUCTION
+      - ABANDONED
+      - ACCESS
+      - PROPOSED
+      - REST_AREA
+    H3CoverageApiElement:
+      title: H3 Coverage Information
+      type: object
+      properties:
+        h3_id:
+          title: H3 ID
+          type: string
+          description: H3 cell identifier
+          format: uint64
+        frame_count:
+          title: Frame Count
+          type: string
+          description: Number of frames available in this H3 cell
+          format: uint64
+    apiH3IndicesApiRequest:
+      title: Area of interest as H3 cells
+      type: object
+      description: Accepts H3 IDs with resolutions between 10 and 15 up to a maximum area equivalent to 1000 H3 cells of resolution 12.
+      properties:
+        h3_ids:
+          title: H3 Ids
+          type: array
+          description: H3 IDs list in decimal format
+          items:
+            type: string
+    GeoLocationApiElement:
+      title: Geo Coordinates
+      type: object
+      properties:
+        longitude:
+          title: Longitude
+          type: number
+          description: GPS Point longitude in decimal degrees
+          format: double
+        latitude:
+          title: Latitude
+          type: number
+          description: GPS Point latitude in decimal degrees
+          format: double
+    nexarBadRequest:
+      type: object
+      title: Bad Request
+      properties:
+        status:
+          type: integer
+        error:
+          type: string
+      example:
+        status: 400
+        error: Bad Request
+    road_itemapiGeoLocationApiElement:
+      title: GPS Point
+      type: object
+      properties:
+        longitude:
+          title: Longitude
+          type: number
+          description: GPS Point longitude in decimal degrees
+          format: double
+        latitude:
+          title: Latitude
+          type: number
+          description: GPS Point latitude in decimal degrees
+          format: double
+    apiDaylightStateApiElement:
+      title: Daylight conditions
+      type: string
+      enum:
+      - DAYLIGHT
+      - TWILIGHT
+      - NIGHTTIME
+    GeoBoundingBoxApiElement:
+      title: Area of interest
+      description: The geographical area of interest is defined as a rectangular area by its northeast and southwest points.
+      type: object
+      properties:
+        north_east:
+          $ref: '#/components/schemas/GeoLocationApiElement'
+        south_west:
+          $ref: '#/components/schemas/GeoLocationApiElement'
+    apiFindRawFramesApiFilters:
+      title: Request Filters
+      type: object
+      properties:
+        directions:
+          title: Directions
+          type: array
+          description: Filters frames according to the direction of the camera at the time the frame was captured
+          items:
+            $ref: '#/components/schemas/apiHeadingApiElement'
+        frames_context:
+          title: Frames Context
+          type: array
+          description: Filters frames according to daylight conditions
+          items:
+            $ref: '#/components/schemas/apiDaylightStateApiElement'
+        min_frame_quality:
+          title: Minimum Frame Quality
+          type: number
+          default: 0
+          description: Filters frames according to a minimum frame quality. Frame quality is defined as the number of pixels outside of the car divided by the total number of pixels.
+          format: double
+        frames_per_h3:
+          title: Frames per H3
+          default: 5000
+          type: integer
+          description: Maximum number of frames to return per H3 in the response. The resolution of the H3 cell varies based on the requested area's size, with a range of resolution 3 for very large areas to resolution 12 for smaller areas.
+          format: int64
+        road_types:
+          title: Road Types
+          type: array
+          description: Filters frames according to the OSM segment road type
+          items:
+            $ref: '#/components/schemas/road_itemapiOsmRoadTypeApiElement'
+        start_time:
+          title: Start timestamp
+          type: string
+          description: Filters frames which were captured after the specified start timestamp (Epoch milliseconds)
+          format: uint64
+        end_time:
+          title: End Timestamp
+          type: string
+          description: Filters frames which were captured before the specified end timestamp (Epoch milliseconds)
+          format: uint64
+    GetH3CoverageRequestParams:
+      title: H3 Coverage Request
+      type: object
+      properties:
+        h3_coverage_bounding_box:
+          $ref: '#/components/schemas/H3CoverageBoundingBoxApiElement'
+        h3_indices:
+          $ref: '#/components/schemas/H3IndicesApiRequest'
+    apiFindRawFramesApiRequestParams:
+      type: object
+      title: VirtualCam Request
+      properties:
+        bounding_box:
+          $ref: '#/components/schemas/road_itemapiGeoBoundingBoxApiElement'
+        h3_location:
+          $ref: '#/components/schemas/apiH3IndicesApiRequest'
+        filters:
+          $ref: '#/components/schemas/apiFindRawFramesApiFilters'
+        sort_by:
+          $ref: '#/components/schemas/apiSortByApiRequest'
+      example:
+        bounding_box:
+          south_west:
+            longitude: -73.99708049121774
+            latitude: 40.72176834293103
+          north_east:
+            longitude: -73.98168795029027
+            latitude: 40.73122344104337
+        filters:
+          frames_per_h3: 1
+          min_frame_quality: 0.7
+          road_types:
+          - MOTORWAY
+          - RESIDENTIAL
+          frames_context:
+          - DAYLIGHT
+          - NIGHTTIME
+          start_time: 1688169600000
+          end_time: 1689206400000
+        sort_by: QUALITY
+    apiSortByApiRequest:
+      title: Optional sorting modes of the returned frame
+      type: string
+      default: TIMESTAMP
+      enum:
+      - TIMESTAMP
+      - QUALITY
+    GetH3CoverageResponse:
+      title: H3 Coverage Response
+      type: object
+      properties:
+        coverage:
+          type: array
+          items:
+            $ref: '#/components/schemas/H3CoverageApiElement'
+    road_itemapiOsmRoadSegmentApiElement:
+      title: Osm Info
+      type: object
+      properties:
+        osm_node_id_from:
+          type: string
+          format: uint64
+        osm_node_id_to:
+          type: string
+          format: uint64
+        road_type:
+          $ref: '#/components/schemas/road_itemapiOsmRoadTypeApiElement'
+      description: Open Street Map way identifier and metadata
+    H3IndicesApiRequest:
+      title: Area of interest as H3 cells
+      type: object
+      description: Accepts H3 IDs with resolutions between 10 and 15 up to a maximum area equivalent to 1000 H3 cells of resolution 12.
+      properties:
+        h3_ids:
+          title: H3 Ids
+          type: array
+          description: H3 IDs list in decimal format
+          items:
+            type: string
+    HeadingApiElement:
+      title: HeadingApiElement
+      type: string
+      description: Nexar car heading direction
+      enum:
+      - NORTH
+      - NORTH_WEST
+      - WEST
+      - SOUTH_WEST
+      - SOUTH
+      - SOUTH_EAST
+      - EAST
+      - NORTH_EAST
+    FindRawFramesApiRequestParams:
+      title: VirtualCam Request
+      type: object
+      properties:
+        bounding_box:
+          $ref: '#/components/schemas/GeoBoundingBoxApiElement'
+        h3_location:
+          $ref: '#/components/schemas/H3IndicesApiRequest'
+        filters:
+          $ref: '#/components/schemas/FindRawFramesApiFilters'
+        sort_by:
+          $ref: '#/components/schemas/SortByApiRequest'
+    FindRawFramesApiResponse:
+      type: object
+      properties:
+        frames:
+          type: array
+          items:
+            $ref: '#/components/schemas/RawFrameApiElement'
+        frames_fetched:
+          title: Frames Fetched
+          type: integer
+          description: Frames fetched count
+          format: int32
+    DaylightStateApiElement:
+      title: Daylight conditions
+      type: string
+      enum:
+      - DAYLIGHT
+      - TWILIGHT
+      - NIGHTTIME
+    OsmRoadSegmentApiElement:
+      title: Osm Info
+      type: object
+      properties:
+        osm_node_id_from:
+          type: string
+          format: uint64
+        osm_node_id_to:
+          type: string
+          format: uint64
+        road_type:
+          $ref: '#/components/schemas/OsmRoadTypeApiElement'
+      description: Open Street Map way identifier and metadata
+    FindRawFramesApiFilters:
+      title: Request Filters
+      type: object
+      properties:
+        directions:
+          title: Directions
+          type: array
+          description: Filters frames according to the direction of the camera at the time the frame was captured
+          items:
+            $ref: '#/components/schemas/HeadingApiElement'
+        frames_context:
+          title: Frames Context
+          type: array
+          description: Filters frames according to daylight conditions
+          items:
+            $ref: '#/components/schemas/DaylightStateApiElement'
+        min_frame_quality:
+          title: Minimum Frame Quality
+          type: number
+          description: Filters frames according to a minimum frame quality. Frame quality is defined as the number of pixels outside of the car divided by the total number of pixels.
+          format: double
+        frames_per_h3:
+          title: Frames per H3
+          type: integer
+          description: Maximum number of frames to return per H3 in the response. The resolution of the H3 cell varies based on the requested area's size, with a range of resolution 3 for very large areas to resolution 12 for smaller areas.
+          format: int64
+        road_types:
+          title: Road Types
+          type: array
+          description: Filters frames according to the OSM segment road type
+          items:
+            $ref: '#/components/schemas/OsmRoadTypeApiElement'
+        start_time:
+          title: Start timestamp
+          type: string
+          description: Filters frames which were captured after the specified start timestamp (Epoch milliseconds)
+          format: uint64
+        end_time:
+          title: End Timestamp
+          type: string
+          description: Filters frames which were captured before the specified end timestamp (Epoch milliseconds)
+          format: uint64
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
