@@ -1,0 +1,14 @@
+{
+  "repo": "nexar",
+  "feeds": [
+    {
+      "source": "https://help.getnexar.com/",
+      "feed_url": "https://help.getnexar.com/feed.xml",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-08-30T22:33:40Z"
+}
