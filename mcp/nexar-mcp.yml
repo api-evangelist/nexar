@@ -7,18 +7,24 @@ deployment:
   endpoint: https://getnexar.com/api/mcp
   auth: none
   verified: probed
+  probe_prior: (never probed)
+  probe: live
+  probe_why: live
+  checked: '2026-09-11'
+  source: claimed-backlog re-probe 2026-09-11
 server:
   name: nexar-storefront
   transport: http
   url: https://getnexar.com/api/mcp
   platform: Shopify Storefront MCP
-note: 'HONEST SCOPE: this is the Shopify Storefront MCP endpoint served on Nexar''s own consumer dashcam store at
-  getnexar.com. It answered an anonymous JSON-RPC tools/list with HTTP 200 and returned one real tool. It is platform-provided
-  by Shopify rather than engineered by Nexar, and it exposes the STORE (policies, FAQs, products), NOT the CityStream
-  data APIs. There is no MCP server for VirtualCam, Live Feed, Work Zones or Road Inventory: mcp.getnexar.com does
-  not resolve, and POSTing tools/list to external.getnexar.com/mcp and developer.getnexar.com/mcp returns 403 and
-  an SPA shell respectively. The corresponding RFC 9728 protected-resource document is saved at well-known/nexar-shopify-oauth-protected-resource.json
-  and advertises the Shopify scope customer-account-mcp-api:full for the authenticated customer-account MCP surface.'
+note: 'HONEST SCOPE: this is the Shopify Storefront MCP endpoint served on Nexar''s own consumer dashcam
+  store at getnexar.com. It answered an anonymous JSON-RPC tools/list with HTTP 200 and returned one real
+  tool. It is platform-provided by Shopify rather than engineered by Nexar, and it exposes the STORE (policies,
+  FAQs, products), NOT the CityStream data APIs. There is no MCP server for VirtualCam, Live Feed, Work
+  Zones or Road Inventory: mcp.getnexar.com does not resolve, and POSTing tools/list to external.getnexar.com/mcp
+  and developer.getnexar.com/mcp returns 403 and an SPA shell respectively. The corresponding RFC 9728
+  protected-resource document is saved at well-known/nexar-shopify-oauth-protected-resource.json and advertises
+  the Shopify scope customer-account-mcp-api:full for the authenticated customer-account MCP surface.'
 probe:
   method: tools/list
   http_status: 200
