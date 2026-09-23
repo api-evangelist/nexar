@@ -1,0 +1,29 @@
+# Front Door AI Index — nexar — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: nexar
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.nexar-ai.com
+  final_host: www.nexar-ai.com
+  ownership: own
+  owner: nexar
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 22
+  host_score: 22
+  density: 13.06
+  words: 1685
+  tiers:
+    agentic: 1
+    core: 21
+    model: 0
+  ambiguous: 17
+  top_terms:
+    AI: 19
+    intelligence: 14
+    smart: 3
+    machine learning: 2
+    fine-tune: 1

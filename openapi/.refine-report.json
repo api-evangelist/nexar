@@ -1,0 +1,42 @@
+{
+  "provider": "nexar",
+  "sources": [
+    "_original/nexar-livefeed-openapi.yml",
+    "_original/nexar-roadinventory-openapi.yml",
+    "_original/nexar-virtualcam-openapi.yml",
+    "_original/nexar-workzones-openapi.yml"
+  ],
+  "outputs": [
+    "nexar-citystream-live-feed-api-v4-api-openapi.yml",
+    "nexar-get-a-collection-of-road-signs-api-openapi.yml",
+    "nexar-get-the-details-of-a-specific-road-sign-api-openapi.yml",
+    "nexar-virtualcam-api-api-openapi.yml",
+    "nexar-get-a-collection-of-work-zones-api-openapi.yml",
+    "nexar-get-a-specific-work-zone-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (4 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "nexar-livefeed-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "nexar-livefeed-openapi.yml: declared missing tag: CityStream\u2122 Live Feed API V4",
+    "nexar-roadinventory-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "nexar-roadinventory-openapi.yml: declared missing tag: Get a collection of road signs",
+    "nexar-roadinventory-openapi.yml: declared missing tag: Get the details of a specific road sign",
+    "nexar-virtualcam-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "nexar-virtualcam-openapi.yml: declared missing tag: VirtualCam API",
+    "nexar-workzones-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "nexar-workzones-openapi.yml: declared missing tag: Get a collection of work zones",
+    "nexar-workzones-openapi.yml: declared missing tag: Get a specific work zone",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "nexar-citystream-live-feed-api-v4-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "nexar-get-a-collection-of-road-signs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "nexar-get-a-collection-of-work-zones-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "nexar-get-a-specific-work-zone-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "nexar-get-the-details-of-a-specific-road-sign-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "nexar-virtualcam-api-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
