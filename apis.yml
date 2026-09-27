@@ -50,12 +50,12 @@ tags:
 - Mapping
 - Geospatial
 - Transportation
-- Computer-Vision
+- Computer Vision
 - Autonomous Vehicles
 - Smart Cities
 - Imagery
 - Road Data
-- Machine-Learning
+- Machine Learning
 tags_raw:
 - Company
 - Mapping
@@ -67,6 +67,8 @@ tags_raw:
 - Imagery
 - Road Data
 - Machine Learning
+- Computer-Vision
+- Machine-Learning
 apis:
 - aid: nexar:nexar-citystream-live-feed-api-v4-api
   name: Nexar CityStream™ Live Feed API V4 API

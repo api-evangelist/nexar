@@ -62,6 +62,73 @@ paths:
       x-codegen-request-body-name: body
 components:
   schemas:
+    nexarRoadItemDetectionFilter:
+      type: object
+      title: Detection filters
+      properties:
+        construction_zone_filter:
+          $ref: '#/components/schemas/nexarConstructionZoneFilter'
+        status:
+          title: Status
+          type: array
+          description: Change detection status filter
+          items:
+            $ref: '#/components/schemas/nexarChangeDetectionStatus'
+    nexarFindDetectionsResponse:
+      title: find detections response
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/nexarRoadItemDetectionResultSet'
+    nexarH3IndicesRequest:
+      title: List of Uber H3 hexagon identifiers
+      type: object
+      properties:
+        h3_indices:
+          title: H3 Id
+          type: array
+          description: Uber H3 hexagon identifiers list
+          items:
+            type: string
+      example:
+        h3_indices:
+        - '622236750708604927'
+        - '622236723640434687'
+    nexarLogicalOperator:
+      title: Conjunction operator
+      type: string
+      default: OR
+      enum:
+      - OR
+      - AND
+    nexarConstructionZoneFilter:
+      title: Filter by work zone elements type / impact on road
+      type: object
+      properties:
+        construction_zone_elements:
+          $ref: '#/components/schemas/nexarConstructionZoneElements'
+        construction_zone_impact:
+          $ref: '#/components/schemas/nexarConstructionZoneImpact'
+        operator:
+          $ref: '#/components/schemas/nexarLogicalOperator'
+          not: null
+          title: Not
+          type: boolean
+          description: Negation operator (e.g. NOT construction_zone_elements)
+    nexarConstructionZoneImpact:
+      title: Filter predicate by impact on road
+      type: object
+      properties:
+        lane_impact:
+          title: Lane Impact
+          type: array
+          description: Impact of construction elements on road (e.g. BLOCKED)
+          items:
+            $ref: '#/components/schemas/nexarConstructionZoneImpactLaneImpact'
+        not:
+          title: Not
+          type: boolean
+          description: Negation operator (e.g. NOT BLOCKED)
     nexarRoadItemDetectionResultSet:
       type: object
       properties:
@@ -83,28 +150,47 @@ components:
           format: int64
         result_window_time_range:
           $ref: '#/components/schemas/mobinexarTimeRange'
-    nexarGPSPoint:
-      title: A basic GPS point
+    nexarRoadItemDetection:
+      type: object
+      title: Work Zone detection
+      properties:
+        item_id:
+          $ref: '#/components/schemas/nexarObjectId'
+        construction_zone:
+          $ref: '#/components/schemas/mobinexarConstructionZoneDetection'
+        timezone_offset:
+          title: Timezone Offset
+          type: integer
+          description: Timezone offset in seconds from UTC
+          format: int32
+        created_at_millis:
+          title: Created at millis
+          type: string
+          description: UTC Timestamp in milliseconds of the earliest evidence
+          format: uint64
+        expired_at_millis:
+          title: expired at millis
+          type: string
+          description: UTC Timestamp in milliseconds of the detection expiration
+          format: uint64
+    nexarConstructionZoneDetectionSegment:
+      title: Construction elements that ConstructionZoneSegmentconstitute a construction zone grouped to a primary road segment
       type: object
       properties:
-        latitude:
-          title: Latitude
-          type: number
-          description: GPS Point latitude
-          format: double
-        longtitude:
-          title: Longiutde
-          type: number
-          description: GPS Point longitude
-          format: double
-        altitude:
-          title: Altitude
-          type: number
-          description: GPS Point altitude
-          format: double
+        segment:
+          $ref: '#/components/schemas/mobinexarConstructionZoneSegment'
+        sub_item_id:
+          $ref: '#/components/schemas/nexarObjectId'
+        detection_element:
+          $ref: '#/components/schemas/nexarConstructionZoneDetectionElement'
+    nexarObjectId:
+      title: Wrapper for Nexar unique identifier
+      type: object
+      properties:
+        id:
+          type: string
       example:
-        latitude: 40.7380653
-        longtitude: -73.9800164
+        id: bed8dfe80331c3062c6893ac8c08146d
     nexarConstructionZoneRoadSegment:
       title: Describes the impact on a lane from a given construction zone
       type: object
@@ -113,13 +199,41 @@ components:
           $ref: '#/components/schemas/mobinexarConstructionZoneSegment'
         status:
           $ref: '#/components/schemas/nexarChangeDetectionStatus'
-    GPSSignalGPSProducer:
-      title: GPS signal source (Camera or external mount)
+    nexarChangeDetectionStatus:
+      title: Describing the status of the work zone lane impact (e.g. new / removed detections)
       type: string
-      default: DEVICE
+      default: DETECTION_STATUS_NONE
       enum:
-      - DEVICE
-      - CAMERA_MOUNT
+      - DETECTION_STATUS_NONE
+      - NEW_DETECTION
+      - EXISTING_DETECTION
+      - REMOVED_DETECTION
+    nexarHeading:
+      title: heading
+      type: string
+      description: Nexar car heading direction
+      default: UNKNOWN_HEADING
+      enum:
+      - UNKNOWN_HEADING
+      - NORTH
+      - NORTH_WEST
+      - WEST
+      - SOUTH_WEST
+      - SOUTH
+      - SOUTH_EAST
+      - EAST
+      - NORTH_EAST
+    nexarBoundingGPSBox:
+      title: Geo bounding box
+      required:
+      - north_east_point
+      - south_west_point
+      type: object
+      properties:
+        south_west_point:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        north_east_point:
+          $ref: '#/components/schemas/nexarGPSPoint'
     nexarTimeOfDay:
       title: Time of day
       type: object
@@ -140,127 +254,6 @@ components:
         hours: 22
         minutes: 10
         seconds: 0
-    nexarObjectId:
-      title: Wrapper for Nexar unique identifier
-      type: object
-      properties:
-        id:
-          type: string
-      example:
-        id: bed8dfe80331c3062c6893ac8c08146d
-    nexarTimeOfDayRange:
-      title: Filter predicate by time of day
-      type: object
-      properties:
-        from:
-          $ref: '#/components/schemas/nexarTimeOfDay'
-        to:
-          $ref: '#/components/schemas/nexarTimeOfDay'
-        time_zone_name:
-          title: IANA full time zone name e.g. America/Los_Angeles
-          type: string
-    nexarDetectionLocation:
-      title: Detection location and metadata
-      type: object
-      properties:
-        location:
-          $ref: '#/components/schemas/nexarGPSPoint'
-        course:
-          title: Course
-          type: number
-          description: Aggregated course of the detection
-          format: double
-        bbox:
-          $ref: '#/components/schemas/nexarBBox'
-        confidence:
-          title: Confidence
-          type: number
-          description: Detection confidence
-          format: double
-        h3_indices:
-          $ref: '#/components/schemas/nexarPointH3Indices'
-    nexarBBox:
-      title: Location of detected element on the image, where (X1,Y1),(X2,Y2) describes the SW,NE corners accordingly
-      type: object
-      properties:
-        x1:
-          type: number
-          format: double
-        y1:
-          type: number
-          format: double
-        x2:
-          type: number
-          format: double
-        y2:
-          type: number
-          format: double
-        tag:
-          type: string
-      example:
-        x1: 246
-        y1: 426
-        x2: 290
-        y2: 492
-        tag: grabber_cone
-    runtimeError:
-      type: object
-      properties:
-        error:
-          type: string
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
-    nexarConstructionZoneFilter:
-      title: Filter by work zone elements type / impact on road
-      type: object
-      properties:
-        construction_zone_elements:
-          $ref: '#/components/schemas/nexarConstructionZoneElements'
-        construction_zone_impact:
-          $ref: '#/components/schemas/nexarConstructionZoneImpact'
-        operator:
-          $ref: '#/components/schemas/nexarLogicalOperator'
-          not: null
-          title: Not
-          type: boolean
-          description: Negation operator (e.g. NOT construction_zone_elements)
-    mobinexarConstructionZoneSegment:
-      type: object
-      properties:
-        line:
-          $ref: '#/components/schemas/nexarGeoLine'
-        lane_impact:
-          $ref: '#/components/schemas/nexarConstructionZoneImpactLaneImpact'
-      description: Construction zones are segmented geographically. Each segment is described by a geographical line.
-    nexarFindDetectionsResponse:
-      title: find detections response
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/nexarRoadItemDetectionResultSet'
-    mobinexarConstructionZoneDetection:
-      title: Aggregated construction zone detections segmented by geographical shape
-      type: object
-      properties:
-        primary_segments:
-          title: Primary Segments
-          type: array
-          description: Primary segments are road areas which are blocked by construction zone
-          items:
-            $ref: '#/components/schemas/nexarConstructionZoneRoadSegment'
-        detection_segments:
-          title: Detection Segments
-          type: array
-          description: Detection segments are where construction zone elements (such as Barrels, Traffic cone, etc) were detected.
-          items:
-            $ref: '#/components/schemas/nexarConstructionZoneDetectionSegment'
     nexarRoadBlockageConstructionElement:
       title: Construction element types
       type: string
@@ -284,20 +277,31 @@ components:
       - TRAFFIC_CONE_BLACK
       - VERTICAL_PANEL
       - ROAD_WORKS_SIGN_VIENNA
-    nexarH3IndicesRequest:
-      title: List of Uber H3 hexagon identifiers
+    runtimeError:
       type: object
       properties:
-        h3_indices:
-          title: H3 Id
+        error:
+          type: string
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
           type: array
-          description: Uber H3 hexagon identifiers list
           items:
-            type: string
-      example:
-        h3_indices:
-        - '622236750708604927'
-        - '622236723640434687'
+            $ref: '#/components/schemas/protobufAny'
+    nexarTimeOfDayRange:
+      title: Filter predicate by time of day
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/nexarTimeOfDay'
+        to:
+          $ref: '#/components/schemas/nexarTimeOfDay'
+        time_zone_name:
+          title: IANA full time zone name e.g. America/Los_Angeles
+          type: string
     FindDetectionsRequestParamsSortDirection:
       title: Sort order
       type: string
@@ -306,6 +310,96 @@ components:
       - NONE
       - ASC
       - DESC
+    nexarConstructionZoneElements:
+      title: Filter predicate by work zone element type
+      type: object
+      properties:
+        elements:
+          title: Construction Elements
+          type: array
+          description: List of construction zone elements
+          items:
+            $ref: '#/components/schemas/nexarRoadBlockageConstructionElement'
+        operator:
+          $ref: '#/components/schemas/nexarLogicalOperator'
+        not:
+          title: Not
+          type: boolean
+          description: Negation operator (e.g. NOT TRAFFIC_CONE)
+    nexarRoadType:
+      title: Open Street Map road types
+      type: string
+      default: UNKNOWN_ROAD_TYPE
+      enum:
+      - UNKNOWN_ROAD_TYPE
+      - MOTORWAY
+      - TRUNK
+      - PRIMARY
+      - SECONDARY
+      - TERTIARY
+      - UNCLASSIFIED
+      - RESIDENTIAL
+      - SERVICE
+      - MOTORWAY_LINK
+      - TRUNK_LINK
+      - PRIMARY_LINK
+      - SECONDARY_LINK
+      - TERTIARY_LINK
+      - LIVING_STREET
+      - PEDESTRIAN
+      - TRACK
+      - BUS_GUIDEWAY
+      - ESCAPE
+      - RACEWAY
+      - ROAD
+      - FOOTWAY
+      - BRIDLEWAY
+      - STEPS
+      - PATH
+      - CYCLEWAY
+      - CONSTRUCTION
+      - ABANDONED
+      - ACCESS
+      - PROPOSED
+      - REST_AREA
+    mobinexarConstructionZoneSegment:
+      type: object
+      properties:
+        line:
+          $ref: '#/components/schemas/nexarGeoLine'
+        lane_impact:
+          $ref: '#/components/schemas/nexarConstructionZoneImpactLaneImpact'
+      description: Construction zones are segmented geographically. Each segment is described by a geographical line.
+    nexarRoadItemEvidenceFrame:
+      type: object
+      properties:
+        frame_id:
+          title: Frame Id
+          type: string
+          description: Unique frame identifier
+        image_ref:
+          title: Image Ref
+          type: string
+          description: URL to the frame
+        raw_gps_signal_of_camera:
+          $ref: '#/components/schemas/nexarGPSSignal'
+        location_of_camera:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        course_of_camera:
+          title: Course Of Camera
+          type: number
+          description: Course of the camera capturing the frame
+          format: double
+        detection_locations:
+          title: Detection Locations
+          type: array
+          description: List of detection locations of a given type in this frame
+          items:
+            $ref: '#/components/schemas/nexarDetectionLocation'
+        h3_indices:
+          $ref: '#/components/schemas/nexarPointH3Indices'
+        osm_info:
+          $ref: '#/components/schemas/nexarOsmInfo'
     nexarGeoLine:
       title: Geo line
       type: object
@@ -320,39 +414,6 @@ components:
           format: double
         osm_info:
           $ref: '#/components/schemas/nexarOsmInfo'
-    nexarConstructionZoneDetectionElement:
-      type: object
-      properties:
-        element:
-          $ref: '#/components/schemas/nexarRoadBlockageConstructionElement'
-        evidence_frames:
-          title: Evidence Frames
-          type: array
-          description: List of evidence frames showing the construction element
-          items:
-            $ref: '#/components/schemas/nexarRoadItemEvidenceFrame'
-    nexarLogicalOperator:
-      title: Conjunction operator
-      type: string
-      default: OR
-      enum:
-      - OR
-      - AND
-    nexarHeading:
-      title: heading
-      type: string
-      description: Nexar car heading direction
-      default: UNKNOWN_HEADING
-      enum:
-      - UNKNOWN_HEADING
-      - NORTH
-      - NORTH_WEST
-      - WEST
-      - SOUTH_WEST
-      - SOUTH
-      - SOUTH_EAST
-      - EAST
-      - NORTH_EAST
     protobufAny:
       type: object
       properties:
@@ -365,51 +426,6 @@ components:
           description: Must be a valid serialized protocol buffer of the above specified type.
           format: byte
       description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    mobinexarTimeRange:
-      title: Work Zones filter by their detection time
-      description: Selects detections within the aggregation time window which delimited by the end timestamp
-      type: object
-      required:
-      - end
-      properties:
-        start:
-          title: Deprecated
-          type: string
-          format: uint64
-        end:
-          title: Time range end date (UTC)
-          type: string
-          format: uint64
-      example:
-        start: 1585468974791
-        end: 1588060974791
-    nexarBoundingGPSBox:
-      title: Geo bounding box
-      required:
-      - north_east_point
-      - south_west_point
-      type: object
-      properties:
-        south_west_point:
-          $ref: '#/components/schemas/nexarGPSPoint'
-        north_east_point:
-          $ref: '#/components/schemas/nexarGPSPoint'
-    nexarOsmInfo:
-      title: Open Street Map way identifier and metadata
-      type: object
-      properties:
-        osm_node_id_from:
-          type: string
-          format: uint64
-        osm_node_id_to:
-          type: string
-          format: uint64
-        road_type:
-          $ref: '#/components/schemas/nexarRoadType'
-      example:
-        osm_node_id_from: '5717622395'
-        osm_node_id_to: '5717622398'
-        road_type: SECONDARY
     nexarConstructionZoneImpactLaneImpact:
       type: string
       default: NO_IMPACT
@@ -477,15 +493,57 @@ components:
         time_range:
           end: 1671624519242
         limit: 10
-    nexarChangeDetectionStatus:
-      title: Describing the status of the work zone lane impact (e.g. new / removed detections)
-      type: string
-      default: DETECTION_STATUS_NONE
-      enum:
-      - DETECTION_STATUS_NONE
-      - NEW_DETECTION
-      - EXISTING_DETECTION
-      - REMOVED_DETECTION
+    nexarConstructionZoneDetectionElement:
+      type: object
+      properties:
+        element:
+          $ref: '#/components/schemas/nexarRoadBlockageConstructionElement'
+        evidence_frames:
+          title: Evidence Frames
+          type: array
+          description: List of evidence frames showing the construction element
+          items:
+            $ref: '#/components/schemas/nexarRoadItemEvidenceFrame'
+    nexarBBox:
+      title: Location of detected element on the image, where (X1,Y1),(X2,Y2) describes the SW,NE corners accordingly
+      type: object
+      properties:
+        x1:
+          type: number
+          format: double
+        y1:
+          type: number
+          format: double
+        x2:
+          type: number
+          format: double
+        y2:
+          type: number
+          format: double
+        tag:
+          type: string
+      example:
+        x1: 246
+        y1: 426
+        x2: 290
+        y2: 492
+        tag: grabber_cone
+    nexarOsmInfo:
+      title: Open Street Map way identifier and metadata
+      type: object
+      properties:
+        osm_node_id_from:
+          type: string
+          format: uint64
+        osm_node_id_to:
+          type: string
+          format: uint64
+        road_type:
+          $ref: '#/components/schemas/nexarRoadType'
+      example:
+        osm_node_id_from: '5717622395'
+        osm_node_id_to: '5717622398'
+        road_type: SECONDARY
     nexarGPSSignal:
       title: GPS measurement
       type: object
@@ -546,22 +604,6 @@ components:
         course: 6.91280832
         altitude: 725.5895027
         speed: 11.34940719
-    nexarConstructionZoneElements:
-      title: Filter predicate by work zone element type
-      type: object
-      properties:
-        elements:
-          title: Construction Elements
-          type: array
-          description: List of construction zone elements
-          items:
-            $ref: '#/components/schemas/nexarRoadBlockageConstructionElement'
-        operator:
-          $ref: '#/components/schemas/nexarLogicalOperator'
-        not:
-          title: Not
-          type: boolean
-          description: Negation operator (e.g. NOT TRAFFIC_CONE)
     nexarPointH3Indices:
       title: Uber H3 index list
       type: object
@@ -647,131 +689,89 @@ components:
         h3_index_res13: '635738085295921855'
         h3_index_res14: '640241684923292319'
         h3_index_res15: '644745284550662814'
-    nexarRoadItemDetectionFilter:
-      type: object
-      title: Detection filters
-      properties:
-        construction_zone_filter:
-          $ref: '#/components/schemas/nexarConstructionZoneFilter'
-        status:
-          title: Status
-          type: array
-          description: Change detection status filter
-          items:
-            $ref: '#/components/schemas/nexarChangeDetectionStatus'
-    nexarRoadType:
-      title: Open Street Map road types
-      type: string
-      default: UNKNOWN_ROAD_TYPE
-      enum:
-      - UNKNOWN_ROAD_TYPE
-      - MOTORWAY
-      - TRUNK
-      - PRIMARY
-      - SECONDARY
-      - TERTIARY
-      - UNCLASSIFIED
-      - RESIDENTIAL
-      - SERVICE
-      - MOTORWAY_LINK
-      - TRUNK_LINK
-      - PRIMARY_LINK
-      - SECONDARY_LINK
-      - TERTIARY_LINK
-      - LIVING_STREET
-      - PEDESTRIAN
-      - TRACK
-      - BUS_GUIDEWAY
-      - ESCAPE
-      - RACEWAY
-      - ROAD
-      - FOOTWAY
-      - BRIDLEWAY
-      - STEPS
-      - PATH
-      - CYCLEWAY
-      - CONSTRUCTION
-      - ABANDONED
-      - ACCESS
-      - PROPOSED
-      - REST_AREA
-    nexarRoadItemEvidenceFrame:
+    nexarDetectionLocation:
+      title: Detection location and metadata
       type: object
       properties:
-        frame_id:
-          title: Frame Id
-          type: string
-          description: Unique frame identifier
-        image_ref:
-          title: Image Ref
-          type: string
-          description: URL to the frame
-        raw_gps_signal_of_camera:
-          $ref: '#/components/schemas/nexarGPSSignal'
-        location_of_camera:
+        location:
           $ref: '#/components/schemas/nexarGPSPoint'
-        course_of_camera:
-          title: Course Of Camera
+        course:
+          title: Course
           type: number
-          description: Course of the camera capturing the frame
+          description: Aggregated course of the detection
           format: double
-        detection_locations:
-          title: Detection Locations
-          type: array
-          description: List of detection locations of a given type in this frame
-          items:
-            $ref: '#/components/schemas/nexarDetectionLocation'
+        bbox:
+          $ref: '#/components/schemas/nexarBBox'
+        confidence:
+          title: Confidence
+          type: number
+          description: Detection confidence
+          format: double
         h3_indices:
           $ref: '#/components/schemas/nexarPointH3Indices'
-        osm_info:
-          $ref: '#/components/schemas/nexarOsmInfo'
-    nexarConstructionZoneImpact:
-      title: Filter predicate by impact on road
+    GPSSignalGPSProducer:
+      title: GPS signal source (Camera or external mount)
+      type: string
+      default: DEVICE
+      enum:
+      - DEVICE
+      - CAMERA_MOUNT
+    nexarGPSPoint:
+      title: A basic GPS point
       type: object
       properties:
-        lane_impact:
-          title: Lane Impact
+        latitude:
+          title: Latitude
+          type: number
+          description: GPS Point latitude
+          format: double
+        longtitude:
+          title: Longiutde
+          type: number
+          description: GPS Point longitude
+          format: double
+        altitude:
+          title: Altitude
+          type: number
+          description: GPS Point altitude
+          format: double
+      example:
+        latitude: 40.7380653
+        longtitude: -73.9800164
+    mobinexarConstructionZoneDetection:
+      title: Aggregated construction zone detections segmented by geographical shape
+      type: object
+      properties:
+        primary_segments:
+          title: Primary Segments
           type: array
-          description: Impact of construction elements on road (e.g. BLOCKED)
+          description: Primary segments are road areas which are blocked by construction zone
           items:
-            $ref: '#/components/schemas/nexarConstructionZoneImpactLaneImpact'
-        not:
-          title: Not
-          type: boolean
-          description: Negation operator (e.g. NOT BLOCKED)
-    nexarRoadItemDetection:
+            $ref: '#/components/schemas/nexarConstructionZoneRoadSegment'
+        detection_segments:
+          title: Detection Segments
+          type: array
+          description: Detection segments are where construction zone elements (such as Barrels, Traffic cone, etc) were detected.
+          items:
+            $ref: '#/components/schemas/nexarConstructionZoneDetectionSegment'
+    mobinexarTimeRange:
+      title: Work Zones filter by their detection time
+      description: Selects detections within the aggregation time window which delimited by the end timestamp
       type: object
-      title: Work Zone detection
+      required:
+      - end
       properties:
-        item_id:
-          $ref: '#/components/schemas/nexarObjectId'
-        construction_zone:
-          $ref: '#/components/schemas/mobinexarConstructionZoneDetection'
-        timezone_offset:
-          title: Timezone Offset
-          type: integer
-          description: Timezone offset in seconds from UTC
-          format: int32
-        created_at_millis:
-          title: Created at millis
+        start:
+          title: Deprecated
           type: string
-          description: UTC Timestamp in milliseconds of the earliest evidence
           format: uint64
-        expired_at_millis:
-          title: expired at millis
+        end:
+          title: Time range end date (UTC)
           type: string
-          description: UTC Timestamp in milliseconds of the detection expiration
           format: uint64
-    nexarConstructionZoneDetectionSegment:
-      title: Construction elements that ConstructionZoneSegmentconstitute a construction zone grouped to a primary road segment
-      type: object
-      properties:
-        segment:
-          $ref: '#/components/schemas/mobinexarConstructionZoneSegment'
-        sub_item_id:
-          $ref: '#/components/schemas/nexarObjectId'
-        detection_element:
-          $ref: '#/components/schemas/nexarConstructionZoneDetectionElement'
+      example:
+        start: 1585468974791
+        end: 1588060974791
   securitySchemes:
     Bearer:
       type: apiKey
