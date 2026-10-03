@@ -62,6 +62,50 @@ paths:
       x-codegen-request-body-name: body
 components:
   schemas:
+    nexarRoadItemEvidenceFrame:
+      type: object
+      properties:
+        frame_id:
+          title: Frame Id
+          type: string
+          description: Unique frame identifier
+        image_ref:
+          title: Image Ref
+          type: string
+          description: URL to the frame
+        raw_gps_signal_of_camera:
+          $ref: '#/components/schemas/nexarGPSSignal'
+        location_of_camera:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        course_of_camera:
+          title: Course Of Camera
+          type: number
+          description: Course of the camera capturing the frame
+          format: double
+        detection_locations:
+          title: Detection Locations
+          type: array
+          description: List of detection locations of a given type in this frame
+          items:
+            $ref: '#/components/schemas/nexarDetectionLocation'
+        h3_indices:
+          $ref: '#/components/schemas/nexarPointH3Indices'
+        osm_info:
+          $ref: '#/components/schemas/nexarOsmInfo'
+    runtimeError:
+      type: object
+      properties:
+        error:
+          type: string
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
     nexarRoadItemDetection:
       type: object
       title: Road Sign Detection
@@ -93,183 +137,6 @@ components:
           title: Damaged
           type: boolean
           description: Is damaged logical
-    nexarObjectId:
-      title: Wrapper for Nexar unique identifier
-      type: object
-      properties:
-        id:
-          type: string
-      example:
-        id: bed8dfe80331c3062c6893ac8c08146d
-    nexarGeoPoint:
-      title: GPS point enriched with Open Street Map node identifier
-      type: object
-      properties:
-        point:
-          $ref: '#/components/schemas/nexarGPSPoint'
-        course:
-          title: Nexar car heading value
-          type: number
-          format: double
-        osm_info:
-          $ref: '#/components/schemas/nexarOsmInfo'
-    nexarChangeDetectionStatus:
-      title: Describing the status of the construction zone lane impact (e.g. new / removed detections)
-      type: string
-      default: DETECTION_STATUS_NONE
-      enum:
-      - DETECTION_STATUS_NONE
-      - NEW_DETECTION
-      - EXISTING_DETECTION
-      - REMOVED_DETECTION
-    runtimeError:
-      type: object
-      properties:
-        error:
-          type: string
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
-    nexarDisplayImage:
-      title: URL and metadata for the head frame best representing the road item
-      type: object
-      properties:
-        image_url:
-          title: URL
-          type: string
-          description: URL to the source image file (valid for 24 hours)
-        timestamp_millis:
-          title: Timestamp
-          type: string
-          description: Timestamp in milliseconds for when the image was taken (UTC)
-          format: uint64
-        width:
-          title: Width
-          type: string
-          description: Image width in pixels
-          format: uint64
-        height:
-          title: Height
-          type: string
-          description: Image height in pixels
-          format: uint64
-        imageRef:
-          title: Ref
-          type: string
-          description: HTML a tag target href
-        frame_id:
-          title: Frame Id
-          type: string
-          description: Unique generated frame id
-      example:
-        image_url: https://d1fd2w0efmqqe1.cloudfront.net/fit-in/276x155/fod_6BB685FD-9646-48F8-90BB-1297ADCEB60E_anon.jpg?Expires=1568828292&Signature=DrBXr5sb0lhgL
-        timestamp_millis: 1568824692031
-        width: 276
-        height: 155
-    nexarRoadType:
-      title: Open Street Map road types
-      type: string
-      default: UNKNOWN_ROAD_TYPE
-      enum:
-      - UNKNOWN_ROAD_TYPE
-      - MOTORWAY
-      - TRUNK
-      - PRIMARY
-      - SECONDARY
-      - TERTIARY
-      - UNCLASSIFIED
-      - RESIDENTIAL
-      - SERVICE
-      - MOTORWAY_LINK
-      - TRUNK_LINK
-      - PRIMARY_LINK
-      - SECONDARY_LINK
-      - TERTIARY_LINK
-      - LIVING_STREET
-      - PEDESTRIAN
-      - TRACK
-      - BUS_GUIDEWAY
-      - ESCAPE
-      - RACEWAY
-      - ROAD
-      - FOOTWAY
-      - BRIDLEWAY
-      - STEPS
-      - PATH
-      - CYCLEWAY
-      - CONSTRUCTION
-      - ABANDONED
-      - ACCESS
-      - PROPOSED
-      - REST_AREA
-    nexarGetDetectionRequestParams:
-      required:
-      - item_id
-      type: object
-      properties:
-        item_id:
-          $ref: '#/components/schemas/nexarObjectId'
-      example:
-        item_id:
-          id: 34.0516754064_-118.2455985276_MUTCD__R3_18__NO_U_AND_LEFT_TURN-021dcd01:1671408000000:RS
-    protobufAny:
-      type: object
-      properties:
-        type_url:
-          type: string
-          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-        value:
-          pattern: ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$
-          type: string
-          description: Must be a valid serialized protocol buffer of the above specified type.
-          format: byte
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    nexarBBox:
-      title: Location of detected element on the image, where (X1,Y1),(X2,Y2) describes the SW,NE corners accordingly
-      type: object
-      properties:
-        x1:
-          type: number
-          format: double
-        y1:
-          type: number
-          format: double
-        x2:
-          type: number
-          format: double
-        y2:
-          type: number
-          format: double
-        tag:
-          type: string
-      example:
-        x1: 246
-        y1: 426
-        x2: 290
-        y2: 492
-        tag: grabber_cone
-    nexarOsmInfo:
-      title: Open Street Map way identifier and metadata
-      type: object
-      properties:
-        osm_node_id_from:
-          type: string
-          format: uint64
-        osm_node_id_to:
-          type: string
-          format: uint64
-        road_type:
-          $ref: '#/components/schemas/nexarRoadType'
-      example:
-        osm_node_id_from: '5717622395'
-        osm_node_id_to: '5717622398'
-        road_type: SECONDARY
     nexarGPSSignal:
       title: GPS measurement
       type: object
@@ -330,16 +197,15 @@ components:
         course: 6.91280832
         altitude: 725.5895027
         speed: 11.34940719
-    nexarRoadSignDetection:
-      title: Aggregated road sign detections
-      type: object
-      properties:
-        location:
-          $ref: '#/components/schemas/nexarGeoPoint'
-        detection_element:
-          $ref: '#/components/schemas/nexarRoadSignDetectionElement'
-        status:
-          $ref: '#/components/schemas/nexarChangeDetectionStatus'
+    nexarChangeDetectionStatus:
+      title: Describing the status of the construction zone lane impact (e.g. new / removed detections)
+      type: string
+      default: DETECTION_STATUS_NONE
+      enum:
+      - DETECTION_STATUS_NONE
+      - NEW_DETECTION
+      - EXISTING_DETECTION
+      - REMOVED_DETECTION
     nexarPointH3Indices:
       title: Uber H3 index list
       type: object
@@ -425,6 +291,58 @@ components:
         h3_index_res13: '635738085295921855'
         h3_index_res14: '640241684923292319'
         h3_index_res15: '644745284550662814'
+    nexarOsmInfo:
+      title: Open Street Map way identifier and metadata
+      type: object
+      properties:
+        osm_node_id_from:
+          type: string
+          format: uint64
+        osm_node_id_to:
+          type: string
+          format: uint64
+        road_type:
+          $ref: '#/components/schemas/nexarRoadType'
+      example:
+        osm_node_id_from: '5717622395'
+        osm_node_id_to: '5717622398'
+        road_type: SECONDARY
+    nexarRoadType:
+      title: Open Street Map road types
+      type: string
+      default: UNKNOWN_ROAD_TYPE
+      enum:
+      - UNKNOWN_ROAD_TYPE
+      - MOTORWAY
+      - TRUNK
+      - PRIMARY
+      - SECONDARY
+      - TERTIARY
+      - UNCLASSIFIED
+      - RESIDENTIAL
+      - SERVICE
+      - MOTORWAY_LINK
+      - TRUNK_LINK
+      - PRIMARY_LINK
+      - SECONDARY_LINK
+      - TERTIARY_LINK
+      - LIVING_STREET
+      - PEDESTRIAN
+      - TRACK
+      - BUS_GUIDEWAY
+      - ESCAPE
+      - RACEWAY
+      - ROAD
+      - FOOTWAY
+      - BRIDLEWAY
+      - STEPS
+      - PATH
+      - CYCLEWAY
+      - CONSTRUCTION
+      - ABANDONED
+      - ACCESS
+      - PROPOSED
+      - REST_AREA
     nexarRoadSignDetectionElement:
       title: Road sign detection
       type: object
@@ -448,117 +366,6 @@ components:
           type: string
           description: Timestamp of earliest evidence frame for this detection
           format: uint64
-    nexarDetectionLocation:
-      title: Detection location and metadata
-      type: object
-      properties:
-        location:
-          $ref: '#/components/schemas/nexarGPSPoint'
-        course:
-          title: Course
-          type: number
-          description: Aggregated course of the detection
-          format: double
-        bbox:
-          $ref: '#/components/schemas/nexarBBox'
-        confidence:
-          title: Confidence
-          type: number
-          description: Detection confidence
-          format: double
-        h3_indices:
-          $ref: '#/components/schemas/nexarPointH3Indices'
-    GPSSignalGPSProducer:
-      title: GPS signal source (Camera or external mount)
-      type: string
-      default: DEVICE
-      enum:
-      - DEVICE
-      - CAMERA_MOUNT
-    nexarGetDetectionResponse:
-      title: Detailed Road Sign Response
-      type: object
-      properties:
-        road_item_detection:
-          $ref: '#/components/schemas/nexarRoadItemDetection'
-        display_images:
-          title: Display Images
-          type: array
-          description: List of detection images for display
-          items:
-            $ref: '#/components/schemas/nexarDisplayImage'
-      example:
-        road_item_detection:
-          item_id:
-            id: 34.0516754064_-118.2455985276_MUTCD__R3_18__NO_U_AND_LEFT_TURN-021dcd01:1671408000000:RS
-          road_sign:
-            location:
-              point:
-                latitude: 34.05167540639005
-                longtitude: -118.24559852760652
-                altitude: 0.0
-              course: 128.38238435177138
-            detection_element:
-              road_sign_type: MUTCD__R3_18__NO_U_AND_LEFT_TURN
-              impact: {}
-              evidence_frames:
-              - frame_id: b2adbe07239b21dac7841b763468f756
-                image_ref: timelapses/8fe73f8b-8817-4313-8978-66079a1738a7.mov/frame_b2adbe07239b21dac7841b763468f756.jpg
-                raw_gps_signal_of_camera:
-                  timestamp: 1667082338089
-                  longitude: 34.051632166666664
-                  latitude: -118.24554099999999
-                  horizontal_accuracy: 10.0
-                  speed: 8.179666666666668
-                  course: 127.61937713623047
-                  vertical_accuracy: 0.0
-                  altitude: 0.0
-                  producer: DEVICE
-                  gps_timestamp: 0
-                  producer_timestamp: 0
-                location_of_camera:
-                  latitude: 34.051632166666664
-                  longtitude: -118.24554099999999
-                  altitude: 0.0
-                course_of_camera: 127.79973749554028
-                detection_locations:
-                - location:
-                    latitude: 34.051632166666664
-                    longtitude: -118.245541
-                    altitude: 0.0
-                  course: 127.79973749554028
-                  bbox:
-                    x1: 182.0
-                    y1: 175.0
-                    x2: 208.0
-                    y2: 210.0
-                    tag: MUTCD__R3_18__NO_U_AND_LEFT_TURN
-                  confidence: 0.9404761904761905
-                h3_indices:
-                  h3_index_res10: '622229149845880831'
-                  h3_index_res11: '626732749473222655'
-                  h3_index_res12: '631236349100590079'
-                osm_info:
-                  osm_node_id_from: 68214600
-                  osm_node_id_to: 4014854508
-                  road_type: SECONDARY
-              earliest_evidence_millis: 1665066580000
-            status: EXISTING_DETECTION
-          timezone_offset: -28800
-          created_at_millis: 1671408000000
-        display_images:
-        - image_url: https://images-cdn-api.getnexar.com/aod/full/timelapses/8fe73f8b-8817-4313-8978-66079a1738a7.mov/frame_b2adbe07239b21dac7841b763468f756.jpg
-          timestamp_millis: 1673017825538
-          width: 1280
-          height: 720
-          imageRef: timelapses/8fe73f8b-8817-4313-8978-66079a1738a7.mov/frame_b2adbe07239b21dac7841b763468f756.jpg
-          frame_id: b2adbe07239b21dac7841b763468f756
-        - image_url: https://images-cdn-api.getnexar.com/aod/thumbnail/timelapses/8fe73f8b-8817-4313-8978-66079a1738a7.mov/frame_b2adbe07239b21dac7841b763468f756.jpg
-          timestamp_millis: 1673017825538
-          width: 160
-          height: 90
-          imageRef: timelapses/8fe73f8b-8817-4313-8978-66079a1738a7.mov/frame_b2adbe07239b21dac7841b763468f756.jpg
-          frame_id: b2adbe07239b21dac7841b763468f756
     nexarGPSPoint:
       title: A basic GPS point
       type: object
@@ -581,36 +388,18 @@ components:
       example:
         latitude: 40.7380653
         longtitude: -73.9800164
-    nexarRoadItemEvidenceFrame:
+    protobufAny:
       type: object
       properties:
-        frame_id:
-          title: Frame Id
+        type_url:
           type: string
-          description: Unique frame identifier
-        image_ref:
-          title: Image Ref
+          description: "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+        value:
+          pattern: ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$
           type: string
-          description: URL to the frame
-        raw_gps_signal_of_camera:
-          $ref: '#/components/schemas/nexarGPSSignal'
-        location_of_camera:
-          $ref: '#/components/schemas/nexarGPSPoint'
-        course_of_camera:
-          title: Course Of Camera
-          type: number
-          description: Course of the camera capturing the frame
-          format: double
-        detection_locations:
-          title: Detection Locations
-          type: array
-          description: List of detection locations of a given type in this frame
-          items:
-            $ref: '#/components/schemas/nexarDetectionLocation'
-        h3_indices:
-          $ref: '#/components/schemas/nexarPointH3Indices'
-        osm_info:
-          $ref: '#/components/schemas/nexarOsmInfo'
+          description: Must be a valid serialized protocol buffer of the above specified type.
+          format: byte
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := &pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     nexarRoadSignType:
       type: string
       default: UNKNOWN
@@ -718,6 +507,217 @@ components:
       - VIENNA__E3A__ONE_WAY
       - ISRAEL__B24__URBAN_AREA
       - MUTCD__R5_1__DO_NOT_ENTER
+    nexarGetDetectionResponse:
+      title: Detailed Road Sign Response
+      type: object
+      properties:
+        road_item_detection:
+          $ref: '#/components/schemas/nexarRoadItemDetection'
+        display_images:
+          title: Display Images
+          type: array
+          description: List of detection images for display
+          items:
+            $ref: '#/components/schemas/nexarDisplayImage'
+      example:
+        road_item_detection:
+          item_id:
+            id: 34.0516754064_-118.2455985276_MUTCD__R3_18__NO_U_AND_LEFT_TURN-021dcd01:1671408000000:RS
+          road_sign:
+            location:
+              point:
+                latitude: 34.05167540639005
+                longtitude: -118.24559852760652
+                altitude: 0.0
+              course: 128.38238435177138
+            detection_element:
+              road_sign_type: MUTCD__R3_18__NO_U_AND_LEFT_TURN
+              impact: {}
+              evidence_frames:
+              - frame_id: b2adbe07239b21dac7841b763468f756
+                image_ref: timelapses/8fe73f8b-8817-4313-8978-66079a1738a7.mov/frame_b2adbe07239b21dac7841b763468f756.jpg
+                raw_gps_signal_of_camera:
+                  timestamp: 1667082338089
+                  longitude: 34.051632166666664
+                  latitude: -118.24554099999999
+                  horizontal_accuracy: 10.0
+                  speed: 8.179666666666668
+                  course: 127.61937713623047
+                  vertical_accuracy: 0.0
+                  altitude: 0.0
+                  producer: DEVICE
+                  gps_timestamp: 0
+                  producer_timestamp: 0
+                location_of_camera:
+                  latitude: 34.051632166666664
+                  longtitude: -118.24554099999999
+                  altitude: 0.0
+                course_of_camera: 127.79973749554028
+                detection_locations:
+                - location:
+                    latitude: 34.051632166666664
+                    longtitude: -118.245541
+                    altitude: 0.0
+                  course: 127.79973749554028
+                  bbox:
+                    x1: 182.0
+                    y1: 175.0
+                    x2: 208.0
+                    y2: 210.0
+                    tag: MUTCD__R3_18__NO_U_AND_LEFT_TURN
+                  confidence: 0.9404761904761905
+                h3_indices:
+                  h3_index_res10: '622229149845880831'
+                  h3_index_res11: '626732749473222655'
+                  h3_index_res12: '631236349100590079'
+                osm_info:
+                  osm_node_id_from: 68214600
+                  osm_node_id_to: 4014854508
+                  road_type: SECONDARY
+              earliest_evidence_millis: 1665066580000
+            status: EXISTING_DETECTION
+          timezone_offset: -28800
+          created_at_millis: 1671408000000
+        display_images:
+        - image_url: https://images-cdn-api.getnexar.com/aod/full/timelapses/8fe73f8b-8817-4313-8978-66079a1738a7.mov/frame_b2adbe07239b21dac7841b763468f756.jpg
+          timestamp_millis: 1673017825538
+          width: 1280
+          height: 720
+          imageRef: timelapses/8fe73f8b-8817-4313-8978-66079a1738a7.mov/frame_b2adbe07239b21dac7841b763468f756.jpg
+          frame_id: b2adbe07239b21dac7841b763468f756
+        - image_url: https://images-cdn-api.getnexar.com/aod/thumbnail/timelapses/8fe73f8b-8817-4313-8978-66079a1738a7.mov/frame_b2adbe07239b21dac7841b763468f756.jpg
+          timestamp_millis: 1673017825538
+          width: 160
+          height: 90
+          imageRef: timelapses/8fe73f8b-8817-4313-8978-66079a1738a7.mov/frame_b2adbe07239b21dac7841b763468f756.jpg
+          frame_id: b2adbe07239b21dac7841b763468f756
+    nexarObjectId:
+      title: Wrapper for Nexar unique identifier
+      type: object
+      properties:
+        id:
+          type: string
+      example:
+        id: bed8dfe80331c3062c6893ac8c08146d
+    nexarGeoPoint:
+      title: GPS point enriched with Open Street Map node identifier
+      type: object
+      properties:
+        point:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        course:
+          title: Nexar car heading value
+          type: number
+          format: double
+        osm_info:
+          $ref: '#/components/schemas/nexarOsmInfo'
+    nexarRoadSignDetection:
+      title: Aggregated road sign detections
+      type: object
+      properties:
+        location:
+          $ref: '#/components/schemas/nexarGeoPoint'
+        detection_element:
+          $ref: '#/components/schemas/nexarRoadSignDetectionElement'
+        status:
+          $ref: '#/components/schemas/nexarChangeDetectionStatus'
+    nexarDisplayImage:
+      title: URL and metadata for the head frame best representing the road item
+      type: object
+      properties:
+        image_url:
+          title: URL
+          type: string
+          description: URL to the source image file (valid for 24 hours)
+        timestamp_millis:
+          title: Timestamp
+          type: string
+          description: Timestamp in milliseconds for when the image was taken (UTC)
+          format: uint64
+        width:
+          title: Width
+          type: string
+          description: Image width in pixels
+          format: uint64
+        height:
+          title: Height
+          type: string
+          description: Image height in pixels
+          format: uint64
+        imageRef:
+          title: Ref
+          type: string
+          description: HTML a tag target href
+        frame_id:
+          title: Frame Id
+          type: string
+          description: Unique generated frame id
+      example:
+        image_url: https://d1fd2w0efmqqe1.cloudfront.net/fit-in/276x155/fod_6BB685FD-9646-48F8-90BB-1297ADCEB60E_anon.jpg?Expires=1568828292&Signature=DrBXr5sb0lhgL
+        timestamp_millis: 1568824692031
+        width: 276
+        height: 155
+    nexarDetectionLocation:
+      title: Detection location and metadata
+      type: object
+      properties:
+        location:
+          $ref: '#/components/schemas/nexarGPSPoint'
+        course:
+          title: Course
+          type: number
+          description: Aggregated course of the detection
+          format: double
+        bbox:
+          $ref: '#/components/schemas/nexarBBox'
+        confidence:
+          title: Confidence
+          type: number
+          description: Detection confidence
+          format: double
+        h3_indices:
+          $ref: '#/components/schemas/nexarPointH3Indices'
+    nexarBBox:
+      title: Location of detected element on the image, where (X1,Y1),(X2,Y2) describes the SW,NE corners accordingly
+      type: object
+      properties:
+        x1:
+          type: number
+          format: double
+        y1:
+          type: number
+          format: double
+        x2:
+          type: number
+          format: double
+        y2:
+          type: number
+          format: double
+        tag:
+          type: string
+      example:
+        x1: 246
+        y1: 426
+        x2: 290
+        y2: 492
+        tag: grabber_cone
+    nexarGetDetectionRequestParams:
+      required:
+      - item_id
+      type: object
+      properties:
+        item_id:
+          $ref: '#/components/schemas/nexarObjectId'
+      example:
+        item_id:
+          id: 34.0516754064_-118.2455985276_MUTCD__R3_18__NO_U_AND_LEFT_TURN-021dcd01:1671408000000:RS
+    GPSSignalGPSProducer:
+      title: GPS signal source (Camera or external mount)
+      type: string
+      default: DEVICE
+      enum:
+      - DEVICE
+      - CAMERA_MOUNT
   securitySchemes:
     Bearer:
       type: apiKey
